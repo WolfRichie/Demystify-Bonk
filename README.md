@@ -86,7 +86,7 @@ A repository for various resources to understand the inner workings of [bonk.io]
     - [Emit 15 — UnknownPacket](#emit-15-unknownpacket) *line 1053*
     - [Emit 16 — Set Ready](#emit-16-set-ready) *line 1058*
     - [Emit 17 — All Ready Reset](#emit-17-all-ready-reset) *line 1068*
-    - [Emit 18 — UnknownPacket](#emit-18-unknownpacket) *line 1076*
+    - [Emit 18 — Timesync Request](#emit-18-timesync-request) *line 1076*
     - [Emit 19 — Map Reorder](#emit-19-map-reorder) *line 1081*
     - [Emit 20 — Send Mode](#emit-20-send-mode) *line 1090*
     - [Emit 21 — Send WL (Rounds)](#emit-21-send-wl-rounds) *line 1103*
@@ -161,12 +161,17 @@ In fact, much of this README was written with the help of AI. However, the resea
 <a name="network"></a>
 ## Network
 
-Bonk.io networking uses **Socket.IO** for client-server communication. Each game packet is a JSON array prefixed with `42`, where the first element is the Packet ID[^Packet-ID]:
+Bonk.io networking uses **Socket.IO** for client-server communication. Each game packet __except emit 18__ is a JSON array prefixed with `42`, where the first element is the Packet ID[^Packet-ID]:
 
 ```
 42[packetID[^Packet-ID], ...args]
 ```
+```
+42ackID[18,{...}]
+```
 
+> [!NOTE]
+> ackID is a number that increments each time the message containing it gets sent.
 > [!NOTE]
 > The same Packet ID[^Packet-ID] may serve different purposes depending on direction (incoming `socket.on()` vs outgoing `socket.emit()`).
 
@@ -339,6 +344,7 @@ Received when a player is muted by the server.
 |---|-------------|
 | 1 | Muted player's slot ID |
 | 2 | Mute type/info |
+| 3 | Who was told about it. 1 - Everyone, 2 - Everyone except muted player
 
 ---
 
@@ -354,6 +360,7 @@ Received when a player is unmuted by the server.
 |---|-------------|
 | 1 | Unmuted player's slot ID |
 | 2 | Unmute type/info |
+| 3 | Who was told about it. 1 - Everyone, 2 - Everyone except muted player
 
 ---
 
@@ -1035,7 +1042,7 @@ Example: `42[7,{"teamLock":false}]`
 | Key | Description |
 |-----|-------------|
 | `muteID` | Target player's ID |
-| `muteType` | Type of mute |
+| `muteType` | Who to tell about it. 1 - Everyone, 2 - Everyone except the player, 3 - Nobody |
 | `action` | `"mute"` or `"unmute"` |
 
 ---
@@ -1158,9 +1165,14 @@ Example: `42[17]`
 
 ---
 
-<a name="emit-18-unknownpacket"></a>
-#### Emit 18 — UnknownPacket
-TODO
+<a name="emit-18-timesync-request"></a>
+#### Emit 18 — Timesync request
+
+Example: `4229[18,{"jsonrpc":"2.0","id":354,"method":"timesync"}]`
+
+| Key | Description |
+|-----|-------------|
+| `id` | Timesync request ID |
 
 ---
 
@@ -1731,17 +1743,48 @@ Status messages received via Packet 16:
 
 <a name="initial-game-state"></a>
 ### Initial Game State
+A string compressed with LZ-String[^LZ-String] and encoded in Base64, in PSON[^PSON] format, with cases for the first 101 characters flipped.
 
-| Field | Type | Notes |
+To flip/unflip the case (works both ways):
+
+```ts
+let str = "";
+for (let i = 0; i < 101; i++){
+  str += String.fromCharCode(initialState.charCodeAt(i) ^ 32)
+}
+str += initialState.slice(101)
+```
+
+| Field | Description | Mode |
 | ----- | ---- | ----- |
-| TODO  | TODO | TODO  |
+| players | Array of players | Any |
+| discs | Array of player discs | Any |
+| discDeaths | Array of player discs when they died | Any except football |
+| scores | Player scores. Array index is player ID | Any |
+| lscr | Winner ID | Any |
+| fte | Frames till end | Any |
+| ftu | Frames till unfreeze (start) | Any |
+| seed | Random seed | Any |
+| sts | Sounds this step | Any |
+| ni | No Interpolation | Any |
+| mm | Map info (name, author etc) | Any except football |
+| ms | Map settings | Any except football |
+| rl | Unused | Any except football |
+| capZones | Capture zones | Any except football |
+| physics | Bodies, Joints, Shapes, Fixtures, Z-indexes, Shape shrinks | Any except football |
+| projectiles | Arrows | Arrows and Death Arrows |
+| goalHeight | Goal Height. Always 13 | Football |
+| borderThickness | Border Thickness. Always 5 | Football |
+| borderThicknessXInner | Border Thickness X Inner. Always 25 | Football |
+| borderThicknessYInner | Border Thickness Y Inner. Always 70 | Football |
 
 <a name="timesync-response-data"></a>
 ### Timesync Response Data
 
-| Field | Type | Notes |
-| ----- | ---- | ----- |
-| TODO  | TODO | TODO  |
+| Field | Description |
+| ----- | ----- |
+| id | Timesync request ID |
+| result | Unix timestamp of the server time (in milliseconds) |
 
 <a name="admin-input-data"></a>
 ### Admin Input Data
@@ -1792,3 +1835,4 @@ Could also be refered to as DiedThisStepMethod. Method how a disc died, (all pla
   [^AST]: **AST** Abstract syntax tree
   [^LZ-String]: **LZ-String** A string compression algorithm used for encoding map and game state data. [GitHub](https://github.com/pieroxy/lz-string)
   [^Packet-ID]: **Packet ID** A Packet ID is a numeric or identifier value used to distinguish different network packets in a communication system. It is commonly used in both client and server networking to determine how incoming and outgoing messages should be handled. Packet ID may serve different purposes depending on direction (incoming `socket.on()` vs outgoing `socket.emit()`).
+  [^PSON]: **PSON** An efficient binary encoding for JSON data. [GitHub](https://github.com/dcodeIO/PSON)
