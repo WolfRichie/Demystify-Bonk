@@ -1,157 +1,234 @@
 # Demystifying Bonk
-Last updated: *12-4-2026, 16:50:44*
+Last updated: *12-7-2026, 16:38:41*
 
 A repository for various resources to understand the inner workings of [bonk.io](https://bonk.io) api protocol 49.
 
 <!-- reservedForToc -->
-- [Contributing to the repository](#contributing-to-the-repository) *line 158*
-- [Network](#network) *line 172*
-  - [Community Resources](#community-resources) *line 190*
-  - [Incoming Packets (Server → Client)](#incoming-packets-server-client) *line 209*
-    - [On 1 - Update Pings](#on-1---update-pings) *line 211*
-    - [On 2 - Room Created](#on-2---room-created) *line 224*
-    - [On 3 - Room Join](#on-3---room-join) *line 238*
-    - [On 4 - Player Join](#on-4---player-join) *line 257*
-    - [On 5 - Player Leave](#on-5---player-leave) *line 275*
-    - [On 6 - Host Leave](#on-6---host-leave) *line 288*
-    - [On 7 - Inputs](#on-7---inputs) *line 302*
-    - [On 8 - Ready Change](#on-8---ready-change) *line 315*
-    - [On 9 - All Ready Reset](#on-9---all-ready-reset) *line 328*
-    - [On 10 - Server Mute](#on-10---server-mute) *line 336*
-    - [On 11 - Server Unmute](#on-11---server-unmute) *line 350*
-    - [On 12 - Username Change](#on-12---username-change) *line 364*
-    - [On 13 - Game End](#on-13---game-end) *line 377*
-    - [On 14 - Reserved](#on-14---reserved) *line 385*
-    - [On 15 - Game Start](#on-15---game-start) *line 394*
-    - [On 16 - Status Message](#on-16---status-message) *line 408*
-    - [On 17 - Reserved](#on-17---reserved) *line 420*
-    - [On 18 - Team Change](#on-18---team-change) *line 429*
-    - [On 19 - Teamlock Toggle](#on-19---teamlock-toggle) *line 442*
-    - [On 20 - Chat Message](#on-20---chat-message) *line 454*
-    - [On 21 - Initial Data](#on-21---initial-data) *line 467*
-    - [On 23 - Timesync Response](#on-23---timesync-response) *line 479*
-    - [On 24 - Player Banned/Kicked](#on-24---player-bannedkicked) *line 489*
-    - [On 25 - Map Reorder](#on-25---map-reorder) *line 502*
-    - [On 26 - Mode Change](#on-26---mode-change) *line 513*
-    - [On 27 - Change WL (Rounds)](#on-27---change-wl-rounds) *line 526*
-    - [On 28 - Map Delete](#on-28---map-delete) *line 538*
-    - [On 29 - Map Switch](#on-29---map-switch) *line 548*
-    - [On 30 - Typing](#on-30---typing) *line 560*
-    - [On 31 - Admin Inputs](#on-31---admin-inputs) *line 573*
-    - [On 32 - AFK Warn](#on-32---afk-warn) *line 581*
-    - [On 33 - Map Suggest (Host)](#on-33---map-suggest-host) *line 589*
-    - [On 34 - Map Suggest (Client)](#on-34---map-suggest-client) *line 602*
-    - [On 35 - Change Mode](#on-35---change-mode) *line 616*
-    - [On 36 - Balance Set](#on-36---balance-set) *line 626*
-    - [On 37 - Reserved](#on-37---reserved) *line 639*
-    - [On 38 - Debug Winner](#on-38---debug-winner) *line 648*
-    - [On 39 - Team Settings Change](#on-39---team-settings-change) *line 662*
-    - [On 40 - Save Replay](#on-40---save-replay) *line 672*
-    - [On 41 - Host Change](#on-41---host-change) *line 684*
-    - [On 42 - Friend Request](#on-42---friend-request) *line 694*
-    - [On 43 - Countdown](#on-43---countdown) *line 706*
-    - [On 44 - Abort Countdown](#on-44---abort-countdown) *line 718*
-    - [On 45 - Player Leveled Up](#on-45---player-leveled-up) *line 726*
-    - [On 46 - Local Gained XP](#on-46---local-gained-xp) *line 736*
-    - [On 47 - Local Revert](#on-47---local-revert) *line 748*
-    - [On 48 - Recv In Game](#on-48---recv-in-game) *line 758*
-    - [On 49 - Room Share Link](#on-49---room-share-link) *line 768*
-    - [On 50 - Map Vote Update](#on-50---map-vote-update) *line 781*
-    - [On 51 - More Quick Maps](#on-51---more-quick-maps) *line 792*
-    - [On 52 - Tabbed](#on-52---tabbed) *line 800*
-    - [On 53 - Desync Request](#on-53---desync-request) *line 813*
-    - [On 54 - Desync Response](#on-54---desync-response) *line 825*
-    - [On 57 - Curate Result](#on-57---curate-result) *line 837*
-    - [On 58 - Room Name Update](#on-58---room-name-update) *line 850*
-    - [On 59 - Room Password Update](#on-59---room-password-update) *line 862*
-    - [On 60 - Server Message](#on-60---server-message) *line 874*
-  - [Outgoing Packets (Client → Server)](#outgoing-packets-client-server) *line 882*
-    - [Emit 1 - Ping Acknowledgement](#emit-1---ping-acknowledgement) *line 884*
-    - [Emit 2 - Test Ping](#emit-2---test-ping) *line 896*
-    - [Emit 3 - Get Debug](#emit-3---get-debug) *line 905*
-    - [Emit 4 - Send Inputs](#emit-4---send-inputs) *line 914*
-    - [Emit 5 - Trigger Start](#emit-5---trigger-start) *line 928*
-    - [Emit 6 - Change Own Team](#emit-6---change-own-team) *line 941*
-    - [Emit 7 - Team Lock](#emit-7---team-lock) *line 951*
-    - [Emit 8 - Silence Player](#emit-8---silence-player) *line 961*
-    - [Emit 9 - Kick/Ban Player](#emit-9---kickban-player) *line 974*
-    - [Emit 10 - Chat Message](#emit-10---chat-message) *line 985*
-    - [Emit 11 - Inform In Lobby](#emit-11---inform-in-lobby) *line 995*
-    - [Emit 12 - Create Room](#emit-12---create-room) *line 1008*
-    - [Emit 13 - Join Room](#emit-13---join-room) *line 1037*
-    - [Emit 14 - Return To Lobby](#emit-14---return-to-lobby) *line 1054*
-    - [Emit 16 - Set Ready](#emit-16---set-ready) *line 1060*
-    - [Emit 17 - All Ready Reset](#emit-17---all-ready-reset) *line 1070*
-    - [Emit 18 - Timesync request](#emit-18---timesync-request) *line 1078*
-    - [Emit 19 - Map Reorder](#emit-19---map-reorder) *line 1088*
-    - [Emit 20 - Send Mode](#emit-20---send-mode) *line 1097*
-    - [Emit 21 - Send WL (Rounds)](#emit-21---send-wl-rounds) *line 1110*
-    - [Emit 22 - Map Delete](#emit-22---map-delete) *line 1120*
-    - [Emit 23 - Map Add](#emit-23---map-add) *line 1128*
-    - [Emit 24 - Send Typing](#emit-24---send-typing) *line 1140*
-    - [Emit 25 - Admin Inputs](#emit-25---admin-inputs) *line 1149*
-    - [Emit 26 - Change Other Team](#emit-26---change-other-team) *line 1159*
-    - [Emit 27 - Map Suggest](#emit-27---map-suggest) *line 1170*
-    - [Emit 28 - Change Mode](#emit-28---change-mode) *line 1182*
-    - [Emit 29 - Send Balance](#emit-29---send-balance) *line 1192*
-    - [Emit 30 - Version Check](#emit-30---version-check) *line 1205*
-    - [Emit 31 - Send Debug Winner](#emit-31---send-debug-winner) *line 1214*
-    - [Emit 32 - Team Settings Change](#emit-32---team-settings-change) *line 1227*
-    - [Emit 33 - Arm Record](#emit-33---arm-record) *line 1239*
-    - [Emit 34 - Host Change](#emit-34---host-change) *line 1247*
-    - [Emit 35 - Send Friended](#emit-35---send-friended) *line 1259*
-    - [Emit 36 - Start Countdown](#emit-36---start-countdown) *line 1271*
-    - [Emit 37 - Abort Countdown](#emit-37---abort-countdown) *line 1283*
-    - [Emit 38 - Request XP](#emit-38---request-xp) *line 1291*
-    - [Emit 39 - Map Vote](#emit-39---map-vote) *line 1299*
-    - [Emit 40 - Inform In Game](#emit-40---inform-in-game) *line 1312*
-    - [Emit 41 - Get Pre Vote](#emit-41---get-pre-vote) *line 1325*
-    - [Emit 42 - Get More Quick Play Maps](#emit-42---get-more-quick-play-maps) *line 1337*
-    - [Emit 43 - Update RC Data](#emit-43---update-rc-data) *line 1345*
-    - [Emit 44 - Tabbed](#emit-44---tabbed) *line 1354*
-    - [Emit 45 - Desync Test](#emit-45---desync-test) *line 1366*
-    - [Emit 46 - Send Desync Response](#emit-46---send-desync-response) *line 1380*
-    - [Emit 47 - Round Complete](#emit-47---round-complete) *line 1394*
-    - [Emit 50 - No Host Swap](#emit-50---no-host-swap) *line 1405*
-    - [Emit 51 - Curate](#emit-51---curate) *line 1413*
-    - [Emit 52 - Room Name Update](#emit-52---room-name-update) *line 1427*
-    - [Emit 53 - Room Password Update](#emit-53---room-password-update) *line 1439*
-- [Source Code / Deobfuscation](#source-code-deobfuscation) *line 1449*
-- [Common Data Schemes](#common-data-schemes) *line 1453*
-  - [Enums](#enums) *line 1455*
-    - [Team](#team) *line 1457*
-    - [Server Mute Broadcast type enum](#server-mute-broadcast-type-enum) *line 1470*
-    - [Game Engine Enum](#game-engine-enum) *line 1480*
-    - [Game Mode Enum](#game-mode-enum) *line 1490*
-  - [Inputs](#inputs) *line 1507*
-    - [Input Flags](#input-flags) *line 1555*
-    - [Input Object](#input-object) *line 1575*
-  - [Game Configuration](#game-configuration) *line 1583*
-    - [Game Settings Object (`gs`)](#game-settings-object-gs) *line 1585*
-    - [Mode Settings Object](#mode-settings-object) *line 1607*
-    - [Team Settings Object](#team-settings-object) *line 1613*
-  - [Map](#map) *line 1619*
-    - [Map Data Format](#map-data-format) *line 1621*
-    - [Capture Zone](#capture-zone) *line 1632*
-  - [Game State](#game-state) *line 1645*
-    - [Initial Game State](#initial-game-state) *line 1647*
-      - [Bonk Game State](#bonk-game-state) *line 1663*
-      - [Football Game State](#football-game-state) *line 1688*
-    - [Full Game State Data](#full-game-state-data) *line 1709*
-  - [Discs](#discs) *line 1715*
-    - [Bonk Disc](#bonk-disc) *line 1717*
-    - [Football Disc](#football-disc) *line 1725*
-    - [Disc Death](#disc-death) *line 1733*
-      - [DiscDeathMethod](#discdeathmethod) *line 1747*
-  - [Common Types](#common-types) *line 1759*
-    - [Point 2D](#point-2d) *line 1761*
-    - [Sounds This Step](#sounds-this-step) *line 1770*
-    - [Avatar Data Format](#avatar-data-format) *line 1779*
-  - [Server](#server) *line 1786*
-    - [Status Codes](#status-codes) *line 1788*
-    - [Timesync Response Data](#timesync-response-data) *line 1834*
-    - [Admin Input Data](#admin-input-data) *line 1841*
-- [Foot Notes](#foot-notes) *line 1847*
+- [Contributing to the repository](#contributing-to-the-repository) *line 233*
+- [Network](#network) *line 247*
+  - [Community Resources](#community-resources) *line 265*
+  - [Incoming Packets (Server Ã¢â€ â€™ Client)](#incoming-packets-server-client) *line 284*
+    - [On 1 - Update Pings](#on-1---update-pings) *line 286*
+    - [On 2 - Room Created](#on-2---room-created) *line 299*
+    - [On 3 - Room Join](#on-3---room-join) *line 313*
+    - [On 4 - Player Join](#on-4---player-join) *line 332*
+    - [On 5 - Player Leave](#on-5---player-leave) *line 350*
+    - [On 6 - Host Leave](#on-6---host-leave) *line 363*
+    - [On 7 - Inputs](#on-7---inputs) *line 377*
+    - [On 8 - Ready Change](#on-8---ready-change) *line 390*
+    - [On 9 - All Ready Reset](#on-9---all-ready-reset) *line 403*
+    - [On 10 - Server Mute](#on-10---server-mute) *line 411*
+    - [On 11 - Server Unmute](#on-11---server-unmute) *line 425*
+    - [On 12 - Username Change](#on-12---username-change) *line 439*
+    - [On 13 - Game End](#on-13---game-end) *line 452*
+    - [On 14 - Reserved](#on-14---reserved) *line 460*
+    - [On 15 - Game Start](#on-15---game-start) *line 469*
+    - [On 16 - Status Message](#on-16---status-message) *line 483*
+    - [On 17 - Reserved](#on-17---reserved) *line 495*
+    - [On 18 - Team Change](#on-18---team-change) *line 504*
+    - [On 19 - Teamlock Toggle](#on-19---teamlock-toggle) *line 517*
+    - [On 20 - Chat Message](#on-20---chat-message) *line 529*
+    - [On 21 - Initial Data](#on-21---initial-data) *line 542*
+    - [On 23 - Timesync Response](#on-23---timesync-response) *line 554*
+    - [On 24 - Player Banned/Kicked](#on-24---player-bannedkicked) *line 564*
+    - [On 25 - Map Reorder](#on-25---map-reorder) *line 577*
+    - [On 26 - Mode Change](#on-26---mode-change) *line 588*
+    - [On 27 - Change WL (Rounds)](#on-27---change-wl-rounds) *line 601*
+    - [On 28 - Map Delete](#on-28---map-delete) *line 613*
+    - [On 29 - Map Switch](#on-29---map-switch) *line 623*
+    - [On 30 - Typing](#on-30---typing) *line 635*
+    - [On 31 - Admin Inputs](#on-31---admin-inputs) *line 648*
+    - [On 32 - AFK Warn](#on-32---afk-warn) *line 656*
+    - [On 33 - Map Suggest (Host)](#on-33---map-suggest-host) *line 664*
+    - [On 34 - Map Suggest (Client)](#on-34---map-suggest-client) *line 677*
+    - [On 35 - Change Mode](#on-35---change-mode) *line 691*
+    - [On 36 - Balance Set](#on-36---balance-set) *line 701*
+    - [On 37 - Reserved](#on-37---reserved) *line 714*
+    - [On 38 - Debug Winner](#on-38---debug-winner) *line 723*
+    - [On 39 - Team Settings Change](#on-39---team-settings-change) *line 737*
+    - [On 40 - Save Replay](#on-40---save-replay) *line 747*
+    - [On 41 - Host Change](#on-41---host-change) *line 759*
+    - [On 42 - Friend Request](#on-42---friend-request) *line 769*
+    - [On 43 - Countdown](#on-43---countdown) *line 781*
+    - [On 44 - Abort Countdown](#on-44---abort-countdown) *line 793*
+    - [On 45 - Player Leveled Up](#on-45---player-leveled-up) *line 801*
+    - [On 46 - Local Gained XP](#on-46---local-gained-xp) *line 811*
+    - [On 47 - Local Revert](#on-47---local-revert) *line 823*
+    - [On 48 - Recv In Game](#on-48---recv-in-game) *line 833*
+    - [On 49 - Room Share Link](#on-49---room-share-link) *line 843*
+    - [On 50 - Map Vote Update](#on-50---map-vote-update) *line 856*
+    - [On 51 - More Quick Maps](#on-51---more-quick-maps) *line 867*
+    - [On 52 - Tabbed](#on-52---tabbed) *line 875*
+    - [On 53 - Desync Request](#on-53---desync-request) *line 888*
+    - [On 54 - Desync Response](#on-54---desync-response) *line 900*
+    - [On 57 - Curate Result](#on-57---curate-result) *line 912*
+    - [On 58 - Room Name Update](#on-58---room-name-update) *line 925*
+    - [On 59 - Room Password Update](#on-59---room-password-update) *line 937*
+    - [On 60 - Server Message](#on-60---server-message) *line 949*
+  - [Outgoing Packets (Client Ã¢â€ â€™ Server)](#outgoing-packets-client-server) *line 957*
+    - [Emit 1 - Ping Acknowledgement](#emit-1---ping-acknowledgement) *line 959*
+    - [Emit 2 - Test Ping](#emit-2---test-ping) *line 971*
+    - [Emit 3 - Get Debug](#emit-3---get-debug) *line 980*
+    - [Emit 4 - Send Inputs](#emit-4---send-inputs) *line 989*
+    - [Emit 5 - Trigger Start](#emit-5---trigger-start) *line 1003*
+    - [Emit 6 - Change Own Team](#emit-6---change-own-team) *line 1016*
+    - [Emit 7 - Team Lock](#emit-7---team-lock) *line 1026*
+    - [Emit 8 - Silence Player](#emit-8---silence-player) *line 1036*
+    - [Emit 9 - Kick/Ban Player](#emit-9---kickban-player) *line 1049*
+    - [Emit 10 - Chat Message](#emit-10---chat-message) *line 1060*
+    - [Emit 11 - Inform In Lobby](#emit-11---inform-in-lobby) *line 1070*
+    - [Emit 12 - Create Room](#emit-12---create-room) *line 1083*
+    - [Emit 13 - Join Room](#emit-13---join-room) *line 1112*
+    - [Emit 14 - Return To Lobby](#emit-14---return-to-lobby) *line 1129*
+    - [Emit 16 - Set Ready](#emit-16---set-ready) *line 1135*
+    - [Emit 17 - All Ready Reset](#emit-17---all-ready-reset) *line 1145*
+    - [Emit 18 - Timesync request](#emit-18---timesync-request) *line 1153*
+    - [Emit 19 - Map Reorder](#emit-19---map-reorder) *line 1163*
+    - [Emit 20 - Send Mode](#emit-20---send-mode) *line 1172*
+    - [Emit 21 - Send WL (Rounds)](#emit-21---send-wl-rounds) *line 1185*
+    - [Emit 22 - Map Delete](#emit-22---map-delete) *line 1195*
+    - [Emit 23 - Map Add](#emit-23---map-add) *line 1203*
+    - [Emit 24 - Send Typing](#emit-24---send-typing) *line 1215*
+    - [Emit 25 - Admin Inputs](#emit-25---admin-inputs) *line 1224*
+    - [Emit 26 - Change Other Team](#emit-26---change-other-team) *line 1234*
+    - [Emit 27 - Map Suggest](#emit-27---map-suggest) *line 1245*
+    - [Emit 28 - Change Mode](#emit-28---change-mode) *line 1257*
+    - [Emit 29 - Send Balance](#emit-29---send-balance) *line 1267*
+    - [Emit 30 - Version Check](#emit-30---version-check) *line 1280*
+    - [Emit 31 - Send Debug Winner](#emit-31---send-debug-winner) *line 1289*
+    - [Emit 32 - Team Settings Change](#emit-32---team-settings-change) *line 1302*
+    - [Emit 33 - Arm Record](#emit-33---arm-record) *line 1314*
+    - [Emit 34 - Host Change](#emit-34---host-change) *line 1322*
+    - [Emit 35 - Send Friended](#emit-35---send-friended) *line 1334*
+    - [Emit 36 - Start Countdown](#emit-36---start-countdown) *line 1346*
+    - [Emit 37 - Abort Countdown](#emit-37---abort-countdown) *line 1358*
+    - [Emit 38 - Request XP](#emit-38---request-xp) *line 1366*
+    - [Emit 39 - Map Vote](#emit-39---map-vote) *line 1374*
+    - [Emit 40 - Inform In Game](#emit-40---inform-in-game) *line 1387*
+    - [Emit 41 - Get Pre Vote](#emit-41---get-pre-vote) *line 1400*
+    - [Emit 42 - Get More Quick Play Maps](#emit-42---get-more-quick-play-maps) *line 1412*
+    - [Emit 43 - Update RC Data](#emit-43---update-rc-data) *line 1420*
+    - [Emit 44 - Tabbed](#emit-44---tabbed) *line 1430*
+    - [Emit 45 - Desync Test](#emit-45---desync-test) *line 1442*
+    - [Emit 46 - Send Desync Response](#emit-46---send-desync-response) *line 1456*
+    - [Emit 47 - Round Complete](#emit-47---round-complete) *line 1470*
+    - [Emit 50 - No Host Swap](#emit-50---no-host-swap) *line 1481*
+    - [Emit 51 - Curate](#emit-51---curate) *line 1489*
+    - [Emit 52 - Room Name Update](#emit-52---room-name-update) *line 1503*
+    - [Emit 53 - Room Password Update](#emit-53---room-password-update) *line 1515*
+- [Common Data Schemes](#common-data-schemes) *line 1525*
+  - [Data](#data) *line 1527*
+    - [Token Format](#token-format) *line 1529*
+  - [Enums](#enums) *line 1555*
+    - [Team](#team) *line 1557*
+    - [Server Mute Broadcast type enum](#server-mute-broadcast-type-enum) *line 1568*
+    - [Game Engine Enum](#game-engine-enum) *line 1576*
+    - [Game Mode Enum](#game-mode-enum) *line 1585*
+    - [Body Type Enum](#body-type-enum) *line 1599*
+    - [Quality Enum](#quality-enum) *line 1609*
+    - [Projectile Type Enum](#projectile-type-enum) *line 1619*
+    - [Avatar Shape Enum](#avatar-shape-enum) *line 1627*
+    - [Disc Death Method Enum](#disc-death-method-enum) *line 1633*
+  - [Inputs](#inputs) *line 1643*
+    - [Input Flags](#input-flags) *line 1691*
+    - [Input Object](#input-object) *line 1709*
+    - [Frame Input](#frame-input) *line 1717*
+  - [Game Configuration](#game-configuration) *line 1730*
+    - [Game Settings Object (`gs`)](#game-settings-object-gs) *line 1732*
+    - [Mode Settings Object](#mode-settings-object) *line 1748*
+    - [Team Settings Object](#team-settings-object) *line 1757*
+  - [Map](#map) *line 1766*
+    - [Map Settings](#map-settings) *line 1768*
+    - [Map Metadata](#map-metadata) *line 1780*
+    - [Map Data Format](#map-data-format) *line 1802*
+      - [Capture Zone](#capture-zone) *line 1813*
+    - [Physics](#physics) *line 1826*
+      - [Shapes](#shapes) *line 1830*
+        - [Base Shape](#base-shape) *line 1834*
+        - [Box Shape](#box-shape) *line 1841*
+        - [Circle Shape](#circle-shape) *line 1853*
+        - [Poly Shape](#poly-shape) *line 1863*
+        - [Chain Shape](#chain-shape) *line 1874*
+      - [Fixture](#fixture) *line 1888*
+      - [Body](#body) *line 1905*
+      - [Joints](#joints) *line 1935*
+        - [Base Joint](#base-joint) *line 1939*
+        - [Revolute Joint](#revolute-joint) *line 1952*
+        - [Distance Joint](#distance-joint) *line 1973*
+        - [Legacy Path Joint](#legacy-path-joint) *line 1990*
+        - [Legacy Springy Joint](#legacy-springy-joint) *line 2011*
+        - [Prismatic Joint](#prismatic-joint) *line 2028*
+        - [Soft Rod Joint](#soft-rod-joint) *line 2049*
+        - [Gear Joint](#gear-joint) *line 2065*
+      - [Physics State](#physics-state) *line 2079*
+  - [Game State](#game-state) *line 2092*
+    - [Initial Game State](#initial-game-state) *line 2094*
+      - [Bonk Game State](#bonk-game-state) *line 2110*
+      - [Football Game State](#football-game-state) *line 2135*
+    - [Full Game State Data](#full-game-state-data) *line 2156*
+  - [Discs](#discs) *line 2202*
+    - [Bonk Disc](#bonk-disc) *line 2204*
+    - [Football Disc](#football-disc) *line 2235*
+    - [Disc Death](#disc-death) *line 2251*
+      - [DiscDeathMethod](#discdeathmethod) *line 2265*
+  - [Common Types](#common-types) *line 2275*
+    - [Point 2D](#point-2d) *line 2277*
+    - [Sounds This Step](#sounds-this-step) *line 2286*
+    - [Swing State](#swing-state) *line 2295*
+  - [Common Types](#common-types) *line 2305*
+    - [Point 2D](#point-2d) *line 2307*
+    - [Avatar Data Format](#avatar-data-format) *line 2320*
+  - [Server](#server) *line 2329*
+    - [Status Codes](#status-codes) *line 2331*
+    - [Timesync Response Data](#timesync-response-data) *line 2377*
+    - [Admin Input Data](#admin-input-data) *line 2384*
+- [HTTP Requests](#http-requests) *line 2390*
+  - [Account Endpoints](#account-endpoints) *line 2396*
+    - [register_legacy.php](#register_legacyphp) *line 2398*
+    - [login_legacy.php](#login_legacyphp) *line 2426*
+    - [login_auto.php](#login_autophp) *line 2439*
+    - [login_clearauto.php](#login_clearautophp) *line 2450*
+    - [account_changepassword.php](#account_changepasswordphp) *line 2458*
+    - [account_savecontrols.php](#account_savecontrolsphp) *line 2475*
+  - [Friends Endpoints](#friends-endpoints) *line 2487*
+    - [friends.php](#friendsphp) *line 2489*
+  - [Map Endpoints](#map-endpoints) *line 2508*
+    - [Map Favorite Endpoints](#map-favorite-endpoints) *line 2510*
+      - [map_fave.php](#map_favephp) *line 2512*
+    - [Map Search Endpoints](#map-search-endpoints) *line 2529*
+      - [map_getsearch.php](#map_getsearchphp) *line 2531*
+      - [map_getfresh.php](#map_getfreshphp) *line 2551*
+      - [map_getfave.php](#map_getfavephp) *line 2567*
+      - [map_getown.php](#map_getownphp) *line 2584*
+    - [Map B1 Endpoints (Bonk1 Legacy Maps)](#map-b1-endpoints-bonk1-legacy-maps) *line 2600*
+      - [map_b1_getfave.php](#map_b1_getfavephp) *line 2602*
+      - [map_b1_getown.php](#map_b1_getownphp) *line 2619*
+      - [map_b1_getbest.php](#map_b1_getbestphp) *line 2636*
+      - [map_b1_getsearch.php](#map_b1_getsearchphp) *line 2652*
+    - [Map Management Endpoints](#map-management-endpoints) *line 2672*
+      - [map_save_pub.php](#map_save_pubphp) *line 2674*
+      - [map_delete.php](#map_deletephp) *line 2699*
+  - [Replay Endpoints](#replay-endpoints) *line 2708*
+      - [replay_submit.php](#replay_submitphp) *line 2710*
+      - [replay_get.php](#replay_getphp) *line 2724*
+      - [replay_report.php](#replay_reportphp) *line 2738*
+  - [Room Endpoints](#room-endpoints) *line 2752*
+      - [getrooms.php](#getroomsphp) *line 2754*
+      - [getroomaddress.php](#getroomaddressphp) *line 2776*
+  - [Matchmaking Endpoints](#matchmaking-endpoints) *line 2794*
+      - [matchmaking_maps.php](#matchmaking_mapsphp) *line 2796*
+      - [matchmaking_query.php](#matchmaking_queryphp) *line 2808*
+  - [Avatar Endpoints](#avatar-endpoints) *line 2831*
+      - [avatar_update.php](#avatar_updatephp) *line 2833*
+  - [static Endpoints](#static-endpoints) *line 2845*
+      - [combinedplayercount.txt](#combinedplayercounttxt) *line 2849*
+      - [Hot Maps Cache](#hot-maps-cache) *line 2858*
+    - [picks](#picks) *line 2879*
+- [Source Code / Deobfuscation](#source-code-deobfuscation) *line 2890*
+  - [Deobfuscation Tools](#deobfuscation-tools) *line 2901*
+    - [[kookywarrior/bonk-deobfuscator](https://github.com/kookywarrior/bonk-deobfuscator)](#kookywarriorbonk-deobfuscatorhttpsgithubcomkookywarriorbonk-deobfuscator) *line 2903*
+    - [[Kitaes-software/bonk-deobfuscator](https://github.com/Kitaes-software/bonk-deobfuscator)](#kitaes-softwarebonk-deobfuscatorhttpsgithubcomkitaes-softwarebonk-deobfuscator) *line 2908*
+- [Foot Notes](#foot-notes) *line 2916*
 
   
 <a name="contributing-to-the-repository"></a>
@@ -209,7 +286,7 @@ Bonk.io networking uses **Socket.IO** for client-server communication. Each game
 > Open-source implementation of the bonk.io multiplayer server and a corresponding client, designed to allow complete freedom over game backend and restrictions.
 
 <a name="incoming-packets-server-client"></a>
-### Incoming Packets (Server → Client)
+### Incoming Packets (Server Ã¢â€ â€™ Client)
 
 <a name="on-1---update-pings"></a>
 #### On 1 - Update Pings
@@ -298,7 +375,7 @@ Example: `42[5,13,14511]`
 
 The host left; a new host is assigned (host migration).
 
-Examples: `42[6,1,0,49753339064]` · `42[6,0,-1,49753339073]`
+Examples: `42[6,1,0,49753339064]` Ã‚Â· `42[6,0,-1,49753339073]`
 
 | # | Description |
 |---|-------------|
@@ -313,7 +390,7 @@ Examples: `42[6,1,0,49753339064]` · `42[6,0,-1,49753339073]`
 
 Game input data from another player, relayed through the server.
 
-Examples: `42[7,1,{"i":38,"f":324,"c":45}]` · `42[7,1,{"i":25,"f":531,"c":108}]`
+Examples: `42[7,1,{"i":38,"f":324,"c":45}]` Ã‚Â· `42[7,1,{"i":25,"f":531,"c":108}]`
 
 | # | Description |
 |---|-------------|
@@ -783,7 +860,7 @@ Example: `42[45,{"sid":1,"lv":69}]`
 <a name="on-46---local-gained-xp"></a>
 #### On 46 - Local Gained XP
 
-You gained XP. May include a new auth token if you leveled up.
+You gained XP. May include a new auth token[^token] if you leveled up.
 
 Example: `42[46,{"newXP":300}]`
 
@@ -895,7 +972,7 @@ Desynchronization test response.
 
 Result of a map curation action (`/curate` + `/curateyes`).
 
-Examples: `42[57,false,"unauthorised"]` · `42[57,true,""]`
+Examples: `42[57,false,"unauthorised"]` Ã‚Â· `42[57,true,""]`
 
 | # | Description |
 |---|-------------|
@@ -940,7 +1017,7 @@ A direct message from the server (system announcement, etc.).
 | 1 | Server message text |
 
 <a name="outgoing-packets-client-server"></a>
-### Outgoing Packets (Client → Server)
+### Outgoing Packets (Client Ã¢â€ â€™ Server)
 
 <a name="emit-1---ping-acknowledgement"></a>
 #### Emit 1 - Ping Acknowledgement
@@ -980,7 +1057,7 @@ Example: `42[3]`
 
 Send game inputs.
 
-Examples: `42[4,{"i":38,"f":324,"c":45}]` · `42[4,{"i":25,"f":531,"c":108}]`
+Examples: `42[4,{"i":38,"f":324,"c":45}]` Ã‚Â· `42[4,{"i":25,"f":531,"c":108}]`
 
 | Key | Description |
 |-----|-------------|
@@ -1080,7 +1157,7 @@ Example: `42[11,{"sid":2,"gs":{"map":{...},"gt":2,"wl":3,"q":false,"tl":false,"t
 <a name="emit-12---create-room"></a>
 #### Emit 12 - Create Room
 
-Example (logged in): `42[12,{"peerID":"ht1a3nt5tgc00000","roomName":"Showcase's game","maxPlayers":6,"password":"","dbid":12741896,"guest":false,...,"token":"TOKENHERE","avatar":{...}}]`
+Example (logged in): `42[12,{"peerID":"ht1a3nt5tgc00000","roomName":"Showcase's game","maxPlayers":6,"password":"","dbid":12741896,"guest":false,...,"token[^token]":"TOKENHERE","avatar":{...}}]`
 
 Example (guest): `42[12,{"peerID":"b6sg533lh1v00000","roomName":"net's game","maxPlayers":6,"password":"","dbid":12741896,"guest":true,...,"guestName":"net","avatar":{...}}]`
 
@@ -1102,7 +1179,7 @@ Example (guest): `42[12,{"peerID":"b6sg533lh1v00000","roomName":"net's game","ma
 | `quick` | Whether quickplay |
 | `mode` | `"custom"`, `"bonkquick"`, `"arrowsquick"`, or `"grapplequick"` |
 | `guestName` | Guest display name (only if guest) |
-| `token` | Auth token (only if not guest) |
+| `token` | Auth token[^token] (only if not guest) |
 | `avatar` | <a href="#avatar-data-format">Skin data</a> |
 
 ---
@@ -1118,10 +1195,10 @@ Example (guest): `42[12,{"peerID":"b6sg533lh1v00000","roomName":"net's game","ma
 | `dbid` | Database ID (hardcoded to 2) |
 | `version` | Bonk.io version |
 | `peerID` | Your peer ID |
-| `bypass` | Auto-join bypass token (empty if none) |
+| `bypass` | Auto-join bypass token[^token] (empty if none) |
 | `avatar` | <a href="#avatar-data-format">Skin data</a> |
 | `guestName` | Guest name (only if guest) |
-| `token` | Auth token (only if not guest) |
+| `token` | Auth token[^token] (only if not guest) |
 
 ---
 
@@ -1446,11 +1523,12 @@ Example: `42[41,{"mapid":831011}]`
 
 <a name="emit-43---update-rc-data"></a>
 #### Emit 43 - Update RC Data
-TODO verify ROUND COUNT
+
+Updates the round count for the current game.
 
 | Key | Description |
 |-----|-------------|
-| `rc` | RC data |
+| `rc` | Round count - indicates how many rounds have passed since the game started |
 
 ---
 
@@ -1557,13 +1635,38 @@ Example: `42[53,{"newPass":"password here"}]`
 |-----|-------------|
 | `newPass` | New password (empty string for `/clearroompass`) |
 
-<a name="source-code-deobfuscation"></a>
-## Source Code / Deobfuscation
-> [!WARNING]
-> THIS SECTION IS NOT ALLOWED CONTRIBUTIONS, WILL BE PURELY WRITTEN BY ME.
-
 <a name="common-data-schemes"></a>
 ## Common Data Schemes
+
+<a name="data"></a>
+### Data
+
+<a name="token-format"></a>
+#### Token Format
+
+A JSON Web Token (JWT) authentication credential assigned to user accounts. 
+
+```json
+{
+  "uid": "12348636",
+  "uip": "123.123.255.255",
+  "un": "username",
+  "ev": true,
+  "lv": 1,
+  "exp": 1783951113,
+  "g": "b"
+}
+```
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `uid` | string | User ID - unique identifier for the account |
+| `uip` | string | User IP - IP address associated with the token[^token] |
+| `un` | string | Username |
+| `ev` | boolean | Email Verified - Whether email has been verified |
+| `lv` | number | Level |
+| `exp` | number | Expiration - Unix timestamp (seconds) when token[^token] expires |
+| `g` | string | Game - the game that this token[^token] is for, for bonk.io this is "b" |
 
 <a name="enums"></a>
 ### Enums
@@ -1571,56 +1674,97 @@ Example: `42[53,{"newPass":"password here"}]`
 <a name="team"></a>
 #### Team
 
-```ts
-enum Team {
-  Spec   = 0, // Spectator
-  FFA    = 1,
-  Red    = 2,
-  Blue   = 3,
-  Green  = 4,
-  Yellow = 5,
-}
-```
+| Value | Name | Description |
+|-------|------|-------------|
+| `0` | Spec | Spectator |
+| `1` | FFA | Free for all |
+| `2` | Red | Red team |
+| `3` | Blue | Blue team |
+| `4` | Green | Green team |
+| `5` | Yellow | Yellow team |
 
 <a name="server-mute-broadcast-type-enum"></a>
 #### Server Mute Broadcast type enum
 
-```ts
-enum ServerMuteBroadcastType {
-  Everyone              = 1,
-  EveryoneExceptPlayer  = 2,
-  Nobody                = 3,
-}
-```
+| Value | Description |
+|-------|-------------|
+| `1` | Everyone - broadcast to all players |
+| `2` | Everyone except player - broadcast to all except one |
+| `3` | Nobody - don't broadcast |
 
 <a name="game-engine-enum"></a>
 #### Game Engine Enum
 This tells the game which "GameEngine" to use, so it knows how to render, step, and initialise the game state.
 All modes except "football"
-```ts
-enum GameEngine {
-  Standard = "b",  // Uses the BonkEngine class
-  Football = "f", // Uses the FootballEngine class
-}
-```
+
+| Value | Description |
+|-------|-------------|
+| `"b"` | Standard - Uses the BonkEngine class |
+| `"f"` | Football - Uses the FootballEngine class |
 
 <a name="game-mode-enum"></a>
 #### Game Mode Enum
 
-```ts
-enum GameMode {
-    Arrows = "ar",
-    ArrowsDeath = "ard",
-    Classic = "b", // Stands for "bonk"
-    Simple = "bs", //Likely stands for "bonk simple"
-    Football = "f", //Stands for "football"
-    Grapple = "sp",  //Stands for "swing proximity"
-    VTOL = "v", //probably stands for "vtol"
-    SL = "sl", // quickplay, swingL?
-    FT = "ft" // quickplay // Football
-}
+| Value | Description |
+|-------|-------------|
+| `"ar"` | Arrows |
+| `"ard"` | Arrows Death |
+| `"b"` | Classic (Bonk) |
+| `"bs"` | Simple (Bonk Simple) |
+| `"f"` | Football |
+| `"sp"` | Grapple (Swing Proximity) |
+| `"v"` | VTOL |
+| `"sl"` | Quickplay |
+| `"ft"` | Quickplay Football |
 
-```
+<a name="body-type-enum"></a>
+#### Body Type Enum
+
+Defines the physical body type for physics objects in maps.
+
+| Value | Description |
+|-------|-------------|
+| `'s'` | Static - does not move |
+| `'k'` | Kinematic - moves but is not affected by physics |
+| `'d'` | Dynamic - affected by physics and gravity |
+
+<a name="quality-enum"></a>
+#### Quality Enum
+
+Graphics quality settings.
+
+| Value | Description |
+|-------|-------------|
+| `1` | Low |
+| `2` | Medium |
+| `3` | High |
+
+<a name="projectile-type-enum"></a>
+#### Projectile Type Enum
+
+Types of projectiles that can be launched in-game.
+
+| Value | Description |
+|-------|-------------|
+| `"arrow"` | Currently the only projectile type |
+
+<a name="avatar-shape-enum"></a>
+#### Avatar Shape Enum
+
+Avatar layer shape IDs for player skin customization. Each enum value represents a unique shape that can be used as a layer in an avatar (maximum 15 layers per avatar). Values are automatically indexed (0-115+).
+
+**Aliens:** Alien1-6 | **Barbed Wire:** Barbedwire1-6 | **Basic:** Circle, Crescent | **Crosses:** Cross1-7, Cross | **Faces:** Face1-21 | **Flames:** Flames1-10 | **Skulls:** Skull1-3, Skullcross | **Stars:** Star1-2 | **Triangles:** Triangle, Triangleeven, Triangletall1-2 | **Grunge:** Grungecircle, Grungeheart1-2, Grungeleaf1-3, Grungelines1-2 | **Prints:** Shoeprint, Handprint, Fingerprint, Print2 | **Splats:** Splat, Splat1-3 | **Geometric:** Pentagon, Rectangle1-3, Rectanglefat, Semicircle, Roundedrectangle | **Celestial:** Moon | **Hazard:** Radioactive1-2, Biohazard | **Fire:** Fire1-2, Oxidiser | **Misc:** Ball, Atomic, Freeze, World, Signal, Exclamation, Electricity, Chain, Scope1-2 | **Whisps:** Whisp1-11
+
+<a name="disc-death-method-enum"></a>
+#### Disc Death Method Enum
+
+Method describing how a disc/player died.
+
+| Value | Description |
+|-------|-------------|
+| `1` | Hit a death object (e.g., death arrow or "death" platform) |
+| `3` | Captured in CTF mode |
+| `4` | Fell out of bounds |
 
 <a name="inputs"></a>
 ### Inputs
@@ -1674,23 +1818,21 @@ class PlayerInput:
 <a name="input-flags"></a>
 #### Input Flags
 
-```ts
-enum InputFlags {
-  None    = 0 << 0,  // 0
-  Left    = 1 << 0,  // 1
-  Right   = 1 << 1,  // 2
-  Up      = 1 << 2,  // 4
-  Down    = 1 << 3,  // 8
-  Heavy   = 1 << 4,  // 16 (bit 4, also known as "Action 1")
-  Special = 1 << 5,  // 32 (bit 5, also known as "Action 2")
-}
-```
-For example if Right, Up and Special are all down (inputBits would be 38):
-`InputFlags.Right | InputFlags.Up | InputFlags.Special // (1 << 1 | 1 << 2 | 1 << 5)`
+| Flag | Bit | Value | Description |
+|------|-----|-------|-------------|
+| `None` | - | 0 | No flags set |
+| `Left` | 0 | 1 | Move left |
+| `Right` | 1 | 2 | Move right |
+| `Up` | 2 | 4 | Move up |
+| `Down` | 3 | 8 | Move down |
+| `Heavy` | 4 | 16 | Action 1 / primary action |
+| `Special` | 5 | 32 | Action 2 / secondary action |
 
-To check if a key is down = `(inputBits & InputFlags.Right) != 0` // bitwise AND mask check
-To set a key = `inputBits | InputFlags.Left` `// bitwise OR adds flag`
-To unset a key = `inputBits & ~Input.Left` // bitwise AND with NOT mask removes flag
+**Bit operations:**
+- Check if key is down: `(inputBits & InputFlags.Right) != 0`
+- Set a key: `inputBits | InputFlags.Left`
+- Unset a key: `inputBits & ~InputFlags.Left`
+- Example: Right + Up + Special = 2 + 4 + 32 = 38
 
 <a name="input-object"></a>
 #### Input Object
@@ -1701,55 +1843,105 @@ To unset a key = `inputBits & ~Input.Left` // bitwise AND with NOT mask removes 
 | `"f"` | int | Frame number |
 | `"c"` | int | Sequence number (increments per input) |
 
+<a name="frame-input"></a>
+#### Frame Input
+
+Represents the current input state for a frame - which keys are being pressed.
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `action` | boolean | Primary action (typically Heavy/bow pull) |
+| `action2` | boolean | Secondary action (typically Special/grapple) |
+| `down` | boolean | Down arrow key pressed |
+| `left` | boolean | Left arrow key pressed |
+| `right` | boolean | Right arrow key pressed |
+| `up` | boolean | Up arrow key pressed |
+
 <a name="game-configuration"></a>
 ### Game Configuration
 
 <a name="game-settings-object-gs"></a>
 #### Game Settings Object (`gs`)
 
-> [!WARNING]
-> heading will berewritten
+Complete game configuration settings.
 
-TODO verify map: string comment
-TODO verify q: boolean | string; 
-
-```ts
-interface GameSettings {
-  map: string | object;  // Map data (typically not encoded? TODO verify)
-  gt: number;            // Game type
-  wl: number;            // Win/loss rounds
-  q: boolean | string;   // Quick play (`false`, `"custom"`, `"bonkquick"`, etc.)
-  tl: boolean;           // Team lock
-  tea: boolean;          // Teams enabled
-  ga: GameEngine;        // Game engine see
-  mo: GameMode;          // Game mode
-  bal: number[];         // Player balance/handicap array
-}
-```
+| Field | Type | Description |
+|-------|------|-------------|
+| `map` | string \| object | Map data - either LZ-String[^LZ-String] compressed + Base64 encoded object, or string map name for quickplay |
+| `gt` | number? | Game type - internal game type identifier (optional) |
+| `wl` | number | Rounds to win - number of rounds needed to win the match |
+| `q` | boolean \| string? | Quick play mode - false for custom map, "custom" for custom lobby, "bonkquick" for quickplay (optional) |
+| `tl` | boolean | Team lock - whether team selection is locked |
+| `tea` | boolean | Teams enabled - whether teams mode is on (false = FFA mode) |
+| `ga` | string? | Game engine - "b" for Bonk, "f" for Football (optional) |
+| `mo` | string | Game mode - game mode identifier (see eMode enum) |
+| `bal` | any[]? | Balance/handicap array - per-player balance settings (optional) |
 
 <a name="mode-settings-object"></a>
 #### Mode Settings Object
 
-| Field | Type | Notes |
+Received via [Packet 26](#on-26---mode-change) when the host changes the game mode or engine.
+
+| Field | Type | Description |
 | ----- | ---- | ----- |
-| TODO  | TODO | TODO  |
+| `gameEngine` | number | Game engine (0 = Bonk, 1 = Football) |
+| `gameMode` | string | Game mode (ar, ard, b, bs, f, sp, v, sl, ft) - see eMode enum in definitions.d.ts |
 
 <a name="team-settings-object"></a>
 #### Team Settings Object
 
-| Field | Type | Notes |
+Received via [Packet 39](#on-39---team-settings-change) when the host changes team settings or team lock status.
+
+| Field | Type | Description |
 | ----- | ---- | ----- |
-| TODO  | TODO | TODO  |
+| `teamsEnabled` | boolean | Whether teams are enabled or FFA mode |
+| `teamLock` | boolean | Whether the team selection is locked (players cannot change teams) |
 
 <a name="map"></a>
 ### Map
+
+<a name="map-settings"></a>
+#### Map Settings
+
+Settings applied to a map that affect gameplay behavior.
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `re` | boolean | Respawn on death - whether discs respawn after dying |
+| `nc` | boolean | No collision - when true, players don't collide with each other (false = collision enabled) |
+| `pq` | number | Physics quality - determines physics complexity (1 << 1 = complex physics, otherwise normal) |
+| `gd` | number | Grid dimension - map editor grid size (no effect on gameplay) |
+| `fl` | boolean | Flight - whether discs can "fly" (fly maps) |
+
+<a name="map-metadata"></a>
+#### Map Metadata
+
+Metadata information about a map including author, name, and publishing details.
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `a` | string | Author - map creator's username |
+| `n` | string | Name - map name |
+| `dbv` | number | Database version - 1 for Flash maps, 2 for Bonk2 maps |
+| `dbid` | number | Database ID - unique identifier in the map database |
+| `authid` | number? | Author ID - user ID of the map creator (optional) |
+| `date` | string? | Creation/publication date (optional) |
+| `rxid` | number? | Remix/original map ID (optional) |
+| `rxn` | string | Remix name - original map name (only on remixed maps, "" for originals) |
+| `rxa` | string | Remix author - original map author (only on remixed maps, "" for originals) |
+| `rxdb` | number | Remix database - original map database version (1 for originals) |
+| `cr` | string[]? | Credits - usernames of contributors (optional) |
+| `pub` | boolean? | Published - whether the map is publicly available (optional) |
+| `mo` | string | Mode - recommended game mode (see eMode enum) |
+| `vu` | number? | Votes up - number of upvotes (optional) |
+| `vd` | number? | Votes down - number of downvotes (optional) |
 
 <a name="map-data-format"></a>
 #### Map Data Format
 
 Map data is an object compressed with LZ-String[^LZ-String] and encoded in Base64.
 
-For the full map data structure and key mappings (e.g. `v` → `version`), see:
+For the full map data structure and key mappings (e.g. `v` Ã¢â€ â€™ `version`), see:
 - [bonk-map](https://github.com/PixelMelt/bonk-map) - Community map parsing library
 - [nameConverter.ts](https://github.com/PixelMelt/bonk-map/blob/23c39313420741709cea089b136f152900d3f3e5/src/util/nameConverter.ts#L1) - Actual mappings of the shorthand keys to their full names
 
@@ -1757,7 +1949,7 @@ For the full map data structure and key mappings (e.g. `v` → `version`), see:
 > THIS IS NOT FULLY ACCURATE, AND MIGHT BE INCOMPLETE FOR SOME STUFF, (like <a href="capture-zone">Capture Znono/a>)
 
 <a name="capture-zone"></a>
-#### Capture Zone
+##### Capture Zone
 
 | Field | Type | Description |
 |-------|------|-------------|
@@ -1769,6 +1961,291 @@ For the full map data structure and key mappings (e.g. `v` → `version`), see:
 | `o` | number? | Owner Player ID[^Player-ID] (after capture) |
 | `ot` | <a href="#team">Team</a>? | Owner team (after capture) |
 | `p` | number? | Power / capture completion |
+
+<a name="physics"></a>
+#### Physics
+
+Physics objects define the layout and behavior of maps using Box2D physics engine.
+
+<a name="shapes"></a>
+##### Shapes
+
+Base shape type for all physics shapes.
+
+<a name="base-shape"></a>
+###### Base Shape
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `type` | string | Shape type identifier |
+| `c` | vector2? | Coordinates [x, y] - position of the shape (optional) |
+
+<a name="box-shape"></a>
+###### Box Shape
+
+Rectangular shape.
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `type` | string | "bx" - Box shape identifier |
+| `w` | number | Width |
+| `h` | number | Height |
+| `a` | number | Angle in degrees |
+| `sk` | boolean | Shrink - apply shrink wrapping |
+
+<a name="circle-shape"></a>
+###### Circle Shape
+
+Circular shape.
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `type` | string | "ci" - Circle shape identifier |
+| `r` | number | Radius |
+| `sk` | boolean | Shrink - apply shrink wrapping |
+
+<a name="poly-shape"></a>
+###### Poly Shape
+
+Polygon shape.
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `type` | string | "po" - Polygon shape identifier |
+| `v` | []  | Vertices array |
+| `s` | number | Scale |
+| `a` | number | Angle in degrees |
+
+<a name="chain-shape"></a>
+###### Chain Shape
+
+Chain/path of line segments.
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `type` | string | "ch" - Chain shape identifier |
+| `c` | vector2? | Coordinates - position (optional) |
+| `v` | vector2[] | Vectors - array of [x, y] points |
+| `s` | number | Scale |
+| `a` | number | Angle in degrees |
+| `l` | boolean | Line - whether to connect last point to first |
+| `sk` | boolean | Shrink - apply shrink wrapping |
+
+<a name="fixture"></a>
+##### Fixture
+
+A fixture applies properties to a shape - friction, bounciness, whether it causes death, etc.
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `sh` | number | Shape - index of the shape this fixture uses |
+| `n` | string | Name - fixture name |
+| `fr` | number | Friction - friction coefficient |
+| `fp` | boolean? | Friction players - whether friction applies to players (optional) |
+| `re` | number | Restitution - bounciness coefficient |
+| `de` | number | Density - mass per unit area |
+| `f` | number | Filter - collision filter value |
+| `d` | boolean | Death - whether this fixture kills players on contact |
+| `np` | boolean | No physics - whether physics are disabled |
+| `ng` | boolean | No grapple - whether grappling is disabled |
+
+<a name="body"></a>
+##### Body
+
+A physics body in the world - either a static platform, moving object, or player.
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `type` | eBodyType | Body type - static, kinematic, or dynamic |
+| `n` | string | Name - body name |
+| `p` | vector2 | Position - [x, y] coordinates |
+| `a` | number | Angle - rotation in degrees |
+| `fric` | number | Friction - friction coefficient |
+| `fricp` | boolean | Friction players - whether friction applies to players |
+| `re` | number | Restitution - bounciness |
+| `de` | number | Density - mass per unit area |
+| `lv` | vector2 | Linear velocity - [vx, vy] |
+| `av` | number | Angular velocity - rotation speed |
+| `ld` | number | Linear damping - linear velocity damping |
+| `ad` | number | Angular damping - angular velocity damping |
+| `fr` | boolean | Fixed rotation - whether rotation is locked |
+| `bu` | boolean | Bullet - high-speed collision flag |
+| `cf` | object | Constant force - {x, y, w, ct} |
+| `fx` | number[] | Fixtures - array of fixture indices |
+| `f_c` | number | Filter collision - collision category |
+| `f_p` | boolean | Filter property |
+| `f_1` | boolean | Filter 1 |
+| `f_2` | boolean | Filter 2 |
+| `f_3` | boolean | Filter 3 |
+| `f_4` | boolean | Filter 4 |
+| `bg` | any? | Background - likely boolean (optional) |
+
+<a name="joints"></a>
+##### Joints
+
+Joints connect two bodies together with various constraints.
+
+<a name="base-joint"></a>
+###### Base Joint
+
+Common properties for all joint types.
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `type` | string | Joint type identifier |
+| `ba` | number | Body A - first body ID |
+| `bb` | number | Body B - second body ID |
+| `d.bf` | number? | Begin fill / base force (optional) |
+| `d.cc` | boolean | Collide connected - whether connected bodies collide |
+| `d.dl` | boolean? | Draw line (optional) |
+
+<a name="revolute-joint"></a>
+###### Revolute Joint
+
+Rotational joint - one body rotates around the other.
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `type` | string | "rv" - Revolute joint identifier |
+| `ba` | number | Body A - first body ID |
+| `bb` | number | Body B - second body ID |
+| `aa` | vector2 | Anchor A - [x, y] |
+| `ab` | vector2? | Anchor B - [x, y] (optional) |
+| `d.la` | number | Lower angle - minimum rotation (degrees) |
+| `d.ua` | number | Upper angle - maximum rotation (degrees) |
+| `d.mmt` | number | Max motor torque |
+| `d.ms` | number | Motor speed |
+| `d.el` | boolean | Enable limit |
+| `d.em` | boolean | Enable motor |
+| `d.cc` | boolean | Collide connected |
+| `d.bf` | number | Base force |
+| `d.dl` | boolean | Draw line |
+
+<a name="distance-joint"></a>
+###### Distance Joint
+
+Maintains a fixed distance between two points.
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `type` | string | "d" - Distance joint identifier |
+| `ba` | number | Body A |
+| `bb` | number | Body B |
+| `aa` | vector2 | Anchor A - [x, y] |
+| `ab` | vector2 | Anchor B - [x, y] |
+| `d.dr` | number | Damping ratio |
+| `d.fh` | number | Frequency Hz |
+| `d.cc` | boolean | Collide connected |
+| `d.bf` | number | Base force |
+| `d.dl` | boolean | Draw line |
+
+<a name="legacy-path-joint"></a>
+###### Legacy Path Joint
+
+Constrains a body to move along a path.
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `type` | string | "lpj" - Legacy path joint identifier |
+| `ba` | number | Body A |
+| `bb` | number | Body B |
+| `pax` | number | Path anchor X |
+| `pay` | number | Path anchor Y |
+| `pa` | number | Path angle (degrees) |
+| `pf` | number | Path force |
+| `pl` | number | Path length |
+| `pu` | number | Path upper (likely unused) |
+| `plen` | number | Path length (alternate) |
+| `pms` | number | Path max speed |
+| `d.cc` | boolean | Collide connected |
+| `d.bf` | number | Base force |
+| `d.dl` | boolean | Draw line |
+
+<a name="legacy-springy-joint"></a>
+###### Legacy Springy Joint
+
+Spring-like joint with damping.
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `type` | string | "lsj" - Legacy springy joint identifier |
+| `ba` | number | Body A |
+| `bb` | number | Body B |
+| `sax` | number | Springy anchor X |
+| `say` | number | Springy anchor Y |
+| `sf` | number | Springy force |
+| `slen` | number | Springy length |
+| `d.cc` | boolean | Collide connected |
+| `d.bf` | number | Base force |
+| `d.dl` | boolean | Draw line |
+
+<a name="prismatic-joint"></a>
+###### Prismatic Joint
+
+Constrains motion to a single axis (sliding joint).
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `type` | string | "p" - Prismatic joint identifier |
+| `ba` | number | Body A |
+| `bb` | number | Body B |
+| `aa` | vector2 | Anchor A - [x, y] |
+| `ab` | vector2 | Anchor B - [x, y] |
+| `axa` | vector2? | Axis A - [x, y] (optional) |
+| `cs` | number? | Change side - motor side control (optional) |
+| `d.ut` | number | Upper translation - max slide distance |
+| `d.lt` | number | Lower translation - min slide distance |
+| `d.mmf` | number | Max motor force |
+| `d.ms` | number | Motor speed |
+| `d.el` | boolean? | Enable limit (optional) |
+| `d.em` | boolean? | Enable motor (optional) |
+| `d.cc` | boolean? | Collide connected (optional) |
+
+<a name="soft-rod-joint"></a>
+###### Soft Rod Joint
+
+Distance joint with flexibility.
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `type` | string | "d" - Soft rod joint identifier |
+| `ba` | number | Body A |
+| `bb` | number | Body B |
+| `aa` | vector2 | Anchor A - [x, y] |
+| `ab` | vector2 | Anchor B - [x, y] |
+| `len` | number? | Length (optional) |
+| `d.dr` | number | Damping ratio |
+| `d.fh` | number | Frequency Hz |
+| `d.cc` | boolean | Collide connected |
+
+<a name="gear-joint"></a>
+###### Gear Joint
+
+Connects two joints so they work in sync.
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `type` | string | "g" - Gear joint identifier |
+| `ba` | number | Body A |
+| `bb` | number | Body B |
+| `ja` | any? | Joint A (optional) |
+| `jb` | any? | Joint B (optional) |
+| `d.r` | number | Ratio - gear ratio |
+| `d.cc` | boolean? | Collide connected (optional) |
+
+<a name="physics-state"></a>
+##### Physics State
+
+Complete physics simulation state for a map.
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `bodies` | (body \| undefined)[] | Array of all physics bodies |
+| `bro` | number[] | Body render order |
+| `fixtures` | (fixture \| undefined)[] | Array of all fixtures |
+| `joints` | (joint \| undefined)[] | Array of all joints |
+| `shapes` | (shape \| undefined)[] | Array of all shapes |
+| `ppm` | number | Pixels per meter - scale factor for the map |
 
 <a name="game-state"></a>
 ### Game State
@@ -1810,7 +2287,7 @@ Used for all modes except Football.
 | `projectiles` | projectile[] | Array of projectiles (e.g. arrows), ordered by projectile ID |
 | `rc` | number | Round count - how many rounds have passed since the game started |
 | `rl` | number | Round length - amount of steps since last round start |
-| `scores` | number[] | Array containing the amount of wins for each player/team. On a Free For All game, these scores are ordered by Player ID[^Player-ID] and each one corresponds to a player (e.g. `scores[10]` = Player ID 10's wins). On a <a href="#team">Teams</a> game, there are up to 4 items, each one corresponding to a specific <a href="#team">Team</a>, in the following order: 0=red, 1=blue, 2=green, 3=yellow (e.g. `scores[2]` = <a href="#team">Team</a> Green's wins). Note: these indices do not match the <a href="#team">Team</a> enum values. |
+| `scores` | number[] | Array containing the amount of wins for each player/team. On a Free For All game, these scores are ordered by Player ID[^Player-ID] and each one corresponds to a player (e.g. `scores[10]` = Player ID[^Player-ID] 10's wins). On a <a href="#team">Teams</a> game, there are up to 4 items, each one corresponding to a specific <a href="#team">Team</a>, in the following order: 0=red, 1=blue, 2=green, 3=yellow (e.g. `scores[2]` = <a href="#team">Team</a> Green's wins). Note: these indices do not match the <a href="#team">Team</a> enum values. |
 | `seed` | number | Random seed |
 | `shk` | <a href="#point">Point2D</a> | Screen shake |
 | `sts` | (<a href="#sounds-this-step">soundsThisStep</a>\|number\|undefined)[]\|null | Sounds this step |
@@ -1841,9 +2318,49 @@ Used for Football mode only.
 <a name="full-game-state-data"></a>
 #### Full Game State Data
 
-| Field | Type | Notes |
+Complete game state containing all physics, player, and game information. Structure varies based on game engine type.
+
+**Bonk Game State** (`bonkGamestate`):
+
+| Field | Type | Description |
 | ----- | ---- | ----- |
-| TODO  | TODO | TODO  |
+| `capZones` | captureZone[] | Array of capture zones for CTF/Capture mode |
+| `discDeaths` | discDeath[] | Array of player discs that died this round |
+| `discs` | disc[] | Array of all active player discs, ordered by disc ID |
+| `fte` | number | Frames to end - countdown until round ends (-1 = inactive) |
+| `ftu` | number | Frames to unfreeze - countdown until world unfreezes (-1 = inactive) |
+| `lscr` | Team or number | Last scored current round - player/team that won; -1 = draw |
+| `mm` | mapMetadata | Map metadata (name, author, etc.) |
+| `ms` | mapSettings | Map settings (respawn on death, collision, etc.) |
+| `physics` | physicsState | Physics bodies, joints, shapes, and fixtures |
+| `players` | (playerInfo \| null)[] | Array of player information |
+| `projectiles` | projectile[] | Array of active projectiles (e.g. arrows) |
+| `rc` | number | Round count - how many rounds have passed |
+| `rl` | number | Round length - frames elapsed since round start |
+| `scores` | number[] | Win scores (indexed by player ID for FFA, team for Teams) |
+| `seed` | number | Random seed for the game |
+| `shk` | Point2D | Screen shake vector |
+| `sts` | (soundsThisStep \| number)[] \| null | Sounds to play this step |
+| `dontInterpolate` | boolean | Skip interpolation this step |
+
+**Football Game State** (`footballGameState`):
+
+| Field | Type | Description |
+| ----- | ---- | ----- |
+| `scores` | any[] | Win scores by team (indices: 0=unused, 1=unused, 2=Red, 3=Blue) |
+| `goalHeight` | number | Height of goal area (always 13) |
+| `borderThickness` | number | Border thickness (always 5) |
+| `borderThicknessXInner` | number | Inner border X thickness (always 25) |
+| `borderThicknessYInner` | number | Inner border Y thickness (always 70) |
+| `ppm` | number | Pixels per meter - determines map size |
+| `lscr` | number | Last scored current round - team that won |
+| `seed` | number | Random seed |
+| `sts` | (soundsThisStep \| number)[] \| null | Sounds to play this step |
+| `ni` | boolean | No interpolation - skip interpolation this step |
+| `players` | (playerInfo \| null)[] | Array of player information |
+| `fte` | number | Frames to end - countdown until round ends |
+| `ftu` | number | Frames to unfreeze - countdown until world unfreezes |
+| `discs` | disc[] | Array of all active football discs (ball + player discs) |
 
 <a name="discs"></a>
 ### Discs
@@ -1851,20 +2368,51 @@ Used for Football mode only.
 <a name="bonk-disc"></a>
 #### Bonk Disc
 
-disc object for BonkEngine
+Disc object representing a player in BonkEngine. Contains position, velocity, and action state.
 
-| Field | Type | Notes |
+| Field | Type | Description |
 | ----- | ---- | ----- |
-| TODO  | TODO | TODO  |
+| `x` | number | Position X |
+| `y` | number | Position Y |
+| `xv` | number | Velocity X |
+| `yv` | number | Velocity Y |
+| `sx` | number | Spawn position X (optional) |
+| `sy` | number | Spawn position Y (optional) |
+| `sxv` | number | Spawn velocity X (optional) |
+| `syv` | number | Spawn velocity Y (optional) |
+| `a` | number | Angle/rotation (optional) |
+| `av` | number | Angular velocity (optional) |
+| `a1a` | number | Action 1 ammo count (optional) |
+| `a1` | boolean | Action 1 pressed (optional) |
+| `a2` | boolean | Action 2 pressed (optional) |
+| `team` | eTeam | Team ID (optional) |
+| `ds` | number | Draw strength (for grapple/bow) (optional) |
+| `da` | number | Draw angle (for grapple/bow) (optional) |
+| `ni` | boolean | No interpolation - skip interpolation this frame (optional) |
+| `swing` | swingState | Swing/grapple state (optional) |
+| `lht` | number | Last hit time (optional) |
+| `lhid` | number | Last hit disc ID (optional) |
+| `kickReady` | boolean | Can kick (football only) (optional) |
+| `extraVelX` | number | Extra velocity X (optional) |
+| `extraVelY` | number | Extra velocity Y (optional) |
+| `radius` | number | Disc radius (optional) |
 
 <a name="football-disc"></a>
 #### Football Disc
 
-disc for football engine, this usually only has the keys x, y, xv, yv, team, kickReady. |
+Disc object representing a player or ball in Football mode. Typically only includes essential fields.
 
-| Field | Type | Notes |
+| Field | Type | Description |
 | ----- | ---- | ----- |
-| TODO  | TODO | TODO  |
+| `x` | number | Position X |
+| `y` | number | Position Y |
+| `xv` | number | Velocity X |
+| `yv` | number | Velocity Y |
+| `team` | eTeam | Team ID (Red=2, Blue=3, or -1 for ball) |
+| `kickReady` | boolean | Player can kick the ball |
+| `a` | number | Angle/rotation (optional) |
+| `av` | number | Angular velocity (optional) |
+| `radius` | number | Disc radius (optional) |
 
 <a name="disc-death"></a>
 #### Disc Death
@@ -1886,13 +2434,11 @@ Contains info about a disc/player when they died.
 
 Could also be referred to as DiedThisStepMethod. Method of how a disc died (all players have a disc ID).
 
-```typescript
-enum eDiscDeathMethod {
-    DeathPhysicsObject = 1, // e.g. death arrow or "death" platform
-    CaptureComplete = 3,
-    OutOfBounds = 4,
-}
-```
+| Value | Description |
+|-------|-------------|
+| `1` | DeathPhysicsObject - e.g. death arrow or "death" platform |
+| `3` | CaptureComplete |
+| `4` | OutOfBounds |
 
 <a name="common-types"></a>
 ### Common Types
@@ -1917,13 +2463,43 @@ A 2D point object. This is either a object (`{x: x, y: y}`) or an array (`[x, y]
 | `p` | string? | Sound type |
 | `f` | any | Frame |
 
+<a name="swing-state"></a>
+#### Swing State
+
+State information for an active swing/grapple action.
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `b` | number | Body - physics body ID that the swing is attached to |
+| `l` | number | Length - length of the swing rope/grapple |
+| `p` | vector2 | Point - anchor point [x, y] of the swing |
+
+<a name="common-types"></a>
+### Common Types
+
+<a name="point-2d"></a>
+#### Point 2D
+
+A 2D point/vector. Can be represented as either an object or array.
+
+**Object format:** `{x: number, y: number}`
+
+**Array format:** `[x: number, y: number]`
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `x` | number | X coordinate |
+| `y` | number | Y coordinate |
+
 <a name="avatar-data-format"></a>
 #### Avatar Data Format
 
-The avatar obejct is an object containing layers with information to redner the skin
+The avatar object is an object containing layers with information to render the skin.
 
-For the full avatar data structure, skin shape IDs, and rendering, see the full fletched library:
+For the full avatar data structure, skin shape IDs, and rendering, see the full-fledged library:
 - [bonk-skin](https://github.com/PixelMelt/bonk-skin) - Community skin parsing library
+> [^NOTE]
+> As of 12/07/2026 this repository contains more up to date definitions, however it is sitll recommended to use if you need a library.
 
 <a name="server"></a>
 ### Server
@@ -1944,7 +2520,7 @@ Status messages received via <a href="#on-16---status-message">Packet 16</a>:
 | `invalid guest name` | N/A |
 | `invalid` | Generic/DesyncTest/Response Value Error, the reason this is returned changes with backend changes, it's likely returned as a last resort try catch till Chaz recodes it |
 | `invalid_max_players` | N/A |
-| `invalid_params (token)` | N/A |
+| `invalid_params (token[^token])` | N/A |
 | `invalid_params` | Error occurrs when invalid parameter inputs are send, this is a generic error most commonly found by Create room error/generic |
 | `invalid_target_team` | You tried to change a players team into the wrong type. |
 | `not_hosting` | You attempted to do an action that requires you to be the game's host. |
@@ -1986,9 +2562,581 @@ Status messages received via <a href="#on-16---status-message">Packet 16</a>:
 <a name="admin-input-data"></a>
 #### Admin Input Data
 
-| Field | Type | Notes |
-| ----- | ---- | ----- |
-| TODO  | TODO | TODO  |
+| Field | Description |
+| ----- | ----- |
+| ? | TODO |
+
+<a name="http-requests"></a>
+## HTTP Requests
+
+This section documents all jQuery AJAX requests (`$.get` and `$.post`) made throughout the codebase of bonk.io
+> [^NOTE]
+> All bonk endpoints are specified with "https://bonk2.io/scripts/" unless otherwise specified
+
+<a name="account-endpoints"></a>
+### Account Endpoints
+
+<a name="register_legacyphp"></a>
+#### register_legacy.php
+
+<h5>Body</h5>
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `username` | string | Username for new account |
+| `password` | string | Password for new account |
+| `remember` | boolean | Enable remember me functionality |
+
+<h5>Response</h5>
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `r` | string | Response status: "success" or error code |
+| `token` | string | Authentication token[^token] (on success) |
+| `xp` | number | User's current XP |
+| `username` | string | Confirmed username |
+| `id` | string | User database ID |
+| `avatar` | string | Encoded default avatar data |
+| `avatar1` - `avatar5` | string | Encoded avatar data for slots 2-5 |
+| `activeAvatarNumber` | number | Currently active avatar slot (1-5) |
+| `controls` | string | Serialized control configuration |
+| `friends` | array | List of friends |
+| `legacyFriends` | string | Legacy friends data |
+| `rememberToken` | string | Token for automatic login[^rememberToken] (if remember enabled) |
+| `e` | string | Error code on failure: "username_invalid", "username_taken", "rate_limited", "data_missing", "password_weak" |
+
+<a name="login_legacyphp"></a>
+#### login_legacy.php
+
+<h5>Body</h5>
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `username` | string | Username |
+| `password` | string | Password |
+| `remember` | boolean | Enable remember me functionality |
+
+<h5>Response</h5>
+Same as register_legacy.php
+
+<a name="login_autophp"></a>
+#### login_auto.php
+
+<h5>Body</h5>
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `rememberToken` | string | Token from previous automatic login session[^rememberToken] |
+
+<h5>Response</h5>
+Same as register_legacy.php (on successful auto-login)
+
+<a name="login_clearautophp"></a>
+#### login_clearauto.php
+
+<h5>Body</h5>
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `rememberToken` | string | Token to invalidate/clear[^rememberToken] |
+
+<a name="account_changepasswordphp"></a>
+#### account_changepassword.php
+
+<h5>Body</h5>
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `token` | string | Authentication token[^token] |
+| `oldpass` | string | Current/old password |
+| `newpass` | string | New password |
+
+<h5>Response</h5>
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `r` | string | Response status: "success" or error |
+| `e` | string | Error code: "ratelimited", "token[^token]", "server_error_1", "server_error_2", "oldpass_wrong" |
+
+<a name="account_savecontrolsphp"></a>
+#### account_savecontrols.php
+
+<h5>Body</h5>
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `controls` | string | Serialized control/input configuration |
+| `token` | string | Authentication token[^token] |
+
+<h5>Response</h5>
+(Fire-and-forget: no response handling)
+
+<a name="friends-endpoints"></a>
+### Friends Endpoints
+
+<a name="friendsphp"></a>
+#### friends.php
+
+<h5>Body</h5>
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `token` | string | Authentication token[^token] |
+| `task` | string | Operation: "getfriends", "send", "unfriend", "deleterequest" |
+| `theirname` | string | Target username (required for "send") |
+| `theirid` | number | Target user ID (required for "unfriend", "deleterequest") |
+
+<h5>Response</h5>
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `r` | string | Response status: "success" or error |
+| `e` | string | Error code: "map_unpublished", "not_faved", etc. |
+| (varies by task) | (varies) | Task-specific response data |
+
+<a name="map-endpoints"></a>
+### Map Endpoints
+
+<a name="map-favorite-endpoints"></a>
+#### Map Favorite Endpoints
+
+<a name="map_favephp"></a>
+##### map_fave.php
+
+<h5>Body</h5>
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `token` | string | Authentication token[^token] |
+| `mapid` | number | Map database ID |
+| `action` | string | "a" for add/favorite, "u" for unfavorite |
+
+<h5>Response</h5>
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `r` | string | Response status: "success" or error |
+| `e` | string | Error code: "map_unpublished", "not_faved", etc. |
+
+<a name="map-search-endpoints"></a>
+#### Map Search Endpoints
+
+<a name="map_getsearchphp"></a>
+##### map_getsearch.php
+
+<h5>Body</h5>
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `searchauthor` | boolean | Search by author name |
+| `searchmapname` | boolean | Search by map name |
+| `searchsort` | string | Sort order |
+| `searchstring` | string | Query string |
+| `startingfrom` | number | Pagination offset |
+
+<h5>Response</h5>
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `r` | string | Response status: "success" |
+| `maps` | array | Array of map objects matching query |
+| `more` | boolean | Whether more results available |
+
+<a name="map_getfreshphp"></a>
+##### map_getfresh.php
+
+<h5>Body</h5>
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `startingfrom` | number | Pagination offset |
+
+<h5>Response</h5>
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `r` | string | Response status: "success" |
+| `maps` | array | Array of recently added maps |
+| `more` | boolean | Whether more results available |
+
+<a name="map_getfavephp"></a>
+##### map_getfave.php
+
+<h5>Body</h5>
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `token` | string | Authentication token[^token] |
+| `startingfrom` | number | Pagination offset |
+
+<h5>Response</h5>
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `r` | string | Response status: "success" |
+| `maps` | array | Array of user's favorite maps |
+| `more` | boolean | Whether more results available |
+
+<a name="map_getownphp"></a>
+##### map_getown.php
+
+<h5>Body</h5>
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `token` | string | Authentication token[^token] |
+| `startingfrom` | number | Pagination offset |
+
+<h5>Response</h5>
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `r` | string | Response status: "success" |
+| `maps` | array | Array of maps created by user |
+
+<a name="map-b1-endpoints-bonk1-legacy-maps"></a>
+#### Map B1 Endpoints (Bonk1 Legacy Maps)
+
+<a name="map_b1_getfavephp"></a>
+##### map_b1_getfave.php
+
+<h5>Body</h5>
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `token` | string | Authentication token[^token] |
+| `startingfrom` | number | Pagination offset |
+
+<h5>Response</h5>
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `r` | string | Response status: "success" |
+| `maps` | string | URL-encoded map data string |
+| `more` | boolean | Whether more results available |
+
+<a name="map_b1_getownphp"></a>
+##### map_b1_getown.php
+
+<h5>Body</h5>
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `token` | string | Authentication token[^token] |
+| `startingfrom` | number | Pagination offset |
+
+<h5>Response</h5>
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `r` | string | Response status: "success" |
+| `maps` | string | URL-encoded map data string |
+| `more` | boolean | Whether more results available |
+
+<a name="map_b1_getbestphp"></a>
+##### map_b1_getbest.php
+
+<h5>Body</h5>
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `startingfrom` | number | Pagination offset |
+
+<h5>Response</h5>
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `r` | string | Response status: "success" |
+| `maps` | string | URL-encoded map data string |
+| `more` | boolean | Whether more results available |
+
+<a name="map_b1_getsearchphp"></a>
+##### map_b1_getsearch.php
+
+<h5>Body</h5>
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `searchsort` | string | Sort order: "ctr" for best, "id" for recent |
+| `searchauthor` | string | "true" or empty string |
+| `searchmapname` | string | "true" or empty string |
+| `startingfrom` | number | Pagination offset |
+| `searchstring` | string | Query string |
+
+<h5>Response</h5>
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `r` | string | Response status: "success" |
+| `maps` | string | URL-encoded map data string |
+| `more` | boolean | Whether more results available |
+
+<a name="map-management-endpoints"></a>
+#### Map Management Endpoints
+
+<a name="map_save_pubphp"></a>
+##### map_save_pub.php
+
+<h5>Body</h5>
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `mapname` | string | Name for the map |
+| `overwriteok` | string | "true" to overwrite, "false" to check if exists |
+| `leveldata` | string | Encoded map data (compressed/encoded) |
+| `token` | string | Authentication token[^token] |
+| `rxid` | string | Map revision/export ID |
+| `rxdb` | string | Map revision database reference |
+| `rxn` | string | Map revision name |
+| `rxa` | string | Map revision author |
+| `public` | string | "true" to make public, "false" for private |
+| `mo` | string | Game mode for map |
+
+<h5>Response</h5>
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `r` | string | "success", "overwrite_confirm", or error |
+| `mapid` | string | Database ID of saved map (on success) |
+| `e` | string | Error code on failure |
+
+<a name="map_deletephp"></a>
+##### map_delete.php
+
+<h5>Body</h5>
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `token` | string | Authentication token[^token] |
+| `mapid` | number | Map database ID to delete |
+
+<a name="replay-endpoints"></a>
+### Replay Endpoints
+
+<a name="replay_submitphp"></a>
+##### replay_submit.php
+
+<h5>Body</h5>
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `version` | string | Game version |
+| `replaydata` | string | Encoded replay data (game state, inputs, players) |
+| `mapid` | number | Database ID of map played |
+| `mode` | string | Game mode (optional in some calls) |
+
+<h5>Response</h5>
+(Fire-and-forget: no response handling)
+
+<a name="replay_getphp"></a>
+##### replay_get.php
+
+<h5>Body</h5>
+
+| Field | Type | Description |
+|-------|------|-------------|
+| TODO | TODO | TODO |
+
+<h5>Response</h5>
+
+| Field | Type | Description |
+|-------|------|-------------|
+| TODO | TODO | Encoded replay data |
+
+<a name="replay_reportphp"></a>
+##### replay_report.php
+
+<h5>Body</h5>
+
+| Field | Type | Description |
+|-------|------|-------------|
+| ? | ? | TODO |
+
+<h5>Response</h5>
+
+| Field | Type | Description |
+|-------|------|-------------|
+| ? | ? | TODO |
+
+<a name="room-endpoints"></a>
+### Room Endpoints
+
+<a name="getroomsphp"></a>
+##### getrooms.php
+
+<h5>Body</h5>
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `version` | string | Game version |
+| `gl` | string |  "y" or "n" game language? |
+| `token` | string | Authentication token[^token] |
+
+<h5>Response</h5>
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `rooms` | array | Array of available game rooms |
+| `friends` | array | Array of friend objects with `roomid` and `name` |
+| `lat` | string | User's latitude (if available) |
+| `long` | string | User's longitude (if available) |
+| `city` | string | User's city (if available) |
+| `country` | string | User's country (if available) |
+| `createserver` | string | Server address for creating new rooms |
+
+<a name="getroomaddressphp"></a>
+##### getroomaddress.php
+
+<h5>Body</h5>
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `id` | number | Room ID to get address for |
+
+<h5>Response</h5>
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `r` | string | Response status: "success" or error |
+| `id` | number | Echo of requested room ID |
+| `address` | string | Server address to connect to |
+| `server` | string | Server identifier/name |
+| `e` | string | Error code on failure |
+
+<a name="matchmaking-endpoints"></a>
+### Matchmaking Endpoints
+
+<a name="matchmaking_mapsphp"></a>
+##### matchmaking_maps.php
+
+<h5>Body</h5>
+(No parameters)
+
+<h5>Response</h5>
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `r` | string | Response status: "success" |
+| `t1` | array | Array of training/quickplay maps with `name`, `authorname`, `id`, `leveldata` |
+
+<a name="matchmaking_queryphp"></a>
+##### matchmaking_query.php
+
+<h5>Body</h5>
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `version` | string | Game version |
+| `mode` | string | Game mode (e.g., "arrowsquick", "b", "ard") |
+| `excludeaddresses` | string | Comma-separated (#) server addresses to exclude |
+| `token` | string | Authentication token[^token] |
+
+<h5>Response</h5>
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `r` | string | Response status: "fail", "join", or "create" |
+| `address` | string | Server address (if r="join") |
+| `server` | string | Server identifier (if r="join" or "create") |
+| `lat` | string | Latitude (if r="create") |
+| `long` | string | Longitude (if r="create") |
+| `country` | string | Country (if r="create") |
+| `e` | string | Error code (if r="fail") |
+
+<a name="avatar-endpoints"></a>
+### Avatar Endpoints
+
+<a name="avatar_updatephp"></a>
+##### avatar_update.php
+
+<h5>Body</h5>
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `token` | string | Authentication token[^token] |
+| `task` | string | Operation: "updateslot" or "updateavatar" |
+| `newactive` | number | New active avatar slot number (for "updateslot") |
+| `newavatarslot` | number | Avatar slot to update (for "updateavatar") |
+| `newavatar` | string | Encoded avatar data (for "updateavatar") |
+
+<a name="static-endpoints"></a>
+### static Endpoints
+
+These endpoints are simple get requests with no request body.
+
+<a name="combinedplayercounttxt"></a>
+##### combinedplayercount.txt
+
+<h5>Response</h5>
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `bonk` | object | Contains player count data for Bonk.io |
+| (sub-fields vary) | (varies) | Mode-specific player counts |
+
+<a name="hot-maps-cache"></a>
+##### Hot Maps Cache
+
+Constructs a URL to fetch paginated hot/trending maps by game mode.
+
+<h5>Body</h5>
+(No body - GET request with URL parameters)
+
+URL format: `https://bonk2.io/scripts/hotmaps/cache3_[page]_[modeCode].txt`
+
+| Parameter | Values | Description |
+|-----------|--------|-------------|
+| `page` | number | Page number (1-indexed) for pagination |
+| `modeCode` | "hot", "ard", "sp" | Game mode: "hot" (general), "ard" (death arrows), "sp" (grapple) |
+
+<h5>Response</h5>
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `r` | string | Response status: "success" or error |
+| (map array) | (varies) | Array of hot map objects for requested page/mode |
+
+<a name="picks"></a>
+#### picks
+> [!NOTE]
+> An exception to the rule is `https://bonk2.io/scripts/hotmaps/picks.txt`
+
+<h5>Response</h5>
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `r` | string | Response status: "success" or error |
+| (map array) | (varies) | Array of featured/community-picked maps |
+
+<a name="source-code-deobfuscation"></a>
+## Source Code / Deobfuscation
+
+> [!WARNING]
+> THIS SECTION IS NOT ALLOWED CONTRIBUTIONS, WILL BE PURELY WRITTEN BY ME.
+
+If you are interested in making your own deobfuscator, you should learn **AST parsing**[^AST]. Check out this resource:
+
+- [AST Parsing Guide](https://gist.github.com/0xdevalias/d8b743efb82c0e9406fc69da0d6c6581)
+
+The [Community Resources](#community-resources) section below will also help you get started if you're just interested in using something public.
+
+<a name="deobfuscation-tools"></a>
+### Deobfuscation Tools
+
+<a name="kookywarriorbonk-deobfuscatorhttpsgithubcomkookywarriorbonk-deobfuscator"></a>
+#### [kookywarrior/bonk-deobfuscator](https://github.com/kookywarrior/bonk-deobfuscator)
+
+> [!WARNING]
+> This deobfuscator is very bare bones and may have limited functionality.
+
+<a name="kitaes-softwarebonk-deobfuscatorhttpsgithubcomkitaes-softwarebonk-deobfuscator"></a>
+#### [Kitaes-software/bonk-deobfuscator](https://github.com/Kitaes-software/bonk-deobfuscator)
+
+> [!NOTE]
+> Whilst this tool is quite badly coded and does not do AST[^AST] parsing (similar to the previous option above) and will break with new versions, it does produce very nice results.
+
+> [!WARNING]
+> Please do not ask for better options. Other options by me or the community often involve automatic renaming heuristics through AST[^AST] or AI, and ARE PRIVATE.
 
 <a name="foot-notes"></a>
 ## Foot Notes
@@ -1998,3 +3146,12 @@ Status messages received via <a href="#on-16---status-message">Packet 16</a>:
   [^Packet-ID]: **Packet ID** A Packet ID is a numeric or identifier value used to distinguish different network packets in a communication system. It is commonly used in both client and server networking to determine how incoming and outgoing messages should be handled. Packet ID may serve different purposes depending on direction (incoming `socket.on()` vs outgoing `socket.emit()`).
   [^PSON]: **PSON** An efficient binary encoding for JSON data. [GitHub](https://github.com/dcodeIO/PSON)
   [^Player-ID]: **Player ID** Each player in a room has a Player ID. It is an auto-incrementing integer assigned when a player joins the room, starting from 0 (the __original__ host). Player IDs are used to map players to their discs, scores, inputs, and other per-player data.
+  [^token]: **Token** A [JWT](https://www.jwt.io/) authentication token credential that belongs to an account. Obtained after successful response from login endpoints: [login_legacy.php](#login_legacyphp), [login_auto.php](#login_autophp), or [register_legacy.php](#register_legacyphp). See [Token Format](#token-format) for structure details.
+  [^rememberToken]: **Remember Token** The same as token except it doesn't expire unless the server explicitly expires it.
+  [^Socket.IO]: **Socket.IO** A real-time bidirectional communication library built on top of WebSockets. It enables event-driven, low-latency communication between client and server. [Website](https://socket.io/)
+  [^Base64]: **Base64** A binary-to-text encoding scheme that represents binary data in ASCII string format. Used throughout Bonk for encoding map data, replay data, and other binary information as transmittable strings.
+  [^Fixture]: **Fixture** In Box2D, a fixture attaches a shape (collision geometry) to a body see [docs/classb2_fixture.html](https://box2d.org/doc_version_2_4/classb2_fixture.html)
+  [^Rate-Limit]: **Rate Limit** A server-side throttling mechanism that prevents clients from performing actions too frequently. Protects against spam and exploits by enforcing cooldown periods between actions.
+  [^Host]: **Host** The player controlling the room
+  [^Emit]: **Emit** In Socket.IO context, to send data from client to server (or vice versa). An event is "emitted" with associated data to trigger server-side handlers.
+  [^sid]: **Session Id**
