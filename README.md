@@ -9,7 +9,7 @@ A repository for various resources to understand the inner workings of [bonk.io]
     - [Modding](#modding) *line 249*
 - [Network](#network) *line 252*
   - [Community Resources](#community-resources) *line 270*
-  - [Incoming Packets (Server Ã¢â€ â€™ Client)](#incoming-packets-server-client) *line 289*
+  - [Incoming Packets (Server <h5>Response</h5> Client)](#incoming-packets-server-client) *line 289*
     - [On 1 - Update Pings](#on-1---update-pings) *line 291*
     - [On 2 - Room Created](#on-2---room-created) *line 304*
     - [On 3 - Room Join](#on-3---room-join) *line 318*
@@ -67,7 +67,7 @@ A repository for various resources to understand the inner workings of [bonk.io]
     - [On 58 - Room Name Update](#on-58---room-name-update) *line 930*
     - [On 59 - Room Password Update](#on-59---room-password-update) *line 942*
     - [On 60 - Server Message](#on-60---server-message) *line 954*
-  - [Outgoing Packets (Client Ã¢â€ â€™ Server)](#outgoing-packets-client-server) *line 962*
+  - [Outgoing Packets (Client <h5>Response</h5> Server)](#outgoing-packets-client-server) *line 962*
     - [Emit 1 - Ping Acknowledgement](#emit-1---ping-acknowledgement) *line 964*
     - [Emit 2 - Test Ping](#emit-2---test-ping) *line 976*
     - [Emit 3 - Get Debug](#emit-3---get-debug) *line 985*
@@ -295,7 +295,7 @@ Bonk.io networking uses **Socket.IO** for client-server communication. Each game
 > Open-source implementation of the bonk.io multiplayer server and a corresponding client, designed to allow complete freedom over game backend and restrictions.
 
 <a name="incoming-packets-server-client"></a>
-### Incoming Packets (Server Ã¢â€ â€™ Client)
+### Incoming Packets (Server Client)
 
 <a name="on-1---update-pings"></a>
 #### On 1 - Update Pings
@@ -1026,7 +1026,7 @@ A direct message from the server (system announcement, etc.).
 | 1 | Server message text |
 
 <a name="outgoing-packets-client-server"></a>
-### Outgoing Packets (Client Ã¢â€ â€™ Server)
+### Outgoing Packets (Client <h5>Response</h5> Server)
 
 <a name="emit-1---ping-acknowledgement"></a>
 #### Emit 1 - Ping Acknowledgement
@@ -1950,7 +1950,7 @@ Metadata information about a map including author, name, and publishing details.
 
 Map data is an object compressed with LZ-String[^LZ-String] and encoded in Base64.
 
-For the full map data structure and key mappings (e.g. `v` Ã¢â€ â€™ `version`), see:
+For the full map data structure and key mappings (e.g. `v` -> `version`), see:
 - [bonk-map](https://github.com/PixelMelt/bonk-map) - Community map parsing library
 - [nameConverter.ts](https://github.com/PixelMelt/bonk-map/blob/23c39313420741709cea089b136f152900d3f3e5/src/util/nameConverter.ts#L1) - Actual mappings of the shorthand keys to their full names
 
