@@ -302,7 +302,7 @@ There is a exception to this rule however __<a href="#emit-18---timesync-request
 - [greasyfork.org/scripts?q=bonk.io](https://greasyfork.org/scripts?filter_locale=0&q=bonk.io)
 Userscripts for bonk.io to mod the game, most of these userscripts require [Code Injector](https://greasyfork.org/en/scripts/433861-code-injector-bonk-io).
 > [!WARNING]
-> Information on creating these mods, or using them is currently not documented, this is TODO and I will gladly accept help. See<a href="modding">Requested Todo - Modding</a>
+> Information on creating these mods, or using them is currently not documented, this is TODO and I will gladly accept help. See<a href="#modding">Requested Todo - Modding</a>
 
 <a name="incoming-packets-server-client"></a>
 ### Incoming Packets (Server Client)
