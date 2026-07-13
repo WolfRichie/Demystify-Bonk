@@ -254,7 +254,9 @@ In fact, much of this README was written with the help of AI. However, the resea
 - Anything marked with "todo" is
 - Any types marked as "any" or "?"
 - <a href="hot-maps-cache">Hot Maps Cache</a> and <a href="picks">Picks</a> have a missing response table for "maps" aswell
-
+- Fix markdown errors, e.g invalid link/href or json code block fails
+- Add request method type to http endpoints e.g post or get
+- 
 <a name="modding"></a>
 #### Modding
 Any information about "modding" or creating userscripts is highly appreciated. The focus should be on the basics rather than in-depth topics such as reverse engineering the game. Simple explanations of how the [Code Injector](https://greasyfork.org/en/scripts/433861-code-injector-bonk-io) works, including how to replace a string with regex to modify the game's behavior, or access certain things (e.g like the current gamestate)
