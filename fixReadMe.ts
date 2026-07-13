@@ -4,7 +4,7 @@ THIS FILE WAS MOSTLY WRITTEN BY Claude Opus 4.6 and Claude Haiku 4.5
 import { readFileSync, writeFileSync } from 'node:fs';
 
 class ReadmeFixer {
-    static readonly FileName = "definitions.md";
+    static readonly FileName = "README.MD";
     private content: string;
     constructor() {
         this.content = readFileSync(ReadmeFixer.FileName, 'utf8').replaceAll('\r\n', '\n');
