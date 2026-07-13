@@ -1,38 +1,70 @@
 /*
-THIS FILE WAS MOSTLY WRITTEN BY Claude Opus 4.6
+THIS FILE WAS MOSTLY WRITTEN BY Claude Opus 4.6 and Claude Haiku 4.5
 */
 import { readFileSync, writeFileSync } from 'node:fs';
 
 class ReadmeFixer {
-    static readonly FileName = "README.MD";
+    static readonly FileName = "definitions.md";
     private content: string;
     constructor() {
         this.content = readFileSync(ReadmeFixer.FileName, 'utf8').replaceAll('\r\n', '\n');
     }
 
     addMissingFootnotesReferences(): this {
-        // Normalize footnote IDs: replace spaces with hyphens
         this.content = this.content.replaceAll(/\[\^([^\]]+)\]/g, (match, id: string) =>
             `[^${id.replaceAll(' ', '-')}]`
         );
 
+        const footNotesIndex = this.content.indexOf('\n## Foot Notes');
+        const beforeFootNotes = footNotesIndex === -1 ? this.content : this.content.substring(0, footNotesIndex);
+        const footNotesSection = footNotesIndex === -1 ? '' : this.content.substring(footNotesIndex);
+
         // Collect unique footnote definitions
         const footnotes = Object.fromEntries(
-            [...this.content.matchAll(/^\s*\[(\^[^\]]+)\]:\s*(.+)$/gm)]
+            [...beforeFootNotes.matchAll(/^\s*\[(\^[^\]]+)\]:\s*(.+)$/gm)]
                 .map(m => [m[1].trim(), m[2].trim()])
         );
 
         // For each footnote, add [^ABBR] after bare occurrences of the abbreviation
+        // Only process the content before Foot Notes section
+        let processedContent = beforeFootNotes;
         for (const key of Object.keys(footnotes)) {
             const abbr = key.slice(1); // strip leading ^
             const escaped = abbr.replaceAll(/[.*+?^${}()|[\]\\]/g, String.raw`\$&`);
             // Allow hyphens in footnote IDs to also match spaces in the text
             const flexible = escaped.replaceAll('-', '[- ]');
-            this.content = this.content.replaceAll(
-                new RegExp(`(?<=^(?!\\s*\\[\\^)(?!- ).*?)\\b(${flexible})\\b(?!\\[\\^)(?!\\])(?!\\()(?!.*:\\s)`, 'gm'),
-                `$1[^${abbr}]`
-            );
+            
+            // Process line by line to check if match is inside backticks
+            processedContent = processedContent.split('\n').map(line => {
+                // Check if line is inside a code block (starts with ```)
+                if (line.trim().startsWith('```')) return line;
+                
+                // Replace only matches that are NOT inside backticks
+                let result = '';
+                let inBackticks = false;
+                let lastIndex = 0;
+                
+                const regex = new RegExp(`\\b(${flexible})\\b(?!\\[\\^)(?!\\])(?!\\()`, 'g');
+                let match: RegExpExecArray | null;
+                
+                while ((match = regex.exec(line)) !== null) {
+                    // Count backticks before this match to determine if we're inside backticks
+                    const beforeMatch = line.substring(0, match.index);
+                    const backtickCount = (beforeMatch.match(/`/g) || []).length;
+                    
+                    // Only add footnote if we're not inside backticks (even count = outside)
+                    if (backtickCount % 2 === 0) {
+                        result += beforeMatch.substring(lastIndex) + match[1] + `[^${abbr}]`;
+                        lastIndex = match.index + match[1].length;
+                    }
+                }
+                
+                result += line.substring(lastIndex);
+                return result === '' ? line : result;
+            }).join('\n');
         }
+
+        this.content = processedContent + footNotesSection;
 
         // Deduplicate footnote definitions
         const seen = new Set<string>();
