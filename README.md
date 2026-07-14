@@ -1784,6 +1784,7 @@ Method describing how a disc/player died.
 | Value | Description |
 |-------|-------------|
 | `1` | Hit a death object (e.g., death arrow or "death" platform) |
+| `2` | Hit a laser (lasers were removed in bonk 2 beta) |
 | `3` | Another player won through "capture", so other player discs died |
 | `4` | Fell out of bounds |
 
