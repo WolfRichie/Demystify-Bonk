@@ -1,236 +1,236 @@
 # Demystifying Bonk
-Last updated: *13-7-2026, 12:15:32*
+Last updated: *15-7-2026, 19:49:07*
 
 A repository for various resources to understand the inner workings of [bonk.io](https://bonk.io) api protocol 49.
 
 <!-- reservedForToc -->
 - [Contributing to the repository](#contributing-to-the-repository) *line 235*
   - [Requested Todo](#requested-todo) *line 249*
-    - [Modding](#modding) *line 255*
-- [Network](#network) *line 258*
-  - [Community Resources](#community-resources) *line 277*
-  - [Incoming Packets (Server Client)](#incoming-packets-server-client) *line 301*
-    - [On 1 - Update Pings](#on-1---update-pings) *line 303*
-    - [On 2 - Room Created](#on-2---room-created) *line 316*
-    - [On 3 - Room Join](#on-3---room-join) *line 330*
-    - [On 4 - Player Join](#on-4---player-join) *line 349*
-    - [On 5 - Player Leave](#on-5---player-leave) *line 367*
-    - [On 6 - Host Leave](#on-6---host-leave) *line 380*
-    - [On 7 - Inputs](#on-7---inputs) *line 394*
-    - [On 8 - Ready Change](#on-8---ready-change) *line 407*
-    - [On 9 - All Ready Reset](#on-9---all-ready-reset) *line 420*
-    - [On 10 - Server Mute](#on-10---server-mute) *line 428*
-    - [On 11 - Server Unmute](#on-11---server-unmute) *line 442*
-    - [On 12 - Username Change](#on-12---username-change) *line 456*
-    - [On 13 - Game End](#on-13---game-end) *line 469*
-    - [On 14 - Reserved](#on-14---reserved) *line 477*
-    - [On 15 - Game Start](#on-15---game-start) *line 486*
-    - [On 16 - Status Message](#on-16---status-message) *line 500*
-    - [On 17 - Reserved](#on-17---reserved) *line 512*
-    - [On 18 - Team Change](#on-18---team-change) *line 521*
-    - [On 19 - Teamlock Toggle](#on-19---teamlock-toggle) *line 534*
-    - [On 20 - Chat Message](#on-20---chat-message) *line 546*
-    - [On 21 - Initial Data](#on-21---initial-data) *line 559*
-    - [On 23 - Timesync Response](#on-23---timesync-response) *line 571*
-    - [On 24 - Player Banned/Kicked](#on-24---player-bannedkicked) *line 581*
-    - [On 25 - Map Reorder](#on-25---map-reorder) *line 594*
-    - [On 26 - Mode Change](#on-26---mode-change) *line 605*
-    - [On 27 - Change WL (Rounds)](#on-27---change-wl-rounds) *line 618*
-    - [On 28 - Map Delete](#on-28---map-delete) *line 630*
-    - [On 29 - Map Switch](#on-29---map-switch) *line 640*
-    - [On 30 - Typing](#on-30---typing) *line 652*
-    - [On 31 - Admin Inputs](#on-31---admin-inputs) *line 665*
-    - [On 32 - AFK Warn](#on-32---afk-warn) *line 673*
-    - [On 33 - Map Suggest (Host)](#on-33---map-suggest-host) *line 681*
-    - [On 34 - Map Suggest (Client)](#on-34---map-suggest-client) *line 694*
-    - [On 35 - Change Mode](#on-35---change-mode) *line 708*
-    - [On 36 - Balance Set](#on-36---balance-set) *line 718*
-    - [On 37 - Reserved](#on-37---reserved) *line 731*
-    - [On 38 - Debug Winner](#on-38---debug-winner) *line 740*
-    - [On 39 - Team Settings Change](#on-39---team-settings-change) *line 754*
-    - [On 40 - Save Replay](#on-40---save-replay) *line 764*
-    - [On 41 - Host Change](#on-41---host-change) *line 776*
-    - [On 42 - Friend Request](#on-42---friend-request) *line 786*
-    - [On 43 - Countdown](#on-43---countdown) *line 798*
-    - [On 44 - Abort Countdown](#on-44---abort-countdown) *line 810*
-    - [On 45 - Player Leveled Up](#on-45---player-leveled-up) *line 818*
-    - [On 46 - Local Gained XP](#on-46---local-gained-xp) *line 828*
-    - [On 47 - Local Revert](#on-47---local-revert) *line 840*
-    - [On 48 - Recv In Game](#on-48---recv-in-game) *line 850*
-    - [On 49 - Room Share Link](#on-49---room-share-link) *line 860*
-    - [On 50 - Map Vote Update](#on-50---map-vote-update) *line 873*
-    - [On 51 - More Quick Maps](#on-51---more-quick-maps) *line 884*
-    - [On 52 - Tabbed](#on-52---tabbed) *line 892*
-    - [On 53 - Desync Request](#on-53---desync-request) *line 905*
-    - [On 54 - Desync Response](#on-54---desync-response) *line 917*
-    - [On 57 - Curate Result](#on-57---curate-result) *line 929*
-    - [On 58 - Room Name Update](#on-58---room-name-update) *line 942*
-    - [On 59 - Room Password Update](#on-59---room-password-update) *line 954*
-    - [On 60 - Server Message](#on-60---server-message) *line 966*
-  - [Outgoing Packets (Client <h5>Response</h5> Server)](#outgoing-packets-client-h5responseh5-server) *line 974*
-    - [Emit 1 - Ping Acknowledgement](#emit-1---ping-acknowledgement) *line 976*
-    - [Emit 2 - Test Ping](#emit-2---test-ping) *line 988*
-    - [Emit 3 - Get Debug](#emit-3---get-debug) *line 997*
-    - [Emit 4 - Send Inputs](#emit-4---send-inputs) *line 1006*
-    - [Emit 5 - Trigger Start](#emit-5---trigger-start) *line 1020*
-    - [Emit 6 - Change Own Team](#emit-6---change-own-team) *line 1033*
-    - [Emit 7 - Team Lock](#emit-7---team-lock) *line 1043*
-    - [Emit 8 - Silence Player](#emit-8---silence-player) *line 1053*
-    - [Emit 9 - Kick/Ban Player](#emit-9---kickban-player) *line 1066*
-    - [Emit 10 - Chat Message](#emit-10---chat-message) *line 1077*
-    - [Emit 11 - Inform In Lobby](#emit-11---inform-in-lobby) *line 1087*
-    - [Emit 12 - Create Room](#emit-12---create-room) *line 1100*
-    - [Emit 13 - Join Room](#emit-13---join-room) *line 1129*
-    - [Emit 14 - Return To Lobby](#emit-14---return-to-lobby) *line 1146*
-    - [Emit 16 - Set Ready](#emit-16---set-ready) *line 1152*
-    - [Emit 17 - All Ready Reset](#emit-17---all-ready-reset) *line 1162*
-    - [Emit 18 - Timesync request](#emit-18---timesync-request) *line 1170*
-    - [Emit 19 - Map Reorder](#emit-19---map-reorder) *line 1180*
-    - [Emit 20 - Send Mode](#emit-20---send-mode) *line 1189*
-    - [Emit 21 - Send WL (Rounds)](#emit-21---send-wl-rounds) *line 1202*
-    - [Emit 22 - Map Delete](#emit-22---map-delete) *line 1212*
-    - [Emit 23 - Map Add](#emit-23---map-add) *line 1220*
-    - [Emit 24 - Send Typing](#emit-24---send-typing) *line 1232*
-    - [Emit 25 - Admin Inputs](#emit-25---admin-inputs) *line 1241*
-    - [Emit 26 - Change Other Team](#emit-26---change-other-team) *line 1251*
-    - [Emit 27 - Map Suggest](#emit-27---map-suggest) *line 1262*
-    - [Emit 28 - Change Mode](#emit-28---change-mode) *line 1274*
-    - [Emit 29 - Send Balance](#emit-29---send-balance) *line 1284*
-    - [Emit 30 - Version Check](#emit-30---version-check) *line 1297*
-    - [Emit 31 - Send Debug Winner](#emit-31---send-debug-winner) *line 1306*
-    - [Emit 32 - Team Settings Change](#emit-32---team-settings-change) *line 1319*
-    - [Emit 33 - Arm Record](#emit-33---arm-record) *line 1331*
-    - [Emit 34 - Host Change](#emit-34---host-change) *line 1339*
-    - [Emit 35 - Send Friended](#emit-35---send-friended) *line 1351*
-    - [Emit 36 - Start Countdown](#emit-36---start-countdown) *line 1363*
-    - [Emit 37 - Abort Countdown](#emit-37---abort-countdown) *line 1375*
-    - [Emit 38 - Request XP](#emit-38---request-xp) *line 1383*
-    - [Emit 39 - Map Vote](#emit-39---map-vote) *line 1391*
-    - [Emit 40 - Inform In Game](#emit-40---inform-in-game) *line 1404*
-    - [Emit 41 - Get Pre Vote](#emit-41---get-pre-vote) *line 1417*
-    - [Emit 42 - Get More Quick Play Maps](#emit-42---get-more-quick-play-maps) *line 1429*
-    - [Emit 43 - Update RC Data](#emit-43---update-rc-data) *line 1437*
-    - [Emit 44 - Tabbed](#emit-44---tabbed) *line 1447*
-    - [Emit 45 - Desync Test](#emit-45---desync-test) *line 1459*
-    - [Emit 46 - Send Desync Response](#emit-46---send-desync-response) *line 1473*
-    - [Emit 47 - Round Complete](#emit-47---round-complete) *line 1487*
-    - [Emit 50 - No Host Swap](#emit-50---no-host-swap) *line 1498*
-    - [Emit 51 - Curate](#emit-51---curate) *line 1506*
-    - [Emit 52 - Room Name Update](#emit-52---room-name-update) *line 1520*
-    - [Emit 53 - Room Password Update](#emit-53---room-password-update) *line 1532*
-- [Common Data Schemes](#common-data-schemes) *line 1542*
-  - [Data](#data) *line 1544*
-    - [Token Format](#token-format) *line 1546*
-  - [Enums](#enums) *line 1572*
-    - [Team](#team) *line 1574*
-    - [Server Mute Broadcast type enum](#server-mute-broadcast-type-enum) *line 1585*
-    - [Game Engine Enum](#game-engine-enum) *line 1593*
-    - [Game Mode Enum](#game-mode-enum) *line 1602*
-    - [Body Type Enum](#body-type-enum) *line 1616*
-    - [Quality Enum](#quality-enum) *line 1626*
-    - [Projectile Type Enum](#projectile-type-enum) *line 1636*
-    - [Avatar Shape Enum](#avatar-shape-enum) *line 1644*
-    - [Disc Death Method Enum](#disc-death-method-enum) *line 1650*
-  - [Inputs](#inputs) *line 1660*
-    - [Input Flags](#input-flags) *line 1708*
-    - [Input Object](#input-object) *line 1726*
-    - [Frame Input](#frame-input) *line 1734*
-  - [Game Configuration](#game-configuration) *line 1747*
-    - [Game Settings Object (`gs`)](#game-settings-object-gs) *line 1749*
-    - [Mode Settings Object](#mode-settings-object) *line 1765*
-    - [Team Settings Object](#team-settings-object) *line 1774*
-  - [Map](#map) *line 1783*
-    - [Map Settings](#map-settings) *line 1785*
-    - [Map Metadata](#map-metadata) *line 1797*
-    - [Map Data Format](#map-data-format) *line 1819*
-      - [Capture Zone](#capture-zone) *line 1830*
-    - [Physics](#physics) *line 1843*
-      - [Shapes](#shapes) *line 1847*
-        - [Base Shape](#base-shape) *line 1851*
-        - [Box Shape](#box-shape) *line 1858*
-        - [Circle Shape](#circle-shape) *line 1870*
-        - [Poly Shape](#poly-shape) *line 1880*
-        - [Chain Shape](#chain-shape) *line 1891*
-      - [Fixture](#fixture) *line 1905*
-      - [Body](#body) *line 1922*
-      - [Joints](#joints) *line 1951*
-        - [Base Joint](#base-joint) *line 1955*
-        - [Revolute Joint](#revolute-joint) *line 1969*
-        - [Distance Joint](#distance-joint) *line 1991*
-        - [Legacy Path Joint](#legacy-path-joint) *line 2009*
-        - [Legacy Springy Joint](#legacy-springy-joint) *line 2031*
-        - [Prismatic Joint](#prismatic-joint) *line 2049*
-        - [Soft Rod Joint](#soft-rod-joint) *line 2071*
-        - [Gear Joint](#gear-joint) *line 2087*
-      - [Physics State](#physics-state) *line 2101*
-  - [Game State](#game-state) *line 2114*
-    - [Initial Game State](#initial-game-state) *line 2116*
-      - [Bonk Game State](#bonk-game-state) *line 2132*
-      - [Football Game State](#football-game-state) *line 2157*
-    - [Full Game State Data](#full-game-state-data) *line 2178*
-  - [Discs](#discs) *line 2224*
-    - [Bonk Disc](#bonk-disc) *line 2226*
-    - [Football Disc](#football-disc) *line 2257*
-    - [Disc Death](#disc-death) *line 2273*
-      - [DiscDeathMethod](#discdeathmethod) *line 2287*
-  - [Common Types](#common-types) *line 2297*
-    - [Point 2D](#point-2d) *line 2299*
-    - [Point 2D Vector](#point-2d-vector) *line 2308*
-    - [Sounds This Step](#sounds-this-step) *line 2317*
-    - [Swing State](#swing-state) *line 2326*
-  - [Common Types](#common-types) *line 2336*
-    - [Avatar Data Format](#avatar-data-format) *line 2338*
-  - [Server](#server) *line 2347*
-    - [Status Codes](#status-codes) *line 2349*
-    - [Timesync Response Data](#timesync-response-data) *line 2395*
-    - [Admin Input Data](#admin-input-data) *line 2402*
-- [HTTP Requests](#http-requests) *line 2408*
-  - [Account Endpoints](#account-endpoints) *line 2414*
-    - [register_legacy.php](#register_legacyphp) *line 2416*
-    - [login_legacy.php](#login_legacyphp) *line 2444*
-    - [login_auto.php](#login_autophp) *line 2457*
-    - [login_clearauto.php](#login_clearautophp) *line 2468*
-    - [account_changepassword.php](#account_changepasswordphp) *line 2476*
-    - [account_savecontrols.php](#account_savecontrolsphp) *line 2493*
-  - [Friends Endpoints](#friends-endpoints) *line 2502*
-    - [friends.php](#friendsphp) *line 2504*
-  - [Map Endpoints](#map-endpoints) *line 2523*
-    - [Map Favorite Endpoints](#map-favorite-endpoints) *line 2525*
-      - [map_fave.php](#map_favephp) *line 2527*
-    - [Map Search Endpoints](#map-search-endpoints) *line 2544*
-      - [map_getsearch.php](#map_getsearchphp) *line 2546*
-      - [map_getfresh.php](#map_getfreshphp) *line 2566*
-      - [map_getfave.php](#map_getfavephp) *line 2582*
-      - [map_getown.php](#map_getownphp) *line 2599*
-    - [Map B1 Endpoints (Bonk1 Legacy Maps)](#map-b1-endpoints-bonk1-legacy-maps) *line 2615*
-      - [map_b1_getfave.php](#map_b1_getfavephp) *line 2617*
-      - [map_b1_getown.php](#map_b1_getownphp) *line 2634*
-      - [map_b1_getbest.php](#map_b1_getbestphp) *line 2651*
-      - [map_b1_getsearch.php](#map_b1_getsearchphp) *line 2667*
-    - [Map Management Endpoints](#map-management-endpoints) *line 2687*
-      - [map_save_pub.php](#map_save_pubphp) *line 2689*
-      - [map_delete.php](#map_deletephp) *line 2714*
-  - [Replay Endpoints](#replay-endpoints) *line 2723*
-      - [replay_submit.php](#replay_submitphp) *line 2725*
-      - [replay_get.php](#replay_getphp) *line 2736*
-      - [replay_report.php](#replay_reportphp) *line 2750*
-  - [Room Endpoints](#room-endpoints) *line 2764*
-      - [getrooms.php](#getroomsphp) *line 2766*
-      - [getroomaddress.php](#getroomaddressphp) *line 2788*
-  - [Matchmaking Endpoints](#matchmaking-endpoints) *line 2808*
-      - [matchmaking_maps.php](#matchmaking_mapsphp) *line 2810*
-      - [matchmaking_query.php](#matchmaking_queryphp) *line 2822*
-  - [Avatar Endpoints](#avatar-endpoints) *line 2845*
-      - [avatar_update.php](#avatar_updatephp) *line 2847*
-  - [static Endpoints](#static-endpoints) *line 2859*
-      - [combinedplayercount.txt](#combinedplayercounttxt) *line 2863*
-      - [Hot Maps Cache](#hot-maps-cache) *line 2890*
-    - [picks](#picks) *line 2912*
-- [Source Code / Deobfuscation](#source-code-deobfuscation) *line 2924*
-  - [Deobfuscation Tools](#deobfuscation-tools) *line 2935*
-    - [[kookywarrior/bonk-deobfuscator](https://github.com/kookywarrior/bonk-deobfuscator)](#kookywarriorbonk-deobfuscatorhttpsgithubcomkookywarriorbonk-deobfuscator) *line 2937*
-    - [[Kitaes-software/bonk-deobfuscator](https://github.com/Kitaes-software/bonk-deobfuscator)](#kitaes-softwarebonk-deobfuscatorhttpsgithubcomkitaes-softwarebonk-deobfuscator) *line 2942*
-- [Foot Notes](#foot-notes) *line 2950*
+    - [Modding](#modding) *line 257*
+- [Network](#network) *line 260*
+  - [Community Resources](#community-resources) *line 279*
+  - [Incoming Packets (Server Client)](#incoming-packets-server-client) *line 303*
+    - [On 1 - Update Pings](#on-1---update-pings) *line 305*
+    - [On 2 - Room Created](#on-2---room-created) *line 318*
+    - [On 3 - Room Join](#on-3---room-join) *line 332*
+    - [On 4 - Player Join](#on-4---player-join) *line 351*
+    - [On 5 - Player Leave](#on-5---player-leave) *line 369*
+    - [On 6 - Host Leave](#on-6---host-leave) *line 382*
+    - [On 7 - Inputs](#on-7---inputs) *line 396*
+    - [On 8 - Ready Change](#on-8---ready-change) *line 409*
+    - [On 9 - All Ready Reset](#on-9---all-ready-reset) *line 422*
+    - [On 10 - Server Mute](#on-10---server-mute) *line 430*
+    - [On 11 - Server Unmute](#on-11---server-unmute) *line 444*
+    - [On 12 - Username Change](#on-12---username-change) *line 458*
+    - [On 13 - Game End](#on-13---game-end) *line 471*
+    - [On 14 - Reserved](#on-14---reserved) *line 479*
+    - [On 15 - Game Start](#on-15---game-start) *line 488*
+    - [On 16 - Status Message](#on-16---status-message) *line 502*
+    - [On 17 - Reserved](#on-17---reserved) *line 514*
+    - [On 18 - Team Change](#on-18---team-change) *line 523*
+    - [On 19 - Teamlock Toggle](#on-19---teamlock-toggle) *line 536*
+    - [On 20 - Chat Message](#on-20---chat-message) *line 548*
+    - [On 21 - Initial Data](#on-21---initial-data) *line 561*
+    - [On 23 - Timesync Response](#on-23---timesync-response) *line 573*
+    - [On 24 - Player Banned/Kicked](#on-24---player-bannedkicked) *line 583*
+    - [On 25 - Map Reorder](#on-25---map-reorder) *line 596*
+    - [On 26 - Mode Change](#on-26---mode-change) *line 607*
+    - [On 27 - Change WL (Rounds)](#on-27---change-wl-rounds) *line 620*
+    - [On 28 - Map Delete](#on-28---map-delete) *line 632*
+    - [On 29 - Map Switch](#on-29---map-switch) *line 642*
+    - [On 30 - Typing](#on-30---typing) *line 654*
+    - [On 31 - Admin Inputs](#on-31---admin-inputs) *line 667*
+    - [On 32 - AFK Warn](#on-32---afk-warn) *line 675*
+    - [On 33 - Map Suggest (Host)](#on-33---map-suggest-host) *line 683*
+    - [On 34 - Map Suggest (Client)](#on-34---map-suggest-client) *line 696*
+    - [On 35 - Change Mode](#on-35---change-mode) *line 710*
+    - [On 36 - Balance Set](#on-36---balance-set) *line 720*
+    - [On 37 - Reserved](#on-37---reserved) *line 733*
+    - [On 38 - Debug Winner](#on-38---debug-winner) *line 742*
+    - [On 39 - Team Settings Change](#on-39---team-settings-change) *line 756*
+    - [On 40 - Save Replay](#on-40---save-replay) *line 766*
+    - [On 41 - Host Change](#on-41---host-change) *line 778*
+    - [On 42 - Friend Request](#on-42---friend-request) *line 788*
+    - [On 43 - Countdown](#on-43---countdown) *line 800*
+    - [On 44 - Abort Countdown](#on-44---abort-countdown) *line 812*
+    - [On 45 - Player Leveled Up](#on-45---player-leveled-up) *line 820*
+    - [On 46 - Local Gained XP](#on-46---local-gained-xp) *line 830*
+    - [On 47 - Local Revert](#on-47---local-revert) *line 842*
+    - [On 48 - Recv In Game](#on-48---recv-in-game) *line 852*
+    - [On 49 - Room Share Link](#on-49---room-share-link) *line 862*
+    - [On 50 - Map Vote Update](#on-50---map-vote-update) *line 875*
+    - [On 51 - More Quick Maps](#on-51---more-quick-maps) *line 886*
+    - [On 52 - Tabbed](#on-52---tabbed) *line 894*
+    - [On 53 - Desync Request](#on-53---desync-request) *line 907*
+    - [On 54 - Desync Response](#on-54---desync-response) *line 919*
+    - [On 57 - Curate Result](#on-57---curate-result) *line 931*
+    - [On 58 - Room Name Update](#on-58---room-name-update) *line 944*
+    - [On 59 - Room Password Update](#on-59---room-password-update) *line 956*
+    - [On 60 - Server Message](#on-60---server-message) *line 968*
+  - [Outgoing Packets (Client <h5>Response</h5> Server)](#outgoing-packets-client-h5responseh5-server) *line 976*
+    - [Emit 1 - Ping Acknowledgement](#emit-1---ping-acknowledgement) *line 978*
+    - [Emit 2 - Test Ping](#emit-2---test-ping) *line 990*
+    - [Emit 3 - Get Debug](#emit-3---get-debug) *line 999*
+    - [Emit 4 - Send Inputs](#emit-4---send-inputs) *line 1008*
+    - [Emit 5 - Trigger Start](#emit-5---trigger-start) *line 1022*
+    - [Emit 6 - Change Own Team](#emit-6---change-own-team) *line 1035*
+    - [Emit 7 - Team Lock](#emit-7---team-lock) *line 1045*
+    - [Emit 8 - Silence Player](#emit-8---silence-player) *line 1055*
+    - [Emit 9 - Kick/Ban Player](#emit-9---kickban-player) *line 1068*
+    - [Emit 10 - Chat Message](#emit-10---chat-message) *line 1079*
+    - [Emit 11 - Inform In Lobby](#emit-11---inform-in-lobby) *line 1089*
+    - [Emit 12 - Create Room](#emit-12---create-room) *line 1102*
+    - [Emit 13 - Join Room](#emit-13---join-room) *line 1131*
+    - [Emit 14 - Return To Lobby](#emit-14---return-to-lobby) *line 1148*
+    - [Emit 16 - Set Ready](#emit-16---set-ready) *line 1154*
+    - [Emit 17 - All Ready Reset](#emit-17---all-ready-reset) *line 1164*
+    - [Emit 18 - Timesync request](#emit-18---timesync-request) *line 1172*
+    - [Emit 19 - Map Reorder](#emit-19---map-reorder) *line 1182*
+    - [Emit 20 - Send Mode](#emit-20---send-mode) *line 1191*
+    - [Emit 21 - Send WL (Rounds)](#emit-21---send-wl-rounds) *line 1204*
+    - [Emit 22 - Map Delete](#emit-22---map-delete) *line 1214*
+    - [Emit 23 - Map Add](#emit-23---map-add) *line 1222*
+    - [Emit 24 - Send Typing](#emit-24---send-typing) *line 1234*
+    - [Emit 25 - Admin Inputs](#emit-25---admin-inputs) *line 1243*
+    - [Emit 26 - Change Other Team](#emit-26---change-other-team) *line 1253*
+    - [Emit 27 - Map Suggest](#emit-27---map-suggest) *line 1264*
+    - [Emit 28 - Change Mode](#emit-28---change-mode) *line 1276*
+    - [Emit 29 - Send Balance](#emit-29---send-balance) *line 1286*
+    - [Emit 30 - Version Check](#emit-30---version-check) *line 1299*
+    - [Emit 31 - Send Debug Winner](#emit-31---send-debug-winner) *line 1308*
+    - [Emit 32 - Team Settings Change](#emit-32---team-settings-change) *line 1321*
+    - [Emit 33 - Arm Record](#emit-33---arm-record) *line 1333*
+    - [Emit 34 - Host Change](#emit-34---host-change) *line 1341*
+    - [Emit 35 - Send Friended](#emit-35---send-friended) *line 1353*
+    - [Emit 36 - Start Countdown](#emit-36---start-countdown) *line 1365*
+    - [Emit 37 - Abort Countdown](#emit-37---abort-countdown) *line 1377*
+    - [Emit 38 - Request XP](#emit-38---request-xp) *line 1385*
+    - [Emit 39 - Map Vote](#emit-39---map-vote) *line 1393*
+    - [Emit 40 - Inform In Game](#emit-40---inform-in-game) *line 1406*
+    - [Emit 41 - Get Pre Vote](#emit-41---get-pre-vote) *line 1419*
+    - [Emit 42 - Get More Quick Play Maps](#emit-42---get-more-quick-play-maps) *line 1431*
+    - [Emit 43 - Update RC Data](#emit-43---update-rc-data) *line 1439*
+    - [Emit 44 - Tabbed](#emit-44---tabbed) *line 1449*
+    - [Emit 45 - Desync Test](#emit-45---desync-test) *line 1461*
+    - [Emit 46 - Send Desync Response](#emit-46---send-desync-response) *line 1475*
+    - [Emit 47 - Round Complete](#emit-47---round-complete) *line 1489*
+    - [Emit 50 - No Host Swap](#emit-50---no-host-swap) *line 1500*
+    - [Emit 51 - Curate](#emit-51---curate) *line 1508*
+    - [Emit 52 - Room Name Update](#emit-52---room-name-update) *line 1522*
+    - [Emit 53 - Room Password Update](#emit-53---room-password-update) *line 1534*
+- [Common Data Schemes](#common-data-schemes) *line 1544*
+  - [Data](#data) *line 1546*
+    - [Token Format](#token-format) *line 1548*
+  - [Enums](#enums) *line 1574*
+    - [Team](#team) *line 1576*
+    - [Server Mute Broadcast type enum](#server-mute-broadcast-type-enum) *line 1587*
+    - [Game Engine Enum](#game-engine-enum) *line 1595*
+    - [Game Mode Enum](#game-mode-enum) *line 1604*
+    - [Body Type Enum](#body-type-enum) *line 1618*
+    - [Quality Enum](#quality-enum) *line 1628*
+    - [Projectile Type Enum](#projectile-type-enum) *line 1638*
+    - [Avatar Shape Enum](#avatar-shape-enum) *line 1646*
+    - [Disc Death Method Enum](#disc-death-method-enum) *line 1652*
+  - [Inputs](#inputs) *line 1663*
+    - [Input Flags](#input-flags) *line 1711*
+    - [Input Object](#input-object) *line 1729*
+    - [Frame Input](#frame-input) *line 1737*
+  - [Game Configuration](#game-configuration) *line 1750*
+    - [Game Settings Object (`gs`)](#game-settings-object-gs) *line 1752*
+    - [Mode Settings Object](#mode-settings-object) *line 1768*
+    - [Team Settings Object](#team-settings-object) *line 1777*
+  - [Map](#map) *line 1786*
+    - [Map Settings](#map-settings) *line 1788*
+    - [Map Metadata](#map-metadata) *line 1800*
+    - [Map Data Format](#map-data-format) *line 1822*
+      - [Capture Zone](#capture-zone) *line 1833*
+    - [Physics](#physics) *line 1846*
+      - [Shapes](#shapes) *line 1850*
+        - [Base Shape](#base-shape) *line 1854*
+        - [Box Shape](#box-shape) *line 1861*
+        - [Circle Shape](#circle-shape) *line 1873*
+        - [Poly Shape](#poly-shape) *line 1883*
+        - [Chain Shape](#chain-shape) *line 1894*
+      - [Fixture](#fixture) *line 1908*
+      - [Body](#body) *line 1925*
+      - [Joints](#joints) *line 1954*
+        - [Base Joint](#base-joint) *line 1958*
+        - [Revolute Joint](#revolute-joint) *line 1972*
+        - [Distance Joint](#distance-joint) *line 1994*
+        - [Legacy Path Joint](#legacy-path-joint) *line 2012*
+        - [Legacy Springy Joint](#legacy-springy-joint) *line 2034*
+        - [Prismatic Joint](#prismatic-joint) *line 2052*
+        - [Soft Rod Joint](#soft-rod-joint) *line 2074*
+        - [Gear Joint](#gear-joint) *line 2090*
+      - [Physics State](#physics-state) *line 2104*
+  - [Game State](#game-state) *line 2117*
+    - [Initial Game State](#initial-game-state) *line 2119*
+      - [Bonk Game State](#bonk-game-state) *line 2135*
+      - [Football Game State](#football-game-state) *line 2160*
+    - [Full Game State Data](#full-game-state-data) *line 2181*
+  - [Discs](#discs) *line 2227*
+    - [Bonk Disc](#bonk-disc) *line 2229*
+    - [Football Disc](#football-disc) *line 2260*
+    - [Disc Death](#disc-death) *line 2276*
+      - [DiscDeathMethod](#discdeathmethod) *line 2290*
+  - [Common Types](#common-types) *line 2300*
+    - [Point 2D](#point-2d) *line 2302*
+    - [Point 2D Vector](#point-2d-vector) *line 2311*
+    - [Sounds This Step](#sounds-this-step) *line 2320*
+    - [Swing State](#swing-state) *line 2329*
+  - [Common Types](#common-types) *line 2339*
+    - [Avatar Data Format](#avatar-data-format) *line 2341*
+  - [Server](#server) *line 2350*
+    - [Status Codes](#status-codes) *line 2352*
+    - [Timesync Response Data](#timesync-response-data) *line 2398*
+    - [Admin Input Data](#admin-input-data) *line 2405*
+- [HTTP Requests](#http-requests) *line 2411*
+  - [Account Endpoints](#account-endpoints) *line 2417*
+    - [register_legacy.php](#register_legacyphp) *line 2419*
+    - [login_legacy.php](#login_legacyphp) *line 2447*
+    - [login_auto.php](#login_autophp) *line 2460*
+    - [login_clearauto.php](#login_clearautophp) *line 2471*
+    - [account_changepassword.php](#account_changepasswordphp) *line 2479*
+    - [account_savecontrols.php](#account_savecontrolsphp) *line 2496*
+  - [Friends Endpoints](#friends-endpoints) *line 2505*
+    - [friends.php](#friendsphp) *line 2507*
+  - [Map Endpoints](#map-endpoints) *line 2526*
+    - [Map Favorite Endpoints](#map-favorite-endpoints) *line 2528*
+      - [map_fave.php](#map_favephp) *line 2530*
+    - [Map Search Endpoints](#map-search-endpoints) *line 2547*
+      - [map_getsearch.php](#map_getsearchphp) *line 2549*
+      - [map_getfresh.php](#map_getfreshphp) *line 2569*
+      - [map_getfave.php](#map_getfavephp) *line 2585*
+      - [map_getown.php](#map_getownphp) *line 2602*
+    - [Map B1 Endpoints (Bonk1 Legacy Maps)](#map-b1-endpoints-bonk1-legacy-maps) *line 2618*
+      - [map_b1_getfave.php](#map_b1_getfavephp) *line 2620*
+      - [map_b1_getown.php](#map_b1_getownphp) *line 2637*
+      - [map_b1_getbest.php](#map_b1_getbestphp) *line 2654*
+      - [map_b1_getsearch.php](#map_b1_getsearchphp) *line 2670*
+    - [Map Management Endpoints](#map-management-endpoints) *line 2690*
+      - [map_save_pub.php](#map_save_pubphp) *line 2692*
+      - [map_delete.php](#map_deletephp) *line 2717*
+  - [Replay Endpoints](#replay-endpoints) *line 2726*
+      - [replay_submit.php](#replay_submitphp) *line 2728*
+      - [replay_get.php](#replay_getphp) *line 2739*
+      - [replay_report.php](#replay_reportphp) *line 2753*
+  - [Room Endpoints](#room-endpoints) *line 2767*
+      - [getrooms.php](#getroomsphp) *line 2769*
+      - [getroomaddress.php](#getroomaddressphp) *line 2791*
+  - [Matchmaking Endpoints](#matchmaking-endpoints) *line 2811*
+      - [matchmaking_maps.php](#matchmaking_mapsphp) *line 2813*
+      - [matchmaking_query.php](#matchmaking_queryphp) *line 2825*
+  - [Avatar Endpoints](#avatar-endpoints) *line 2848*
+      - [avatar_update.php](#avatar_updatephp) *line 2850*
+  - [static Endpoints](#static-endpoints) *line 2862*
+      - [combinedplayercount.txt](#combinedplayercounttxt) *line 2866*
+      - [Hot Maps Cache](#hot-maps-cache) *line 2893*
+    - [picks](#picks) *line 2915*
+- [Source Code / Deobfuscation](#source-code-deobfuscation) *line 2927*
+  - [Deobfuscation Tools](#deobfuscation-tools) *line 2938*
+    - [[kookywarrior/bonk-deobfuscator](https://github.com/kookywarrior/bonk-deobfuscator)](#kookywarriorbonk-deobfuscatorhttpsgithubcomkookywarriorbonk-deobfuscator) *line 2940*
+    - [[Kitaes-software/bonk-deobfuscator](https://github.com/Kitaes-software/bonk-deobfuscator)](#kitaes-softwarebonk-deobfuscatorhttpsgithubcomkitaes-softwarebonk-deobfuscator) *line 2945*
+- [Foot Notes](#foot-notes) *line 2953*
 
   
 <a name="contributing-to-the-repository"></a>
