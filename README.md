@@ -1,242 +1,253 @@
 # Demystifying Bonk
-Last updated: *17-7-2026, 19:48:59*
+Last updated: *17-7-2026, 20:06:28*
 
 A repository for various resources to understand the inner workings of [bonk.io](https://bonk.io) api protocol 49.
+ 
+| `invalid_params (token)`[^token] | N/A |
+peerId[^peerID]
+"PeerID":[^peerID]
+peerID[^peerID]
+<a name="test"></a>
+## test
 
+Peer ID (shouldnt)
+```js
+
+peerID[^peerID]
+```
 
 <!-- reservedForToc -->
-  - [Emit](#emit) *line 11*
-- [Contributing to the repository](#contributing-to-the-repository) *line 254*
-  - [Requested Todo](#requested-todo) *line 268*
-    - [Modding](#modding) *line 276*
-- [Network](#network) *line 279*
-  - [Community Resources](#community-resources) *line 298*
-  - [Incoming Packets (Server Client)](#incoming-packets-server-client) *line 322*
-    - [On 1 - Update Pings](#on-1---update-pings) *line 324*
-    - [On 2 - Room Created](#on-2---room-created) *line 362*
-    - [On 3 - Room Join](#on-3---room-join) *line 400*
-    - [On 4 - Player Join](#on-4---player-join) *line 463*
-    - [On 5 - Player Leave](#on-5---player-leave) *line 481*
-    - [On 6 - Host Leave](#on-6---host-leave) *line 494*
-    - [On 7 - Inputs](#on-7---inputs) *line 508*
-    - [On 8 - Ready Change](#on-8---ready-change) *line 521*
-    - [On 9 - All Ready Reset](#on-9---all-ready-reset) *line 534*
-    - [On 10 - Server Mute](#on-10---server-mute) *line 542*
-    - [On 11 - Server Unmute](#on-11---server-unmute) *line 556*
-    - [On 12 - Username Change](#on-12---username-change) *line 570*
-    - [On 13 - Game End](#on-13---game-end) *line 583*
-    - [On 14 - Reserved](#on-14---reserved) *line 591*
-    - [On 15 - Game Start](#on-15---game-start) *line 600*
-    - [On 16 - Status Message](#on-16---status-message) *line 614*
-    - [On 17 - Reserved](#on-17---reserved) *line 626*
-    - [On 18 - Team Change](#on-18---team-change) *line 635*
-    - [On 19 - Teamlock Toggle](#on-19---teamlock-toggle) *line 648*
-    - [On 20 - Chat Message](#on-20---chat-message) *line 660*
-    - [On 21 - Initial Data](#on-21---initial-data) *line 673*
-    - [On 23 - Timesync Response](#on-23---timesync-response) *line 685*
-    - [On 24 - Player Banned/Kicked](#on-24---player-bannedkicked) *line 697*
-    - [On 25 - Map Reorder](#on-25---map-reorder) *line 710*
-    - [On 26 - Mode Change](#on-26---mode-change) *line 721*
-    - [On 27 - Change WL (Rounds)](#on-27---change-wl-rounds) *line 734*
-    - [On 28 - Map Delete](#on-28---map-delete) *line 746*
-    - [On 29 - Map Switch](#on-29---map-switch) *line 756*
-    - [On 30 - Typing](#on-30---typing) *line 768*
-    - [On 31 - Admin Inputs](#on-31---admin-inputs) *line 781*
-    - [On 32 - AFK Warn](#on-32---afk-warn) *line 812*
-    - [On 33 - Map Suggest (Host)](#on-33---map-suggest-host) *line 820*
-    - [On 34 - Map Suggest (Client)](#on-34---map-suggest-client) *line 833*
-    - [On 35 - Change Mode](#on-35---change-mode) *line 847*
-    - [On 36 - Balance Set](#on-36---balance-set) *line 857*
-    - [On 37 - Reserved](#on-37---reserved) *line 870*
-    - [On 38 - Debug Winner](#on-38---debug-winner) *line 879*
-    - [On 39 - Team Settings Change](#on-39---team-settings-change) *line 893*
-    - [On 40 - Save Replay](#on-40---save-replay) *line 903*
-    - [On 41 - Host Change](#on-41---host-change) *line 915*
-    - [On 42 - Friend Request](#on-42---friend-request) *line 925*
-    - [On 43 - Countdown](#on-43---countdown) *line 937*
-    - [On 44 - Abort Countdown](#on-44---abort-countdown) *line 949*
-    - [On 45 - Player Leveled Up](#on-45---player-leveled-up) *line 957*
-    - [On 46 - Local Gained XP](#on-46---local-gained-xp) *line 967*
-    - [On 47 - Local Revert](#on-47---local-revert) *line 979*
-    - [On 48 - Recv In Game](#on-48---recv-in-game) *line 989*
-    - [On 49 - Room Share Link](#on-49---room-share-link) *line 999*
-    - [On 50 - Map Vote Update](#on-50---map-vote-update) *line 1012*
-    - [On 51 - More Quick Maps](#on-51---more-quick-maps) *line 1023*
-    - [On 52 - Tabbed](#on-52---tabbed) *line 1031*
-    - [On 53 - Desync Request](#on-53---desync-request) *line 1044*
-    - [On 54 - Desync Response](#on-54---desync-response) *line 1056*
-    - [On 57 - Curate Result](#on-57---curate-result) *line 1068*
-    - [On 58 - Room Name Update](#on-58---room-name-update) *line 1081*
-    - [On 59 - Room Password Update](#on-59---room-password-update) *line 1093*
-    - [On 60 - Server Message](#on-60---server-message) *line 1105*
-  - [Outgoing Packets](#outgoing-packets) *line 1113*
-    - [Emit 1 - Ping Acknowledgement](#emit-1---ping-acknowledgement) *line 1115*
-    - [Emit 2 - Test Ping](#emit-2---test-ping) *line 1127*
-    - [Emit 3 - Get Debug](#emit-3---get-debug) *line 1136*
-    - [Emit 4 - Send Inputs](#emit-4---send-inputs) *line 1145*
-    - [Emit 5 - Trigger Start](#emit-5---trigger-start) *line 1159*
-    - [Emit 6 - Change Own Team](#emit-6---change-own-team) *line 1172*
-    - [Emit 7 - Team Lock](#emit-7---team-lock) *line 1182*
-    - [Emit 8 - Silence Player](#emit-8---silence-player) *line 1192*
-    - [Emit 9 - Kick/Ban Player](#emit-9---kickban-player) *line 1205*
-    - [Emit 10 - Chat Message](#emit-10---chat-message) *line 1216*
-    - [Emit 11 - Inform In Lobby](#emit-11---inform-in-lobby) *line 1226*
-    - [Emit 12 - Create Room](#emit-12---create-room) *line 1239*
-    - [Emit 13 - Join Room](#emit-13---join-room) *line 1269*
-    - [Emit 14 - Return To Lobby](#emit-14---return-to-lobby) *line 1288*
-    - [Emit 16 - Set Ready](#emit-16---set-ready) *line 1294*
-    - [Emit 17 - All Ready Reset](#emit-17---all-ready-reset) *line 1304*
-    - [Emit 18 - Timesync request](#emit-18---timesync-request) *line 1312*
-    - [Emit 19 - Map Reorder](#emit-19---map-reorder) *line 1322*
-    - [Emit 20 - Send Mode](#emit-20---send-mode) *line 1331*
-    - [Emit 21 - Send WL (Rounds)](#emit-21---send-wl-rounds) *line 1344*
-    - [Emit 22 - Map Delete](#emit-22---map-delete) *line 1354*
-    - [Emit 23 - Map Add](#emit-23---map-add) *line 1362*
-    - [Emit 24 - Send Typing](#emit-24---send-typing) *line 1374*
-    - [Emit 25 - Admin Inputs](#emit-25---admin-inputs) *line 1383*
-    - [Emit 26 - Change Other Team](#emit-26---change-other-team) *line 1395*
-    - [Emit 27 - Map Suggest](#emit-27---map-suggest) *line 1406*
-    - [Emit 28 - Change Mode](#emit-28---change-mode) *line 1418*
-    - [Emit 29 - Send Balance](#emit-29---send-balance) *line 1428*
-    - [Emit 30 - Version Check](#emit-30---version-check) *line 1441*
-    - [Emit 31 - Send Debug Winner](#emit-31---send-debug-winner) *line 1450*
-    - [Emit 32 - Team Settings Change](#emit-32---team-settings-change) *line 1463*
-    - [Emit 33 - Arm Record](#emit-33---arm-record) *line 1475*
-    - [Emit 34 - Host Change](#emit-34---host-change) *line 1483*
-    - [Emit 35 - Send Friended](#emit-35---send-friended) *line 1495*
-    - [Emit 36 - Start Countdown](#emit-36---start-countdown) *line 1507*
-    - [Emit 37 - Abort Countdown](#emit-37---abort-countdown) *line 1519*
-    - [Emit 38 - Request XP](#emit-38---request-xp) *line 1527*
-    - [Emit 39 - Map Vote](#emit-39---map-vote) *line 1535*
-    - [Emit 40 - Inform In Game](#emit-40---inform-in-game) *line 1548*
-    - [Emit 41 - Get Pre Vote](#emit-41---get-pre-vote) *line 1561*
-    - [Emit 42 - Get More Quick Play Maps](#emit-42---get-more-quick-play-maps) *line 1573*
-    - [Emit 43 - Update RC Data](#emit-43---update-rc-data) *line 1581*
-    - [Emit 44 - Tabbed](#emit-44---tabbed) *line 1591*
-    - [Emit 45 - Desync Test](#emit-45---desync-test) *line 1603*
-    - [Emit 46 - Send Desync Response](#emit-46---send-desync-response) *line 1617*
-    - [Emit 47 - Round Complete](#emit-47---round-complete) *line 1631*
-    - [Emit 50 - No Host Swap](#emit-50---no-host-swap) *line 1642*
-    - [Emit 51 - Curate](#emit-51---curate) *line 1650*
-    - [Emit 52 - Room Name Update](#emit-52---room-name-update) *line 1664*
-    - [Emit 53 - Room Password Update](#emit-53---room-password-update) *line 1676*
-- [Common Data Schemes](#common-data-schemes) *line 1686*
-  - [Data](#data) *line 1688*
-    - [Token Format](#token-format) *line 1690*
-  - [Enums](#enums) *line 1716*
-    - [Team](#team) *line 1718*
-    - [Server Mute Broadcast type enum](#server-mute-broadcast-type-enum) *line 1729*
-    - [Game Engine Enum](#game-engine-enum) *line 1737*
-    - [Game Mode Enum](#game-mode-enum) *line 1746*
-    - [Body Type Enum](#body-type-enum) *line 1760*
-    - [Quality Enum](#quality-enum) *line 1770*
-    - [Projectile Type Enum](#projectile-type-enum) *line 1780*
-    - [Avatar Shape Enum](#avatar-shape-enum) *line 1788*
-    - [Disc Death Method Enum](#disc-death-method-enum) *line 1839*
-  - [Inputs](#inputs) *line 1850*
-    - [Input Flags](#input-flags) *line 1899*
-    - [Input Object](#input-object) *line 1917*
-    - [Frame Input](#frame-input) *line 1925*
-  - [Game Configuration](#game-configuration) *line 1938*
-    - [Game Settings Object (`gs`)](#game-settings-object-gs) *line 1940*
-    - [Mode Settings Object](#mode-settings-object) *line 1956*
-    - [Team Settings Object](#team-settings-object) *line 1965*
-  - [Map](#map) *line 1974*
-    - [Map Settings](#map-settings) *line 1976*
-    - [Map Metadata](#map-metadata) *line 1988*
-    - [Map Data Format](#map-data-format) *line 2010*
-      - [Capture Zone](#capture-zone) *line 2021*
-    - [Physics](#physics) *line 2034*
-      - [Shapes](#shapes) *line 2038*
-        - [Base Shape](#base-shape) *line 2042*
-        - [Box Shape](#box-shape) *line 2049*
-        - [Circle Shape](#circle-shape) *line 2061*
-        - [Poly Shape](#poly-shape) *line 2071*
-        - [Chain Shape](#chain-shape) *line 2082*
-      - [Fixture](#fixture) *line 2096*
-      - [Body](#body) *line 2113*
-      - [Joints](#joints) *line 2142*
-        - [Base Joint](#base-joint) *line 2146*
-        - [Revolute Joint](#revolute-joint) *line 2160*
-        - [Distance Joint](#distance-joint) *line 2182*
-        - [Legacy Path Joint](#legacy-path-joint) *line 2200*
-        - [Legacy Springy Joint](#legacy-springy-joint) *line 2222*
-        - [Prismatic Joint](#prismatic-joint) *line 2240*
-        - [Soft Rod Joint](#soft-rod-joint) *line 2262*
-        - [Gear Joint](#gear-joint) *line 2278*
-      - [Physics State](#physics-state) *line 2292*
-  - [Game State](#game-state) *line 2305*
-    - [Initial Game State](#initial-game-state) *line 2307*
-      - [Bonk Game State](#bonk-game-state) *line 2324*
-      - [Football Game State](#football-game-state) *line 2349*
-    - [Full Game State Data](#full-game-state-data) *line 2370*
-  - [Discs](#discs) *line 2416*
-    - [Bonk Disc](#bonk-disc) *line 2418*
-    - [Football Disc](#football-disc) *line 2449*
-    - [Disc Death](#disc-death) *line 2465*
-      - [DiscDeathMethod](#discdeathmethod) *line 2479*
-  - [Common Types](#common-types) *line 2489*
-    - [Point 2D](#point-2d) *line 2491*
-    - [Point 2D Vector](#point-2d-vector) *line 2500*
-    - [Sounds This Step](#sounds-this-step) *line 2509*
-    - [Swing State](#swing-state) *line 2518*
-  - [Common Types](#common-types) *line 2528*
-    - [Avatar Data Format](#avatar-data-format) *line 2530*
-      - [Avatar](#avatar) *line 2534*
-      - [AvatarLayer](#avatarlayer) *line 2541*
-  - [Server](#server) *line 2559*
-    - [Status Codes](#status-codes) *line 2561*
-    - [Timesync Response Data](#timesync-response-data) *line 2607*
-    - [Admin Input Data](#admin-input-data) *line 2614*
-- [HTTP Requests](#http-requests) *line 2621*
-  - [Account Endpoints](#account-endpoints) *line 2628*
-    - [register_legacy.php](#register_legacyphp) *line 2630*
-    - [login_legacy.php](#login_legacyphp) *line 2658*
-    - [login_auto.php](#login_autophp) *line 2671*
-    - [login_clearauto.php](#login_clearautophp) *line 2682*
-    - [account_changepassword.php](#account_changepasswordphp) *line 2690*
-    - [account_savecontrols.php](#account_savecontrolsphp) *line 2707*
-  - [Friends Endpoints](#friends-endpoints) *line 2716*
-    - [friends.php](#friendsphp) *line 2718*
-  - [Map Endpoints](#map-endpoints) *line 2737*
-    - [Map Favorite Endpoints](#map-favorite-endpoints) *line 2739*
-      - [map_fave.php](#map_favephp) *line 2741*
-    - [Map Search Endpoints](#map-search-endpoints) *line 2758*
-      - [map_getsearch.php](#map_getsearchphp) *line 2760*
-      - [map_getfresh.php](#map_getfreshphp) *line 2780*
-      - [map_getfave.php](#map_getfavephp) *line 2796*
-      - [map_getown.php](#map_getownphp) *line 2813*
-    - [Map B1 Endpoints (Bonk1 Legacy Maps)](#map-b1-endpoints-bonk1-legacy-maps) *line 2829*
-      - [map_b1_getfave.php](#map_b1_getfavephp) *line 2831*
-      - [map_b1_getown.php](#map_b1_getownphp) *line 2848*
-      - [map_b1_getbest.php](#map_b1_getbestphp) *line 2865*
-      - [map_b1_getsearch.php](#map_b1_getsearchphp) *line 2881*
-    - [Map Management Endpoints](#map-management-endpoints) *line 2901*
-      - [map_save_pub.php](#map_save_pubphp) *line 2903*
-      - [map_delete.php](#map_deletephp) *line 2928*
-  - [Replay Endpoints](#replay-endpoints) *line 2937*
-      - [replay_submit.php](#replay_submitphp) *line 2939*
-      - [replay_get.php](#replay_getphp) *line 2950*
-      - [replay_report.php](#replay_reportphp) *line 2968*
-  - [Room Endpoints](#room-endpoints) *line 2982*
-      - [getrooms.php](#getroomsphp) *line 2984*
-      - [getroomaddress.php](#getroomaddressphp) *line 3006*
-  - [Matchmaking Endpoints](#matchmaking-endpoints) *line 3026*
-      - [matchmaking_maps.php](#matchmaking_mapsphp) *line 3028*
-      - [matchmaking_query.php](#matchmaking_queryphp) *line 3040*
-  - [Avatar Endpoints](#avatar-endpoints) *line 3063*
-      - [avatar_update.php](#avatar_updatephp) *line 3065*
-  - [static Endpoints](#static-endpoints) *line 3077*
-      - [combinedplayercount.txt](#combinedplayercounttxt) *line 3081*
-      - [Hot Maps Cache](#hot-maps-cache) *line 3111*
-    - [picks](#picks) *line 3135*
-- [Source Code / Deobfuscation](#source-code-deobfuscation) *line 3151*
-  - [Deobfuscation Tools](#deobfuscation-tools) *line 3162*
-    - [[kookywarrior/bonk-deobfuscator](https://github.com/kookywarrior/bonk-deobfuscator)](#kookywarriorbonk-deobfuscatorhttpsgithubcomkookywarriorbonk-deobfuscator) *line 3164*
-    - [[Kitaes-software/bonk-deobfuscator](https://github.com/Kitaes-software/bonk-deobfuscator)](#kitaes-softwarebonk-deobfuscatorhttpsgithubcomkitaes-softwarebonk-deobfuscator) *line 3169*
-- [Snippets](#snippets) *line 3179*
-  - [PeerID](#peerid) *line 3182*
-- [Foot Notes](#foot-notes) *line 3228*
+- [test](#test) *line 9*
+- [Contributing to the repository](#contributing-to-the-repository) *line 251*
+  - [Requested Todo](#requested-todo) *line 265*
+    - [Modding](#modding) *line 273*
+- [Network](#network) *line 276*
+  - [Community Resources](#community-resources) *line 295*
+  - [Incoming Packets (Server Client)](#incoming-packets-server-client) *line 319*
+    - [On 1 - Update Pings](#on-1---update-pings) *line 321*
+    - [On 2 - Room Created](#on-2---room-created) *line 359*
+    - [On 3 - Room Join](#on-3---room-join) *line 397*
+    - [On 4 - Player Join](#on-4---player-join) *line 460*
+    - [On 5 - Player Leave](#on-5---player-leave) *line 478*
+    - [On 6 - Host Leave](#on-6---host-leave) *line 491*
+    - [On 7 - Inputs](#on-7---inputs) *line 505*
+    - [On 8 - Ready Change](#on-8---ready-change) *line 518*
+    - [On 9 - All Ready Reset](#on-9---all-ready-reset) *line 531*
+    - [On 10 - Server Mute](#on-10---server-mute) *line 539*
+    - [On 11 - Server Unmute](#on-11---server-unmute) *line 553*
+    - [On 12 - Username Change](#on-12---username-change) *line 567*
+    - [On 13 - Game End](#on-13---game-end) *line 580*
+    - [On 14 - Reserved](#on-14---reserved) *line 588*
+    - [On 15 - Game Start](#on-15---game-start) *line 597*
+    - [On 16 - Status Message](#on-16---status-message) *line 611*
+    - [On 17 - Reserved](#on-17---reserved) *line 623*
+    - [On 18 - Team Change](#on-18---team-change) *line 632*
+    - [On 19 - Teamlock Toggle](#on-19---teamlock-toggle) *line 645*
+    - [On 20 - Chat Message](#on-20---chat-message) *line 657*
+    - [On 21 - Initial Data](#on-21---initial-data) *line 670*
+    - [On 23 - Timesync Response](#on-23---timesync-response) *line 682*
+    - [On 24 - Player Banned/Kicked](#on-24---player-bannedkicked) *line 694*
+    - [On 25 - Map Reorder](#on-25---map-reorder) *line 707*
+    - [On 26 - Mode Change](#on-26---mode-change) *line 718*
+    - [On 27 - Change WL (Rounds)](#on-27---change-wl-rounds) *line 731*
+    - [On 28 - Map Delete](#on-28---map-delete) *line 743*
+    - [On 29 - Map Switch](#on-29---map-switch) *line 753*
+    - [On 30 - Typing](#on-30---typing) *line 765*
+    - [On 31 - Admin Inputs](#on-31---admin-inputs) *line 778*
+    - [On 32 - AFK Warn](#on-32---afk-warn) *line 809*
+    - [On 33 - Map Suggest (Host)](#on-33---map-suggest-host) *line 817*
+    - [On 34 - Map Suggest (Client)](#on-34---map-suggest-client) *line 830*
+    - [On 35 - Change Mode](#on-35---change-mode) *line 844*
+    - [On 36 - Balance Set](#on-36---balance-set) *line 854*
+    - [On 37 - Reserved](#on-37---reserved) *line 867*
+    - [On 38 - Debug Winner](#on-38---debug-winner) *line 876*
+    - [On 39 - Team Settings Change](#on-39---team-settings-change) *line 890*
+    - [On 40 - Save Replay](#on-40---save-replay) *line 900*
+    - [On 41 - Host Change](#on-41---host-change) *line 912*
+    - [On 42 - Friend Request](#on-42---friend-request) *line 922*
+    - [On 43 - Countdown](#on-43---countdown) *line 934*
+    - [On 44 - Abort Countdown](#on-44---abort-countdown) *line 946*
+    - [On 45 - Player Leveled Up](#on-45---player-leveled-up) *line 954*
+    - [On 46 - Local Gained XP](#on-46---local-gained-xp) *line 964*
+    - [On 47 - Local Revert](#on-47---local-revert) *line 976*
+    - [On 48 - Recv In Game](#on-48---recv-in-game) *line 986*
+    - [On 49 - Room Share Link](#on-49---room-share-link) *line 996*
+    - [On 50 - Map Vote Update](#on-50---map-vote-update) *line 1009*
+    - [On 51 - More Quick Maps](#on-51---more-quick-maps) *line 1020*
+    - [On 52 - Tabbed](#on-52---tabbed) *line 1028*
+    - [On 53 - Desync Request](#on-53---desync-request) *line 1041*
+    - [On 54 - Desync Response](#on-54---desync-response) *line 1053*
+    - [On 57 - Curate Result](#on-57---curate-result) *line 1065*
+    - [On 58 - Room Name Update](#on-58---room-name-update) *line 1078*
+    - [On 59 - Room Password Update](#on-59---room-password-update) *line 1090*
+    - [On 60 - Server Message](#on-60---server-message) *line 1102*
+  - [Outgoing Packets](#outgoing-packets) *line 1110*
+    - [Emit 1 - Ping Acknowledgement](#emit-1---ping-acknowledgement) *line 1112*
+    - [Emit 2 - Test Ping](#emit-2---test-ping) *line 1124*
+    - [Emit 3 - Get Debug](#emit-3---get-debug) *line 1133*
+    - [Emit 4 - Send Inputs](#emit-4---send-inputs) *line 1142*
+    - [Emit 5 - Trigger Start](#emit-5---trigger-start) *line 1156*
+    - [Emit 6 - Change Own Team](#emit-6---change-own-team) *line 1169*
+    - [Emit 7 - Team Lock](#emit-7---team-lock) *line 1179*
+    - [Emit 8 - Silence Player](#emit-8---silence-player) *line 1189*
+    - [Emit 9 - Kick/Ban Player](#emit-9---kickban-player) *line 1202*
+    - [Emit 10 - Chat Message](#emit-10---chat-message) *line 1213*
+    - [Emit 11 - Inform In Lobby](#emit-11---inform-in-lobby) *line 1223*
+    - [Emit 12 - Create Room](#emit-12---create-room) *line 1236*
+    - [Emit 13 - Join Room](#emit-13---join-room) *line 1266*
+    - [Emit 14 - Return To Lobby](#emit-14---return-to-lobby) *line 1285*
+    - [Emit 16 - Set Ready](#emit-16---set-ready) *line 1291*
+    - [Emit 17 - All Ready Reset](#emit-17---all-ready-reset) *line 1301*
+    - [Emit 18 - Timesync request](#emit-18---timesync-request) *line 1309*
+    - [Emit 19 - Map Reorder](#emit-19---map-reorder) *line 1319*
+    - [Emit 20 - Send Mode](#emit-20---send-mode) *line 1328*
+    - [Emit 21 - Send WL (Rounds)](#emit-21---send-wl-rounds) *line 1341*
+    - [Emit 22 - Map Delete](#emit-22---map-delete) *line 1351*
+    - [Emit 23 - Map Add](#emit-23---map-add) *line 1359*
+    - [Emit 24 - Send Typing](#emit-24---send-typing) *line 1371*
+    - [Emit 25 - Admin Inputs](#emit-25---admin-inputs) *line 1380*
+    - [Emit 26 - Change Other Team](#emit-26---change-other-team) *line 1392*
+    - [Emit 27 - Map Suggest](#emit-27---map-suggest) *line 1403*
+    - [Emit 28 - Change Mode](#emit-28---change-mode) *line 1415*
+    - [Emit 29 - Send Balance](#emit-29---send-balance) *line 1425*
+    - [Emit 30 - Version Check](#emit-30---version-check) *line 1438*
+    - [Emit 31 - Send Debug Winner](#emit-31---send-debug-winner) *line 1447*
+    - [Emit 32 - Team Settings Change](#emit-32---team-settings-change) *line 1460*
+    - [Emit 33 - Arm Record](#emit-33---arm-record) *line 1472*
+    - [Emit 34 - Host Change](#emit-34---host-change) *line 1480*
+    - [Emit 35 - Send Friended](#emit-35---send-friended) *line 1492*
+    - [Emit 36 - Start Countdown](#emit-36---start-countdown) *line 1504*
+    - [Emit 37 - Abort Countdown](#emit-37---abort-countdown) *line 1516*
+    - [Emit 38 - Request XP](#emit-38---request-xp) *line 1524*
+    - [Emit 39 - Map Vote](#emit-39---map-vote) *line 1532*
+    - [Emit 40 - Inform In Game](#emit-40---inform-in-game) *line 1545*
+    - [Emit 41 - Get Pre Vote](#emit-41---get-pre-vote) *line 1558*
+    - [Emit 42 - Get More Quick Play Maps](#emit-42---get-more-quick-play-maps) *line 1570*
+    - [Emit 43 - Update RC Data](#emit-43---update-rc-data) *line 1578*
+    - [Emit 44 - Tabbed](#emit-44---tabbed) *line 1588*
+    - [Emit 45 - Desync Test](#emit-45---desync-test) *line 1600*
+    - [Emit 46 - Send Desync Response](#emit-46---send-desync-response) *line 1614*
+    - [Emit 47 - Round Complete](#emit-47---round-complete) *line 1628*
+    - [Emit 50 - No Host Swap](#emit-50---no-host-swap) *line 1639*
+    - [Emit 51 - Curate](#emit-51---curate) *line 1647*
+    - [Emit 52 - Room Name Update](#emit-52---room-name-update) *line 1661*
+    - [Emit 53 - Room Password Update](#emit-53---room-password-update) *line 1673*
+- [Common Data Schemes](#common-data-schemes) *line 1683*
+  - [Data](#data) *line 1685*
+    - [Token Format](#token-format) *line 1687*
+  - [Enums](#enums) *line 1713*
+    - [Team](#team) *line 1715*
+    - [Server Mute Broadcast type enum](#server-mute-broadcast-type-enum) *line 1726*
+    - [Game Engine Enum](#game-engine-enum) *line 1734*
+    - [Game Mode Enum](#game-mode-enum) *line 1743*
+    - [Body Type Enum](#body-type-enum) *line 1757*
+    - [Quality Enum](#quality-enum) *line 1767*
+    - [Projectile Type Enum](#projectile-type-enum) *line 1777*
+    - [Avatar Shape Enum](#avatar-shape-enum) *line 1785*
+    - [Disc Death Method Enum](#disc-death-method-enum) *line 1836*
+  - [Inputs](#inputs) *line 1847*
+    - [Input Flags](#input-flags) *line 1896*
+    - [Input Object](#input-object) *line 1914*
+    - [Frame Input](#frame-input) *line 1922*
+  - [Game Configuration](#game-configuration) *line 1935*
+    - [Game Settings Object (`gs`)](#game-settings-object-gs) *line 1937*
+    - [Mode Settings Object](#mode-settings-object) *line 1953*
+    - [Team Settings Object](#team-settings-object) *line 1962*
+  - [Map](#map) *line 1971*
+    - [Map Settings](#map-settings) *line 1973*
+    - [Map Metadata](#map-metadata) *line 1985*
+    - [Map Data Format](#map-data-format) *line 2007*
+      - [Capture Zone](#capture-zone) *line 2018*
+    - [Physics](#physics) *line 2031*
+      - [Shapes](#shapes) *line 2035*
+        - [Base Shape](#base-shape) *line 2039*
+        - [Box Shape](#box-shape) *line 2046*
+        - [Circle Shape](#circle-shape) *line 2058*
+        - [Poly Shape](#poly-shape) *line 2068*
+        - [Chain Shape](#chain-shape) *line 2079*
+      - [Fixture](#fixture) *line 2093*
+      - [Body](#body) *line 2110*
+      - [Joints](#joints) *line 2139*
+        - [Base Joint](#base-joint) *line 2143*
+        - [Revolute Joint](#revolute-joint) *line 2157*
+        - [Distance Joint](#distance-joint) *line 2179*
+        - [Legacy Path Joint](#legacy-path-joint) *line 2197*
+        - [Legacy Springy Joint](#legacy-springy-joint) *line 2219*
+        - [Prismatic Joint](#prismatic-joint) *line 2237*
+        - [Soft Rod Joint](#soft-rod-joint) *line 2259*
+        - [Gear Joint](#gear-joint) *line 2275*
+      - [Physics State](#physics-state) *line 2289*
+  - [Game State](#game-state) *line 2302*
+    - [Initial Game State](#initial-game-state) *line 2304*
+      - [Bonk Game State](#bonk-game-state) *line 2321*
+      - [Football Game State](#football-game-state) *line 2346*
+    - [Full Game State Data](#full-game-state-data) *line 2367*
+  - [Discs](#discs) *line 2413*
+    - [Bonk Disc](#bonk-disc) *line 2415*
+    - [Football Disc](#football-disc) *line 2446*
+    - [Disc Death](#disc-death) *line 2462*
+      - [DiscDeathMethod](#discdeathmethod) *line 2476*
+  - [Common Types](#common-types) *line 2486*
+    - [Point 2D](#point-2d) *line 2488*
+    - [Point 2D Vector](#point-2d-vector) *line 2497*
+    - [Sounds This Step](#sounds-this-step) *line 2506*
+    - [Swing State](#swing-state) *line 2515*
+  - [Common Types](#common-types) *line 2525*
+    - [Avatar Data Format](#avatar-data-format) *line 2527*
+      - [Avatar](#avatar) *line 2531*
+      - [AvatarLayer](#avatarlayer) *line 2538*
+  - [Server](#server) *line 2556*
+    - [Status Codes](#status-codes) *line 2558*
+    - [Timesync Response Data](#timesync-response-data) *line 2604*
+    - [Admin Input Data](#admin-input-data) *line 2611*
+- [HTTP Requests](#http-requests) *line 2618*
+  - [Account Endpoints](#account-endpoints) *line 2625*
+    - [register_legacy.php](#register_legacyphp) *line 2627*
+    - [login_legacy.php](#login_legacyphp) *line 2655*
+    - [login_auto.php](#login_autophp) *line 2668*
+    - [login_clearauto.php](#login_clearautophp) *line 2679*
+    - [account_changepassword.php](#account_changepasswordphp) *line 2687*
+    - [account_savecontrols.php](#account_savecontrolsphp) *line 2704*
+  - [Friends Endpoints](#friends-endpoints) *line 2713*
+    - [friends.php](#friendsphp) *line 2715*
+  - [Map Endpoints](#map-endpoints) *line 2734*
+    - [Map Favorite Endpoints](#map-favorite-endpoints) *line 2736*
+      - [map_fave.php](#map_favephp) *line 2738*
+    - [Map Search Endpoints](#map-search-endpoints) *line 2755*
+      - [map_getsearch.php](#map_getsearchphp) *line 2757*
+      - [map_getfresh.php](#map_getfreshphp) *line 2777*
+      - [map_getfave.php](#map_getfavephp) *line 2793*
+      - [map_getown.php](#map_getownphp) *line 2810*
+    - [Map B1 Endpoints (Bonk1 Legacy Maps)](#map-b1-endpoints-bonk1-legacy-maps) *line 2826*
+      - [map_b1_getfave.php](#map_b1_getfavephp) *line 2828*
+      - [map_b1_getown.php](#map_b1_getownphp) *line 2845*
+      - [map_b1_getbest.php](#map_b1_getbestphp) *line 2862*
+      - [map_b1_getsearch.php](#map_b1_getsearchphp) *line 2878*
+    - [Map Management Endpoints](#map-management-endpoints) *line 2898*
+      - [map_save_pub.php](#map_save_pubphp) *line 2900*
+      - [map_delete.php](#map_deletephp) *line 2925*
+  - [Replay Endpoints](#replay-endpoints) *line 2934*
+      - [replay_submit.php](#replay_submitphp) *line 2936*
+      - [replay_get.php](#replay_getphp) *line 2947*
+      - [replay_report.php](#replay_reportphp) *line 2965*
+  - [Room Endpoints](#room-endpoints) *line 2979*
+      - [getrooms.php](#getroomsphp) *line 2981*
+      - [getroomaddress.php](#getroomaddressphp) *line 3003*
+  - [Matchmaking Endpoints](#matchmaking-endpoints) *line 3023*
+      - [matchmaking_maps.php](#matchmaking_mapsphp) *line 3025*
+      - [matchmaking_query.php](#matchmaking_queryphp) *line 3037*
+  - [Avatar Endpoints](#avatar-endpoints) *line 3060*
+      - [avatar_update.php](#avatar_updatephp) *line 3062*
+  - [static Endpoints](#static-endpoints) *line 3074*
+      - [combinedplayercount.txt](#combinedplayercounttxt) *line 3078*
+      - [Hot Maps Cache](#hot-maps-cache) *line 3108*
+    - [picks](#picks) *line 3132*
+- [Source Code / Deobfuscation](#source-code-deobfuscation) *line 3148*
+  - [Deobfuscation Tools](#deobfuscation-tools) *line 3159*
+    - [[kookywarrior/bonk-deobfuscator](https://github.com/kookywarrior/bonk-deobfuscator)](#kookywarriorbonk-deobfuscatorhttpsgithubcomkookywarriorbonk-deobfuscator) *line 3161*
+    - [[Kitaes-software/bonk-deobfuscator](https://github.com/Kitaes-software/bonk-deobfuscator)](#kitaes-softwarebonk-deobfuscatorhttpsgithubcomkitaes-softwarebonk-deobfuscator) *line 3166*
+- [Snippets](#snippets) *line 3174*
+  - [PeerID](#peerid) *line 3312*
 
   
 <a name="contributing-to-the-repository"></a>
@@ -250,9 +261,9 @@ In fact, much of this README was written with the help of AI. However, the resea
 > [!NOTE]
 > A [ReadMe fixer](fixReadMe.ts) script is run after every commit (or you can run it yourself after committing / before submitting a pull request). It handles the following automatically:
 > - **Last updated** timestamp is automatically updated.
-> - **Table of Contents** is generated from headings, along with custom anchors put before them automatically for linking.[^CustomAnchors]
+> - **Table of Contents** is generated from headings, along with custom anchors[^custom-anchors] put before them automatically for linking.
 > - To exclude a heading from the Table of Contents, add `<!-- skipForTableContent -->` on the line before it.
-> - **Footnote references** are applied automatically. For example, if a footnote `` is defined, every occurrence of `AST` will have `` appended. Please be mindful of capitalisation as matching is case-sensitive.[^AST]
+> - **Footnote references** are applied automatically. For example, if a footnote `` is defined, every occurrence of `AST`[^AST] will have `` appended. Please be mindful of capitalisation as matching is case-sensitive.
 
 <a name="requested-todo"></a>
 ### Requested Todo
@@ -270,14 +281,14 @@ Any information about "modding" or creating userscripts is highly appreciated. T
 <a name="network"></a>
 ## Network
 
-Bonk.io networking uses **Socket.IO** for client-server communication. Each game packet is a JSON array prefixed with `42`, where the first element is the Packet ID:[^PacketID][^Socket.IO]
+Bonk.io networking uses **Socket.IO[^Socket.IO]** for client-server communication. Each game packet is a JSON array prefixed with `42`, where the first element is the Packet ID[^Packet-ID]:
 
 ```
 42[packetID, ...args]
 ```
 
 > [!NOTE]
-> The same Packet ID may serve different purposes depending on direction (incoming `socket.on()` vs outgoing `socket.emit()`).[^PacketID][^Emit]
+> The same Packet ID[^Packet-ID] may serve different purposes depending on direction (incoming `socket.on()` vs outgoing `socket.emit()`[^Emit]).
 
 There is a exception to this rule however __<a href="#emit-18---timesync-request">Emit 18</a>__:
 ```
@@ -292,7 +303,7 @@ There is a exception to this rule however __<a href="#emit-18---timesync-request
 
 - [BonkBot Library Python](https://github.com/Fenekiro/bonk_bot)
 > [!NOTE]
-> Quite a decently written library for creating clients/bots to connect to the Socket.IO server for Python[^Socket.IO]
+> Quite a decently written library for creating clients/bots to connect to the Socket.IO[^Socket.IO] server for Python
 
 - [BonkBot (JavaScript)](https://github.com/PixelMelt/BonkBot)
 > [!NOTE]
@@ -324,7 +335,7 @@ Example: `42[1,{"30":180,"33":148,"34":190},9]`
 
 <details>
 <!-- skipForTableContent -->
-<summary><a name="snippet-deobfuscated-handler-code-on-1-333"></a>Deobfuscated Handler Code On 1</summary>
+<summary><a name="snippet-deobfuscated-handler-code-on-1-330"></a>Deobfuscated Handler Code On 1</summary>
 
 ```js
 _SocketIO__server.on(1, (Y_W, _id) => {
@@ -363,7 +374,7 @@ Example: `42[2,"TCwlcVAGzgI6J-4gAAHo",1,null]`
 
 <details>
 <!-- skipForTableContent -->
-<summary><a name="snippet-deobfuscated-handler-code-on-2-371"></a>Deobfuscated Handler Code On 2</summary>
+<summary><a name="snippet-deobfuscated-handler-code-on-2-368"></a>Deobfuscated Handler Code On 2</summary>
 
 ```js
 _SocketIO__server.on(2, function (roomAddress, team, mapListQuick) {
@@ -398,11 +409,11 @@ function _onCreatedRoom(team, mapListQuick) {
 
 Provides lobby information when you join an existing room.
 
-Example: `42[3,3,0,[{"peerID":"vuzvugdrnja00000","userName":"user one","guest":true,"team":1,"level":0,"ready":false,"tabbed":true,"avatar":{"layers":[],"bc":9315498}},null,null,{"peerID":"nx25am3w8d700000","userName":"left paren","guest":false,"team":1,"level":106,"ready":false,"tabbed":false,"avatar":{...}}],0,false,901003,"mtomw",null]`[^PeerID]
+Example: `42[3,3,0,[{"peerID":"vuzvugdrnja00000","userName":"user one","guest":true,"team":1,"level":0,"ready":false,"tabbed":true,"avatar":{"layers":[],"bc":9315498}},null,null,{"peerID":"nx25am3w8d700000","userName":"left paren","guest":false,"team":1,"level":106,"ready":false,"tabbed":false,"avatar":{...}}],0,false,901003,"mtomw",null]`[^peerID]
 
 <details>
 <!-- skipForTableContent -->
-<summary><a name="snippet-deobfuscated-handler-code-on-3-409"></a>Deobfuscated Handler Code On 3</summary>
+<summary><a name="snippet-deobfuscated-handler-code-on-3-406"></a>Deobfuscated Handler Code On 3</summary>
 
 ```js
 _SocketIO__server.on(3, function (sessionId, hostID, playerList, timestamp, teamsLock, _autoJoinID, _autoJoinPassBypass, mapListQuick) {
@@ -412,7 +423,7 @@ _SocketIO__server.on(3, function (sessionId, hostID, playerList, timestamp, team
   this.autoJoinPassBypass = _autoJoinPassBypass;
   for (let i = 0; i < playerList.length; i++) {
     if (playerList[i]) {
-      connectedPeers[i] = new _NetworkPeer_(playerList[i].peerID);
+      connectedPeers[i] = new _NetworkPeer_(playerList[i].peerID[^peerID]);
       if (i != localSessionID) {
         if (enableP2PConnections && !_NetworkEngine_.np) {
           _connectToPlayerP2P_(i);
@@ -446,9 +457,9 @@ function _onJoinedRoom(localSessionId, playerList, C2u, timestamp, mapsQuickplay
 
 | # | Description |
 |---|-------------|
-| 1 | Your Player ID |[^PlayerID]
-| 2 | Host's Player ID |[^PlayerID][^Host]
-| 3 | Player list array (indexed by slot ID, `null` = empty slot). Each player: `{ peerID, userName, guest, team, level, ready, tabbed, avatar }` |[^PeerID]
+| 1 | Your Player ID[^Player-ID] |
+| 2 | Host[^Host]'s Player ID[^Player-ID] |
+| 3 | Player list array (indexed by slot ID, `null` = empty slot). Each player: `{ peerID, userName, guest, team, level, ready, tabbed, avatar }`[^peerID] |
 | 4 | Server Unix timestamp |
 | 5 | `true` if teams are locked |
 | 6 | Room ID for share link (`https://bonk.io/<roomID padded to 6 digits><bypass>`) (autoJoinID) |
@@ -466,8 +477,8 @@ Example: `42[4,21,"0qh12mq737fh0000","left paren",false,39,1,{"layers":[],"bc":6
 
 | # | Description |
 |---|-------------|
-| 1 | New Player ID |[^PlayerID]
-| 2 | PeerID |[^PeerID]
+| 1 | New Player ID[^Player-ID] |
+| 2 | PeerID[^peerID] |
 | 3 | Username |
 | 4 | `true` if guest |
 | 5 | Player level (0 if guest) |
@@ -485,7 +496,7 @@ Example: `42[5,13,14511]`
 
 | # | Description |
 |---|-------------|
-| 1 | Player ID |[^PlayerID]
+| 1 | Player ID[^Player-ID] |
 | 2 | Accumulator / frame tick at time of departure |
 
 ---
@@ -493,14 +504,14 @@ Example: `42[5,13,14511]`
 <a name="on-6---host-leave"></a>
 #### On 6 - Host Leave
 
-The host left; a new host is assigned (host migration).[^Host]
+The host[^Host] left; a new host[^Host] is assigned (host[^Host] migration).
 
 Examples: `42[6,1,0,49753339064], `42[6,0,-1,49753339073]`
 
 | # | Description |
 |---|-------------|
-| 1 | Old host's ID |[^Host]
-| 2 | New host's ID (`-1` = host closed the room) |[^Host]
+| 1 | Old host[^Host]'s ID |
+| 2 | New host[^Host]'s ID (`-1` = host[^Host] closed the room) |
 | 3 | Accumulator |
 
 ---
@@ -514,7 +525,7 @@ Examples: `42[7,1,{"i":38,"f":324,"c":45}]`, `42[7,1,{"i":25,"f":531,"c":108}]`
 
 | # | Description |
 |---|-------------|
-| 1 | Player ID of the sender |[^PlayerID]
+| 1 | Player ID[^Player-ID] of the sender |
 | 2 | <see <a href="#input-object">Input Object</a> |
 
 ---
@@ -528,7 +539,7 @@ Example: `42[8,1,true]`
 
 | # | Description |
 |---|-------------|
-| 1 | Player ID |[^PlayerID]
+| 1 | Player ID[^Player-ID] |
 | 2 | `true` if ready (checkmark), `false` otherwise |
 
 ---
@@ -546,7 +557,7 @@ Example: `42[9]`
 #### On 10 - Server Mute
 
 > [!NOTE]
-> This Packet ID is as of the ReadMe's last updated time unused or was left in the game debugging purposes[^PacketID]
+> This Packet ID[^Packet-ID] is as of the ReadMe's last updated time unused or was left in the game debugging purposes
 
 Received when a player is muted by the server.
 
@@ -561,7 +572,7 @@ Received when a player is muted by the server.
 #### On 11 - Server Unmute
 
 > [!NOTE]
-> This Packet ID is as of the ReadMe's last updated time unused or was left in the game debugging purposes[^PacketID]
+> This Packet ID[^Packet-ID] is as of the ReadMe's last updated time unused or was left in the game debugging purposes
 
 Received when a player is unmuted by the server.
 
@@ -581,7 +592,7 @@ Example: `42[12,0,"123qwe2"]`
 
 | # | Description |
 |---|-------------|
-| 1 | Player ID |[^PlayerID]
+| 1 | Player ID[^Player-ID] |
 | 2 | New username |
 
 ---
@@ -599,7 +610,7 @@ Example: `42[13]`
 #### On 14 - Reserved
 
 > [!NOTE]
-> This Packet ID is as of the ReadMe's last updated time unused or was left in the game debugging purposes[^PacketID]
+> This Packet ID[^Packet-ID] is as of the ReadMe's last updated time unused or was left in the game debugging purposes
 
 Registered but handler is empty. Reserved for future use or deprecated.
 
@@ -608,7 +619,7 @@ Registered but handler is empty. Reserved for future use or deprecated.
 <a name="on-15---game-start"></a>
 #### On 15 - Game Start
 
-A game has been scheduled to start by the host.[^Host]
+A game has been scheduled to start by the host[^Host].
 
 Example: `42[15,1658450696036,"jWCW9ahaqG6GsGbWmycybYa...","ILAM..."]`
 
@@ -637,7 +648,7 @@ Example: `42[16,"rate_limit_ready"]`
 #### On 17 - Reserved
 
 > [!NOTE]
-> This Packet ID is as of the ReadMe's last updated time unused or was left in the game debugging purposes[^PacketID]
+> This Packet ID[^Packet-ID] is as of the ReadMe's last updated time unused or was left in the game debugging purposes
 
 Registered but handler is empty. Reserved for future use or deprecated.
 
@@ -652,7 +663,7 @@ Example: `42[18,2,0]`
 
 | # | Description |
 |---|-------------|
-| 1 | Player ID |[^PlayerID]
+| 1 | Player ID[^Player-ID] |
 | 2 | New <a href="#team">Team</a> value |
 
 ---
@@ -679,7 +690,7 @@ Example: `42[20,0,"hello"]`
 
 | # | Description |
 |---|-------------|
-| 1 | Sender's Player ID |[^PlayerID]
+| 1 | Sender's Player ID[^Player-ID] |
 | 2 | Message text |
 
 ---
@@ -687,7 +698,7 @@ Example: `42[20,0,"hello"]`
 <a name="on-21---initial-data"></a>
 #### On 21 - Initial Data
 
-Sent by the host after you join a room, containing map and game data. Clears the 6-second initial data timeout.[^Host]
+Sent by the host[^Host] after you join a room, containing map and game data. Clears the 6-second initial data timeout.
 
 Example: `42[21,{"map":{"v":15,"s":{"re":false,"nc":false,"pq":1,"gd":25,"fl":false},"physics":{"shapes":[],"fixtures":[],"bodies":[],"bro":[],"joints":[],"ppm":12},"spawns":[],"capZones":[],"m":{"a":"riggad","n":"Unnamed","dbv":2,"dbid":-1,"authid":-1,"date":"","rxid":0,"rxn":"","rxa":"","rxdb":1,"cr":[],"pub":false,"mo":""}},"gt":2,"wl":3,"q":false,"tl":false,"tea":false,"ga":"b","mo":"b","bal":[]}]`
 
@@ -713,13 +724,13 @@ Example `42[23,{"id":82,"result":1784281173297}]`
 <a name="on-24---player-bannedkicked"></a>
 #### On 24 - Player Banned/Kicked
 
-The host has kicked or banned a player.[^Host]
+The host[^Host] has kicked or banned a player.
 
 Example: `42[24,1,false]`
 
 | # | Description |
 |---|-------------|
-| 1 | Kicked/banned Player ID |[^PlayerID]
+| 1 | Kicked/banned Player ID[^Player-ID] |
 | 2 | `true` = kick only (can rejoin), `false` = banned (permanent for this room session) |
 
 ---
@@ -791,7 +802,7 @@ Example: `42[29,"ILAMJAhBFBjBzCTlMiAJgNQEYFsCsAFtgOqYDWIhAjLAEyYCeAkgOICcArgFrQr
 #### On 30 - Typing
 
 > [!NOTE]
-> This Packet ID is as of the ReadMe's last updated time unused or was left in the game debugging purposes[^PacketID]
+> This Packet ID[^Packet-ID] is as of the ReadMe's last updated time unused or was left in the game debugging purposes
 
 A player is typing in the chat. Unused in bonk.io.
 
@@ -810,7 +821,7 @@ A player is typing in the chat. Unused in bonk.io.
 
 <details>
 <!-- skipForTableContent -->
-<summary><a name="snippet-deobfuscated-handler-code-on-31-790"></a>Deobfuscated Handler Code On 31</summary>
+<summary><a name="snippet-deobfuscated-handler-code-on-31-787"></a>Deobfuscated Handler Code On 31</summary>
 
 ```js
 this.recvAdmin = function (adminInputsRecvData) {
@@ -852,7 +863,7 @@ Example: `42[33,"ILAMJAhBFBjBzCTl...",2]`
 | # | Description |
 |---|-------------|
 | 1 | (see <a href="#map-data-format">Map Data</a>) |
-| 2 | Player ID of who suggested the map |[^PlayerID]
+| 2 | Player ID[^Player-ID] of who suggested the map |
 
 ---
 
@@ -867,7 +878,7 @@ Example: `42[34,"CDball","MuadDib",2]`
 |---|-------------|
 | 1 | Map title |
 | 2 | Map author |
-| 3 | Player ID of who suggested the map |[^PlayerID]
+| 3 | Player ID[^Player-ID] of who suggested the map |
 
 ---
 
@@ -891,7 +902,7 @@ Example: `42[36,1,-55]`
 
 | # | Description |
 |---|-------------|
-| 1 | Player ID |[^PlayerID]
+| 1 | Player ID[^Player-ID] |
 | 2 | Balance amount (integer, -100 to 100) |
 
 ---
@@ -900,7 +911,7 @@ Example: `42[36,1,-55]`
 #### On 37 - Reserved
 
 > [!NOTE]
-> This Packet ID is as of the ReadMe's last updated time unused or was left in the game debugging purposes[^PacketID]
+> This Packet ID[^Packet-ID] is as of the ReadMe's last updated time unused or was left in the game debugging purposes
 
 Registered but handler is empty. Reserved for future use or deprecated.
 
@@ -910,7 +921,7 @@ Registered but handler is empty. Reserved for future use or deprecated.
 #### On 38 - Debug Winner
 
 > [!NOTE]
-> This Packet ID is as of the ReadMe's last updated time unused or was left in the game debugging purposes[^PacketID]
+> This Packet ID[^Packet-ID] is as of the ReadMe's last updated time unused or was left in the game debugging purposes
 
 Debug information about the round winner.
 
@@ -941,18 +952,18 @@ Example: `42[40,1]`
 
 | # | Description |
 |---|-------------|
-| 1 | Player ID of who saved the replay |[^PlayerID]
+| 1 | Player ID[^Player-ID] of who saved the replay |
 
 ---
 
 <a name="on-41---host-change"></a>
 #### On 41 - Host Change
 
-The room host has been transferred to a different player.[^Host]
+The room host[^Host] has been transferred to a different player.
 
 | # | Description |
 |---|-------------|
-| 1 | Object: `{ "newHost": <new host's Player ID> }` |[^PlayerID][^Host]
+| 1 | Object: `{ "newHost": <new host's Player ID> }`[^Host][^Player-ID] |
 
 ---
 
@@ -965,7 +976,7 @@ Example: `42[42,1]`
 
 | # | Description |
 |---|-------------|
-| 1 | Player ID of who sent the friend request |[^PlayerID]
+| 1 | Player ID[^Player-ID] of who sent the friend request |
 
 ---
 
@@ -994,18 +1005,18 @@ Example: `42[44]`
 <a name="on-45---player-leveled-up"></a>
 #### On 45 - Player Leveled Up
 
-Example: `42[45,{"sid":1,"lv":69}]`
+Example: `42[45,{"sid":1,"lv":69}]`[^sid]
 
 | # | Description |
 |---|-------------|
-| 1 | Object: `"sid"` = Player ID, `"lv"` = new level |[^PlayerID]
+| 1 | Object: `"sid"`[^sid] = Player ID[^Player-ID], `"lv"` = new level |
 
 ---
 
 <a name="on-46---local-gained-xp"></a>
 #### On 46 - Local Gained XP
 
-You gained XP. May include a new auth token if you leveled up.[^Token]
+You gained XP. May include a new auth token[^token] if you leveled up.
 
 Example: `42[46,{"newXP":300}]`
 
@@ -1081,7 +1092,7 @@ Example: `42[52,3,false]`
 
 | # | Description |
 |---|-------------|
-| 1 | Player ID |[^PlayerID]
+| 1 | Player ID[^Player-ID] |
 | 2 | `true` = tabbed out/unfocused, `false` = focused |
 
 ---
@@ -1129,7 +1140,7 @@ Examples: `42[57,false,"unauthorised"]`, `42[57,true,""]`
 <a name="on-58---room-name-update"></a>
 #### On 58 - Room Name Update
 
-Host changed room name via `/roomname "text"`.[^Host]
+Host[^Host] changed room name via `/roomname "text"`.
 
 Example: `42[58,"hello world"]`
 
@@ -1142,7 +1153,7 @@ Example: `42[58,"hello world"]`
 <a name="on-59---room-password-update"></a>
 #### On 59 - Room Password Update
 
-Host changed password via `/roompass` or `/clearroompass`.[^Host]
+Host[^Host] changed password via `/roompass` or `/clearroompass`.
 
 Example: `42[59,1]`
 
@@ -1181,7 +1192,7 @@ Example: `42[1,{"id":9}]`
 #### Emit 2 - Test Ping
 
 > [!NOTE]
-> This Packet ID is as of the ReadMe's last updated time unused or was left in the game debugging purposes[^PacketID]
+> This Packet ID[^Packet-ID] is as of the ReadMe's last updated time unused or was left in the game debugging purposes
 
 Example: `42[2]`
 
@@ -1191,7 +1202,7 @@ Example: `42[2]`
 #### Emit 3 - Get Debug
 
 > [!NOTE]
-> This Packet ID is as of the ReadMe's last updated time unused or was left in the game debugging purposes[^PacketID]
+> This Packet ID[^Packet-ID] is as of the ReadMe's last updated time unused or was left in the game debugging purposes
 
 Example: `42[3]`
 
@@ -1215,7 +1226,7 @@ Examples: `42[4,{"i":38,"f":324,"c":45}]`, `42[4,{"i":25,"f":531,"c":108}]`
 <a name="emit-5---trigger-start"></a>
 #### Emit 5 - Trigger Start
 
-Start the game as host.[^Host]
+Start the game as host[^Host].
 
 Example: `42[5,{"is":"jWCW9ahaqG6...","gs":{"map":"ILAM...","gt":2,"wl":3,"q":false,"tl":false,"tea":false,"ga":"b","mo":"b","bal":[]}}]`
 
@@ -1252,11 +1263,11 @@ Example: `42[7,{"teamLock":false}]`
 #### Emit 8 - Silence Player
 
 > [!NOTE]
-> This Packet ID is as of the ReadMe's last updated time unused or was left in the game debugging purposes[^PacketID]
+> This Packet ID[^Packet-ID] is as of the ReadMe's last updated time unused or was left in the game debugging purposes
 
 | Key | Description |
 |-----|-------------|
-| `muteID` | Target Player ID |[^PlayerID]
+| `muteID` | Target Player ID[^Player-ID] |
 | `muteType` | (see <a href="#broadcast-type-enum">Broadcast Type Enum</a>) |
 | `action` | `"mute"` or `"unmute"` |
 
@@ -1269,7 +1280,7 @@ Example: `42[9,{"banshortid":6,"kickonly":true}]`
 
 | Key | Description |
 |-----|-------------|
-| `banshortid` | Player ID |[^PlayerID]
+| `banshortid` | Player ID[^Player-ID] |
 | `kickonly` | `true` = kick (can rejoin), `false` = ban (permanent) |
 
 ---
@@ -1288,13 +1299,13 @@ Example: `42[10,{"message":"Hello, World!"}]`
 <a name="emit-11---inform-in-lobby"></a>
 #### Emit 11 - Inform In Lobby
 
-Sent by host to joining players with game settings.[^Host]
+Sent by host[^Host] to joining players with game settings.
 
-Example: `42[11,{"sid":2,"gs":{"map":{"v":15,"s":{"re":false,"nc":false,"pq":1,"gd":25,"fl":false},"physics":{"shapes":[],"fixtures":[],"bodies":[],"bro":[],"joints":[],"ppm":12},"spawns":[],"capZones":[],"m":{"a":"riggad","n":"Unnamed","dbv":2,"dbid":-1,"authid":-1,"date":"","rxid":0,"rxn":"","rxa":"","rxdb":1,"cr":[],"pub":false,"mo":""}},"gt":2,"wl":3,"q":false,"tl":false,"tea":false,"ga":"b","mo":"b","bal":[]}}]`
+Example: `42[11,{"sid":2,"gs":{"map":{"v":15,"s":{"re":false,"nc":false,"pq":1,"gd":25,"fl":false},"physics":{"shapes":[],"fixtures":[],"bodies":[],"bro":[],"joints":[],"ppm":12},"spawns":[],"capZones":[],"m":{"a":"riggad","n":"Unnamed","dbv":2,"dbid":-1,"authid":-1,"date":"","rxid":0,"rxn":"","rxa":"","rxdb":1,"cr":[],"pub":false,"mo":""}},"gt":2,"wl":3,"q":false,"tl":false,"tea":false,"ga":"b","mo":"b","bal":[]}}]`[^sid]
 
 | Key | Description |
 |-----|-------------|
-| `sid` | Slot ID assigned to the joining player |
+| `sid`[^sid] | Slot ID assigned to the joining player |
 | `gs` | Game settings object (see <a href="#game-settings-object-gs">Game Settings Object (`gs`)</a>) |
 
 ---
@@ -1302,14 +1313,14 @@ Example: `42[11,{"sid":2,"gs":{"map":{"v":15,"s":{"re":false,"nc":false,"pq":1,"
 <a name="emit-12---create-room"></a>
 #### Emit 12 - Create Room
 
-Example (guest): `42[12,{"peerID":"einit1u6bp800000","roomName":"digga's game","maxPlayers":6,"password":"","dbid":0,"guest":true,"minLevel":0,"maxLevel":999,"latitude":52.3816,"longitude":4.8883,"country":"NL","version":49,"hidden":0,"quick":false,"mode":"custom","guestName":"digga","avatar":{"layers":[],"bc":6732650}}]`[^PeerID]
+Example (guest): `42[12,{"peerID":"einit1u6bp800000","roomName":"digga's game","maxPlayers":6,"password":"","dbid":0,"guest":true,"minLevel":0,"maxLevel":999,"latitude":52.3816,"longitude":4.8883,"country":"NL","version":49,"hidden":0,"quick":false,"mode":"custom","guestName":"digga","avatar":{"layers":[],"bc":6732650}}]`[^peerID]
 
-The differences are when logged in a token parameter is passed, guest is set to false, and the parameter "guestName" is omitted[^Token]
-Example (logged in): `42[12,{"peerID":"einit1u6bp800000","roomName":"rigga acc's game","maxPlayers":6,"password":"","dbid":0,"guest":false,"minLevel":0,"maxLevel":999,"latitude":52.3816,"longitude":4.8883,"country":"NL","version":49,"hidden":0,"quick":false,"mode":"custom","token":"TOKENHERE","avatar":{"layers":[],"bc":6732650}}]`[^Token][^PeerID]
+The differences are when logged in a token[^token] parameter is passed, guest is set to false, and the parameter "guestName" is omitted
+Example (logged in): `42[12,{"peerID":"einit1u6bp800000","roomName":"rigga acc's game","maxPlayers":6,"password":"","dbid":0,"guest":false,"minLevel":0,"maxLevel":999,"latitude":52.3816,"longitude":4.8883,"country":"NL","version":49,"hidden":0,"quick":false,"mode":"custom","token":"TOKENHERE","avatar":{"layers":[],"bc":6732650}}]`[^token][^peerID]
 
 | Key | Description |
 |-----|-------------|
-| `peerID` | Your peerID |[^PeerID]
+| `peerID`[^peerID] | Your peerID[^peerID] |
 | `roomName` | Room name |
 | `maxPlayers` | Max players allowed |
 | `password` | Room password (empty = no password) |
@@ -1325,7 +1336,7 @@ Example (logged in): `42[12,{"peerID":"einit1u6bp800000","roomName":"rigga acc's
 | `quick` | Whether quickplay |
 | `mode` | `"custom"`, `"bonkquick"`, `"arrowsquick"`, or `"grapplequick"` |
 | `guestName` | Guest display name (only if guest) |
-| `token` | Optional Auth token (only if not guest) |[^Token]
+| `token`[^token] | Optional Auth token[^token] (only if not guest) |
 | `avatar` | <a href="#avatar-data-format">Skin data</a> |
 
 ---
@@ -1333,7 +1344,7 @@ Example (logged in): `42[12,{"peerID":"einit1u6bp800000","roomName":"rigga acc's
 <a name="emit-13---join-room"></a>
 #### Emit 13 - Join Room
 
-Example: `42[13,{"joinID":"dZCuw96RZ60KGK8FAALp","roomPassword":"","guest":true,"dbid":2,"version":49,"peerID":"3vss1i0oywz00000","bypass":"","guestName":"digga","avatar":{"layers":[],"bc":6732650}}]`[^PeerID]
+Example: `42[13,{"joinID":"dZCuw96RZ60KGK8FAALp","roomPassword":"","guest":true,"dbid":2,"version":49,"peerID":"3vss1i0oywz00000","bypass":"","guestName":"digga","avatar":{"layers":[],"bc":6732650}}]`[^peerID]
 
 | Key | Description |
 |-----|-------------|
@@ -1342,11 +1353,11 @@ Example: `42[13,{"joinID":"dZCuw96RZ60KGK8FAALp","roomPassword":"","guest":true,
 | `guest` | Whether you are a guest |
 | `dbid` | Database ID (hardcoded to 2) |
 | `version` | Bonk.io version |
-| `peerID` | Your peerID |[^PeerID]
-| `bypass` | Auto-join bypass token (empty if none) |[^Token]
+| `peerID`[^peerID] | Your peerID[^peerID] |
+| `bypass` | Auto-join bypass token[^token] (empty if none) |
 | `avatar` | <a href="#avatar-data-format">Skin data</a> |
 | `guestName` | Guest name (only if guest) |
-| `token` | OPTIONAL Auth token (only passed if not guest) |[^Token]
+| `token`[^token] | OPTIONAL Auth token[^token] (only passed if not guest) |
 
 ---
 
@@ -1371,7 +1382,7 @@ Example: `42[16,{"ready":false}]`
 <a name="emit-17---all-ready-reset"></a>
 #### Emit 17 - All Ready Reset
 
-Host sets everyone's ready status to false.[^Host]
+Host[^Host] sets everyone's ready status to false.
 
 Example: `42[17]`
 
@@ -1449,7 +1460,7 @@ Example: `42[23,{"m":"ILAMJAhBFBjBzCTl..."}]`
 #### Emit 24 - Send Typing
 
 > [!NOTE]
-> This Packet ID is as of the ReadMe's last updated time unused or was left in the game debugging purposes[^PacketID]
+> This Packet ID[^Packet-ID] is as of the ReadMe's last updated time unused or was left in the game debugging purposes
 
 Send a typing indicator to other players.
 
@@ -1458,7 +1469,7 @@ Send a typing indicator to other players.
 <a name="emit-25---admin-inputs"></a>
 #### Emit 25 - Admin Inputs
 
-Send admin/host commands during a game.[^Host]
+Send admin/host[^Host] commands during a game.
 
 also seems to store inputs for playersLeft, playersJoined?
 
@@ -1475,7 +1486,7 @@ Example: `42[26,{"targetID":1,"targetTeam":1}]`
 
 | Key | Description |
 |-----|-------------|
-| `targetID` | Player ID to move |[^PlayerID]
+| `targetID` | Player ID[^Player-ID] to move |
 | `targetTeam` | Target <a href="#team">Team</a> value |
 
 ---
@@ -1509,11 +1520,11 @@ Change game mode settings.
 
 Change a player's nerf/buff.
 
-Example: `42[29,{"sid":2,"bal":-55}]`
+Example: `42[29,{"sid":2,"bal":-55}]`[^sid]
 
 | Key | Description |
 |-----|-------------|
-| `sid` | Player ID |[^PlayerID]
+| `sid`[^sid] | Player ID[^Player-ID] |
 | `bal` | Balance amount (-100 to 100) |
 
 ---
@@ -1522,7 +1533,7 @@ Example: `42[29,{"sid":2,"bal":-55}]`
 #### Emit 30 - Version Check
 
 > [!NOTE]
-> This Packet ID is as of the ReadMe's last updated time unused or was left in the game debugging purposes[^PacketID]
+> This Packet ID[^Packet-ID] is as of the ReadMe's last updated time unused or was left in the game debugging purposes
 
 Example: `42[30]`
 
@@ -1532,7 +1543,7 @@ Example: `42[30]`
 #### Emit 31 - Send Debug Winner
 
 > [!NOTE]
-> This Packet ID is as of the ReadMe's last updated time unused or was left in the game debugging purposes[^PacketID]
+> This Packet ID[^Packet-ID] is as of the ReadMe's last updated time unused or was left in the game debugging purposes
 
 Example: `42[31,{"wid":0}]`
 
@@ -1567,13 +1578,13 @@ Example: `42[33]`
 <a name="emit-34---host-change"></a>
 #### Emit 34 - Host Change
 
-Transfer host to another player.[^Host]
+Transfer host[^Host] to another player.
 
 Example: `42[34,{"id":1}]`
 
 | Key | Description |
 |-----|-------------|
-| `id` | Player ID receiving host |[^PlayerID][^Host]
+| `id` | Player ID[^Player-ID] receiving host[^Host] |
 
 ---
 
@@ -1586,7 +1597,7 @@ Example: `42[35,{"id":5}]`
 
 | Key | Description |
 |-----|-------------|
-| `id` | Player ID to friend |[^PlayerID]
+| `id` | Player ID[^Player-ID] to friend |
 
 ---
 
@@ -1638,14 +1649,14 @@ Example: `42[39,{"mapid":12345,"vote":1}]`
 <a name="emit-40---inform-in-game"></a>
 #### Emit 40 - Inform In Game
 
-Sent by host to a player joining mid-game with the full game state.[^Host]
+Sent by host[^Host] to a player joining mid-game with the full game state.
 
-Example: `42[40,{"sid":1,"allData":{"state":"jWCW9ah...","stateID":1,"fc":7,"inputs":[],"admin":[],"gs":{...},"random":[]}}]`
+Example: `42[40,{"sid":1,"allData":{"state":"jWCW9ah...","stateID":1,"fc":7,"inputs":[],"admin":[],"gs":{...},"random":[]}}]`[^sid]
 
 | Key | Description |
 |-----|-------------|
-| `sid` | Player to inform |
-| `allData` | Full game state: `state` (LZ-String compressed), `stateID`, `fc` (frame count), `inputs` (input history), `admin` (admin inputs), `gs` (game settings), `random` (seed data) |[^LZString]
+| `sid`[^sid] | Player to inform |
+| `allData` | Full game state: `state` (LZ-String[^LZ-String] compressed), `stateID`, `fc` (frame count), `inputs` (input history), `admin` (admin inputs), `gs` (game settings), `random` (seed data) |
 
 ---
 
@@ -1699,13 +1710,13 @@ Example: `42[44,{"out":true}]`
 #### Emit 45 - Desync Test
 
 > [!NOTE]
-> This Packet ID is as of the ReadMe's last updated time unused or was left in the game debugging purposes[^PacketID]
+> This Packet ID[^Packet-ID] is as of the ReadMe's last updated time unused or was left in the game debugging purposes
 
 Test whether a player is desynced.
 
 | Key | Description |
 |-----|-------------|
-| `sid` | Target player's slot ID |
+| `sid`[^sid] | Target player's slot ID |
 | `a` | Accumulator |
 
 ---
@@ -1714,12 +1725,12 @@ Test whether a player is desynced.
 #### Emit 46 - Send Desync Response
 
 > [!NOTE]
-> This Packet ID is as of the ReadMe's last updated time unused or was left in the game debugging purposes[^PacketID]
+> This Packet ID[^Packet-ID] is as of the ReadMe's last updated time unused or was left in the game debugging purposes
 
 | Key | Description |
 |-----|-------------|
 | `rid` | Request ID |
-| `sid` | Slot ID |
+| `sid`[^sid] | Slot ID |
 | `s` | State data |
 | `a` | Accumulator |
 
@@ -1740,7 +1751,7 @@ Sent when a round is completed.
 <a name="emit-50---no-host-swap"></a>
 #### Emit 50 - No Host Swap
 
-When host leaves, the room ends instead of migrating.[^Host]
+When host[^Host] leaves, the room ends instead of migrating.
 
 Example: `42[50]`
 
@@ -1794,7 +1805,7 @@ Example: `42[53,{"newPass":"password here"}]`
 <a name="token-format"></a>
 #### Token Format
 
-A JSON Web Token (JWT) authentication credential assigned to user accounts.[^Token]
+A JSON Web Token[^token] (JWT) authentication credential assigned to user accounts.
 
 ```json
 {
@@ -1811,12 +1822,12 @@ A JSON Web Token (JWT) authentication credential assigned to user accounts.[^Tok
 | Field | Type | Description |
 |-------|------|-------------|
 | `uid` | string | User ID - unique identifier for the account |
-| `uip` | string | User IP - IP address associated with the token |[^Token]
+| `uip` | string | User IP - IP address associated with the token[^token] |
 | `un` | string | Username |
 | `ev` | boolean | Email Verified - Whether email has been verified |
 | `lv` | number | Level |
-| `exp` | number | Expiration - Unix timestamp (seconds) when token expires |[^Token]
-| `g` | string | Game - the game that this token is for, for bonk.io this is "b" |[^Token]
+| `exp` | number | Expiration - Unix timestamp (seconds) when token[^token] expires |
+| `g` | string | Game - the game that this token[^token] is for, for bonk.io this is "b" |
 
 <a name="enums"></a>
 ### Enums
@@ -1967,7 +1978,7 @@ Method describing how a disc/player died.
 
 <details>
 <!-- skipForTableContent -->
-<summary><a name="snippet-python-parsing-1855"></a>Python Parsing</summary>
+<summary><a name="snippet-python-parsing-1852"></a>Python Parsing</summary>
 
 ```python
 class PlayerInput:
@@ -2064,7 +2075,7 @@ Complete game configuration settings.
 
 | Field | Type | Description |
 |-------|------|-------------|
-| `map` | string \| object | Map data - either LZ-String compressed + Base64 encoded object, or string map name for quickplay |[^LZString][^Base64]
+| `map` | string \| object | Map data - either LZ-String[^LZ-String] compressed + Base64[^Base64] encoded object, or string map name for quickplay |
 | `gt` | number? | Game type - internal game type identifier (optional) |
 | `wl` | number | Rounds to win - number of rounds needed to win the match |
 | `q` | boolean \| string? | Quick play mode - false for custom map, "custom" for custom lobby, "bonkquick" for quickplay (optional) |
@@ -2136,7 +2147,7 @@ Metadata information about a map including author, name, and publishing details.
 <a name="map-data-format"></a>
 #### Map Data Format
 
-Map data is an object compressed with LZ-String and encoded in Base64.[^LZString][^Base64]
+Map data is an object compressed with LZ-String[^LZ-String] and encoded in Base64[^Base64].
 
 For the full map data structure and key mappings (e.g. `v` -> `version`), see:
 - [bonk-map](https://github.com/PixelMelt/bonk-map) - Community map parsing library
@@ -2153,9 +2164,9 @@ For the full map data structure and key mappings (e.g. `v` -> `version`), see:
 | `n` | string | Name of the capture zone |
 | `ty` | number | Type |
 | `l` | number | Capture length (seconds in map form, frames in physics form) |
-| `i` | number | Fixture index |[^Fixture]
+| `i` | number | Fixture[^Fixture] index |
 | `f` | number | Final countdown - jumps to 20 upon capture, decreases by one per frame, on zero win is executed |
-| `o` | number? | Owner Player ID (after capture) |[^PlayerID]
+| `o` | number? | Owner Player ID[^Player-ID] (after capture) |
 | `ot` | <a href="#team">Team</a>? | Owner team (after capture) |
 | `p` | number? | Power / capture completion |
 
@@ -2231,18 +2242,18 @@ Chain/path of line segments.
 <a name="fixture"></a>
 ##### Fixture
 
-A fixture applies properties to a shape - friction, bounciness, whether it causes death, etc.[^Fixture]
+A fixture[^Fixture] applies properties to a shape - friction, bounciness, whether it causes death, etc.
 
 | Field | Type | Description |
 |-------|------|-------------|
-| `sh` | number | Shape - index of the shape this fixture uses |[^Fixture]
-| `n` | string | Name - fixture name |[^Fixture]
+| `sh` | number | Shape - index of the shape this fixture[^Fixture] uses |
+| `n` | string | Name - fixture[^Fixture] name |
 | `fr` | number | Friction - friction coefficient |
 | `fp` | boolean? | Friction players - whether friction applies to players (optional) |
 | `re` | number | Restitution - bounciness coefficient |
 | `de` | number | Density - mass per unit area |
 | `f` | number | Filter - collision filter value |
-| `d` | boolean | Death - whether this fixture kills players on contact |[^Fixture]
+| `d` | boolean | Death - whether this fixture[^Fixture] kills players on contact |
 | `np` | boolean | No physics - whether physics are disabled |
 | `ng` | boolean | No grapple - whether grappling is disabled |
 
@@ -2268,7 +2279,7 @@ A physics body in the world - either a static platform, moving object, or player
 | `fr` | boolean | Fixed rotation - whether rotation is locked |
 | `bu` | boolean | Bullet - high-speed collision flag |
 | `cf` | object | Constant force - {x, y, w, ct} |
-| `fx` | number[] | Fixtures - array of fixture indices |[^Fixture]
+| `fx` | number[] | Fixtures - array of fixture[^Fixture] indices |
 | `f_c` | number | Filter collision - collision category |
 | `f_p` | boolean | Filter property |
 | `f_1` | boolean | Filter 1 |
@@ -2444,7 +2455,7 @@ Complete physics simulation state for a map.
 |-------|------|-------------|
 | `bodies` | (body \| undefined)[] | Array of all physics bodies |
 | `bro` | number[] | Body render order |
-| `fixtures` | (fixture \| undefined)[] | Array of all fixtures |[^Fixture]
+| `fixtures` | (fixture[^Fixture] \| undefined)[] | Array of all fixtures |
 | `joints` | (joint \| undefined)[] | Array of all joints |
 | `shapes` | (shape \| undefined)[] | Array of all shapes |
 | `ppm` | number | Pixels per meter - scale factor for the map |
@@ -2454,11 +2465,11 @@ Complete physics simulation state for a map.
 
 <a name="initial-game-state"></a>
 #### Initial Game State
-A string compressed with LZ-String and encoded in Base64, in PSON format, with cases for the first 101 characters flipped.[^LZString][^PSON][^Base64]
+A string compressed with LZ-String[^LZ-String] and encoded in Base64[^Base64], in PSON[^PSON] format, with cases for the first 101 characters flipped.
 
 <details>
 <!-- skipForTableContent -->
-<summary><a name="snippet-javascript-flipunflip-case-works-both-ways-2313"></a>Javascript: Flip/unflip case (works both ways)</summary>
+<summary><a name="snippet-javascript-flipunflip-case-works-both-ways-2310"></a>Javascript: Flip/unflip case (works both ways)</summary>
 
 ```js
 let str = "";
@@ -2540,7 +2551,7 @@ Complete game state containing all physics, player, and game information. Struct
 | `projectiles` | projectile[] | Array of active projectiles (e.g. arrows) |
 | `rc` | number | Round count - how many rounds have passed |
 | `rl` | number | Round length - frames elapsed since round start |
-| `scores` | number[] | Win scores (indexed by player ID for FFA, team for Teams) |[^PlayerID]
+| `scores` | number[] | Win scores (indexed by player ID[^Player-ID] for FFA, team for Teams) |
 | `seed` | number | Random seed for the game |
 | `shk` | <a href="#point-2d">Point2D</a> | Screen shake vector |
 | `sts` | (soundsThisStep \| number)[] \| null | Sounds to play this step |
@@ -2737,17 +2748,17 @@ Status messages received via <a href="#on-16---status-message">Packet 16</a>:
 | `avatar_data_invalid` | N/A |
 | `bad_instruction_map_reorder` | N/A |
 | `cant_ban_yourself` | You tried to kick yourself. You just can't do that. |
-| `host_change_rate_limited` | You tried to give host too quickly. |[^Host]
+| `host_change_rate_limited` | You tried to give host[^Host] too quickly. |
 | `invalid guest name` | N/A |
 | `invalid` | Generic/DesyncTest/Response Value Error, the reason this is returned changes with backend changes, it's likely returned as a last resort try catch till Chaz recodes it |
 | `invalid_max_players` | N/A |
-| `invalid_params (token)` | N/A |[^Token]
+| `invalid_params (token)`[^token] | N/A |
 | `invalid_params` | Error occurrs when invalid parameter inputs are send, this is a generic error most commonly found by Create room error/generic |
 | `invalid_target_team` | You tried to change a players team into the wrong type. |
-| `not_hosting` | You attempted to do an action that requires you to be the game's host. |[^Host]
+| `not_hosting` | You attempted to do an action that requires you to be the game's host[^Host]. |
 | `players_xp_too_high` | N/A |
 | `players_xp_too_low` | N/A |
-| `rate_limit` | Generic rate-limit. You did something too fast in a short period of time. |[^RateLimit]
+| `rate_limit` | Generic rate-limit[^Rate-Limit]. You did something too fast in a short period of time. |
 | `rate_limit_abortcountdown` | You sent too many "Countdown aborted!" messages, in a short period of time. |
 | `rate_limit_cot` | You changed other teams too quickly. |
 | `rate_limit_countdown` | You sent too many "Game starting in \<x\>" messages, in a short period of time. |
@@ -2759,12 +2770,12 @@ Status messages received via <a href="#on-16---status-message">Packet 16</a>:
 | `rate_limit_sma` | You changed the map too quickly. |
 | `rate_limit_tl` | You locked the teams too quickly |
 | `Connect error` | Generic Connect Error |
-| `Initial data timeout` | You did not receive the initial data from the host after 6 seconds passed. |[^Host]
+| `Initial data timeout` | You did not receive the initial data from the host[^Host] after 6 seconds passed. |
 | `already_in_this_room` | You tried to join a room that your user is already in. |
 | `arm rate limited` | You spammed "Save Replay" too fast. |
 | `banned` | You tried to join a room you've been banned from. |
 | `guest` | You attemped to perform an action that requires you to be logged in. |
-| `host change rate limited` | You changed hosts too fast |[^Host]
+| `host change rate limited`[^Host] | You changed hosts too fast |
 | `join_rate_limited` | You've tried to join rooms too quickly. |
 | `no_client_entry` | You sent some action but you're not in the room, or you were not permitted to. |
 | `old_rotation` | N/A |
@@ -2815,7 +2826,7 @@ This section documents all jQuery AJAX requests all requests are `$.post` unless
 | Field | Type | Description |
 |-------|------|-------------|
 | `r` | string | Response status: "success" or error code |
-| `token` | string | Authentication token (on success) |[^Token]
+| `token`[^token] | string | Authentication token[^token] (on success) |
 | `xp` | number | User's current XP |
 | `username` | string | Confirmed username |
 | `id` | string | User database ID |
@@ -2825,7 +2836,7 @@ This section documents all jQuery AJAX requests all requests are `$.post` unless
 | `controls` | string | Serialized control configuration |
 | `friends` | array | List of friends |
 | `legacyFriends` | string | Legacy friends data |
-| `rememberToken` | string | Token for automatic login (if remember enabled) |[^Token][^RememberToken]
+| `rememberToken`[^rememberToken] | string | Token[^token] for automatic login (if remember enabled) |
 | `e` | string | Error code on failure: "username_invalid", "username_taken", "rate_limited", "data_missing", "password_weak" |
 
 <a name="login_legacyphp"></a>
@@ -2849,7 +2860,7 @@ Same as register_legacy.php
 
 | Field | Type | Description |
 |-------|------|-------------|
-| `rememberToken` | string | Token from previous automatic login session |[^Token][^RememberToken]
+| `rememberToken`[^rememberToken] | string | Token[^token] from previous automatic login session |
 
 <h5>Response</h5>
 Same as register_legacy.php (on successful auto-login)
@@ -2861,7 +2872,7 @@ Same as register_legacy.php (on successful auto-login)
 
 | Field | Type | Description |
 |-------|------|-------------|
-| `rememberToken` | string | Token to invalidate/clear |[^Token][^RememberToken]
+| `rememberToken`[^rememberToken] | string | Token[^token] to invalidate/clear |
 
 <a name="account_changepasswordphp"></a>
 #### account_changepassword.php
@@ -2870,7 +2881,7 @@ Same as register_legacy.php (on successful auto-login)
 
 | Field | Type | Description |
 |-------|------|-------------|
-| `token` | string | Authentication token |[^Token]
+| `token`[^token] | string | Authentication token[^token] |
 | `oldpass` | string | Current/old password |
 | `newpass` | string | New password |
 
@@ -2879,7 +2890,7 @@ Same as register_legacy.php (on successful auto-login)
 | Field | Type | Description |
 |-------|------|-------------|
 | `r` | string | Response status: "success" or error |
-| `e` | string | Error code: "ratelimited", "token", "server_error_1", "server_error_2", "oldpass_wrong" |[^Token]
+| `e` | string | Error code: "ratelimited", "token[^token]", "server_error_1", "server_error_2", "oldpass_wrong" |
 
 <a name="account_savecontrolsphp"></a>
 #### account_savecontrols.php
@@ -2889,7 +2900,7 @@ Same as register_legacy.php (on successful auto-login)
 | Field | Type | Description |
 |-------|------|-------------|
 | `controls` | string | Serialized control/input configuration |
-| `token` | string | Authentication token |[^Token]
+| `token`[^token] | string | Authentication token[^token] |
 
 <a name="friends-endpoints"></a>
 ### Friends Endpoints
@@ -2901,7 +2912,7 @@ Same as register_legacy.php (on successful auto-login)
 
 | Field | Type | Description |
 |-------|------|-------------|
-| `token` | string | Authentication token |[^Token]
+| `token`[^token] | string | Authentication token[^token] |
 | `task` | string | Operation: "getfriends", "send", "unfriend", "deleterequest" |
 | `theirname` | string | Target username (required for "send") |
 | `theirid` | number | Target user ID (required for "unfriend", "deleterequest") |
@@ -2927,7 +2938,7 @@ Same as register_legacy.php (on successful auto-login)
 
 | Field | Type | Description |
 |-------|------|-------------|
-| `token` | string | Authentication token |[^Token]
+| `token`[^token] | string | Authentication token[^token] |
 | `mapid` | number | Map database ID |
 | `action` | string | "a" for add/favorite, "u" for unfavorite |
 
@@ -2986,7 +2997,7 @@ Same as register_legacy.php (on successful auto-login)
 
 | Field | Type | Description |
 |-------|------|-------------|
-| `token` | string | Authentication token |[^Token]
+| `token`[^token] | string | Authentication token[^token] |
 | `startingfrom` | number | Pagination offset |
 
 <h5>Response</h5>
@@ -3004,7 +3015,7 @@ Same as register_legacy.php (on successful auto-login)
 
 | Field | Type | Description |
 |-------|------|-------------|
-| `token` | string | Authentication token |[^Token]
+| `token`[^token] | string | Authentication token[^token] |
 | `startingfrom` | number | Pagination offset |
 
 <h5>Response</h5>
@@ -3024,7 +3035,7 @@ Same as register_legacy.php (on successful auto-login)
 
 | Field | Type | Description |
 |-------|------|-------------|
-| `token` | string | Authentication token |[^Token]
+| `token`[^token] | string | Authentication token[^token] |
 | `startingfrom` | number | Pagination offset |
 
 <h5>Response</h5>
@@ -3042,7 +3053,7 @@ Same as register_legacy.php (on successful auto-login)
 
 | Field | Type | Description |
 |-------|------|-------------|
-| `token` | string | Authentication token |[^Token]
+| `token`[^token] | string | Authentication token[^token] |
 | `startingfrom` | number | Pagination offset |
 
 <h5>Response</h5>
@@ -3104,7 +3115,7 @@ Same as register_legacy.php (on successful auto-login)
 | `mapname` | string | Name for the map |
 | `overwriteok` | string | "true" to overwrite, "false" to check if exists |
 | `leveldata` | string | Encoded map data (compressed/encoded) |
-| `token` | string | Authentication token |[^Token]
+| `token`[^token] | string | Authentication token[^token] |
 | `rxid` | string | Map revision/export ID |
 | `rxdb` | string | Map revision database reference |
 | `rxn` | string | Map revision name |
@@ -3127,7 +3138,7 @@ Same as register_legacy.php (on successful auto-login)
 
 | Field | Type | Description |
 |-------|------|-------------|
-| `token` | string | Authentication token |[^Token]
+| `token`[^token] | string | Authentication token[^token] |
 | `mapid` | number | Map database ID to delete |
 
 <a name="replay-endpoints"></a>
@@ -3191,7 +3202,7 @@ Same as register_legacy.php (on successful auto-login)
 |-------|------|-------------|
 | `version` | string | Game version |
 | `gl` | string |  "y" or "n" game language? |
-| `token` | string | Authentication token |[^Token]
+| `token`[^token] | string | Authentication token[^token] |
 
 <h5>Response</h5>
 
@@ -3208,7 +3219,7 @@ Same as register_legacy.php (on successful auto-login)
 <a name="getroomaddressphp"></a>
 ##### getroomaddress.php
 
-Room address is used for initializing a connection to a room through <a href="emit-13---join-room">Emit 13 - Join Room</a>[^Emit]
+Room address is used for initializing a connection to a room through <a href="emit[^Emit]-13---join-room">Emit[^Emit] 13 - Join Room</a>
 
 <h5>Body</h5>
 
@@ -3252,7 +3263,7 @@ Room address is used for initializing a connection to a room through <a href="em
 | `version` | string | Game version |
 | `mode` | string | Game mode (e.g., "arrowsquick", "b", "ard") |
 | `excludeaddresses` | string | Comma-separated (#) server addresses to exclude |
-| `token` | string | Authentication token |[^Token]
+| `token`[^token] | string | Authentication token[^token] |
 
 <h5>Response</h5>
 
@@ -3276,7 +3287,7 @@ Room address is used for initializing a connection to a room through <a href="em
 
 | Field | Type | Description |
 |-------|------|-------------|
-| `token` | string | Authentication token |[^Token]
+| `token`[^token] | string | Authentication token[^token] |
 | `task` | string | Operation: "updateslot" or "updateavatar" |
 | `newactive` | number | New active avatar slot number (for "updateslot") |
 | `newavatarslot` | number | Avatar slot to update (for "updateavatar") |
@@ -3299,7 +3310,7 @@ These endpoints are simple get requests with no request body.
 
 <details>
 <!-- skipForTableContent -->
-<summary><a name="snippet-example-response-3093"></a>Example response</summary>
+<summary><a name="snippet-example-response-3090"></a>Example response</summary>
 
 ```json
 {
@@ -3366,9 +3377,9 @@ URL format: `https://bonk2.io/scripts/hotmaps/cache3_[page]_[modeCode].txt`
 > [!WARNING]
 > THIS SECTION IS NOT ALLOWED CONTRIBUTIONS, WILL BE PURELY WRITTEN BY ME.
 
-If you are interested in making your own deobfuscator, you should learn **AST parsing**. Check out this resource:[^AST]
+If you are interested in making your own deobfuscator, you should learn **AST[^AST] parsing**. Check out this resource:
 
-- [AST Parsing Guide](https://gist.github.com/0xdevalias/d8b743efb82c0e9406fc69da0d6c6581)[^AST]
+- [AST[^AST] Parsing Guide](https://gist.github.com/0xdevalias/d8b743efb82c0e9406fc69da0d6c6581)
 
 The [Community Resources](#community-resources) section below will also help you get started if you're just interested in using something public.
 
@@ -3385,10 +3396,10 @@ The [Community Resources](#community-resources) section below will also help you
 #### [Kitaes-software/bonk-deobfuscator](https://github.com/Kitaes-software/bonk-deobfuscator)
 
 > [!NOTE]
-> Whilst this tool is quite badly coded and does not do AST parsing (similar to the previous option above) and will break with new versions, it does produce very nice results.[^AST]
+> Whilst this tool is quite badly coded and does not do AST[^AST] parsing (similar to the previous option above) and will break with new versions, it does produce very nice results.
 
 > [!WARNING]
-> Please do not ask for better options. Other options by me or the community often involve automatic renaming heuristics through AST or AI, and ARE PRIVATE.[^AST]
+> Please do not ask for better options. Other options by me or the community often involve automatic renaming heuristics through AST[^AST] or AI, and ARE PRIVATE.
 
 <a name="snippets"></a>
 ## Snippets
@@ -3397,21 +3408,156 @@ The [Community Resources](#community-resources) section below will also help you
 <summary>All Code Blocks</summary>
 
 <!-- snippetSummaryIndex -->
-- <a href="#snippet-deobfuscated-handler-code-on-1-333">Deobfuscated Handler Code On 1</a>
-- <a href="#snippet-deobfuscated-handler-code-on-2-371">Deobfuscated Handler Code On 2</a>
-- <a href="#snippet-deobfuscated-handler-code-on-3-409">Deobfuscated Handler Code On 3</a>
-- <a href="#snippet-deobfuscated-handler-code-on-31-790">Deobfuscated Handler Code On 31</a>
-- <a href="#snippet-python-parsing-1855">Python Parsing</a>
-- <a href="#snippet-javascript-flipunflip-case-works-both-ways-2313">Javascript: Flip/unflip case (works both ways)</a>
-- <a href="#snippet-example-response-3093">Example response</a>
+- <a href="#snippet-deobfuscated-handler-code-on-1-330">Deobfuscated Handler Code On 1</a>
+- <a href="#snippet-deobfuscated-handler-code-on-2-368">Deobfuscated Handler Code On 2</a>
+- <a href="#snippet-deobfuscated-handler-code-on-3-406">Deobfuscated Handler Code On 3</a>
+- <a href="#snippet-deobfuscated-handler-code-on-31-787">Deobfuscated Handler Code On 31</a>
+- <a href="#snippet-python-parsing-1852">Python Parsing</a>
+- <a href="#snippet-javascript-flipunflip-case-works-both-ways-2310">Javascript: Flip/unflip case (works both ways)</a>
+- <a href="#snippet-example-response-3090">Example response</a>
 <!-- /snippetSummaryIndex -->
+
+</details>
+
+<details>
+<summary>All Code Blocks</summary>
+
+</details>
+
+<details>
+<summary>All Code Blocks</summary>
+
+</details>
+
+<details>
+<summary>All Code Blocks</summary>
+
+</details>
+
+<details>
+<summary>All Code Blocks</summary>
+
+</details>
+
+<details>
+<summary>All Code Blocks</summary>
+
+</details>
+
+<details>
+<summary>All Code Blocks</summary>
+
+</details>
+
+<details>
+<summary>All Code Blocks</summary>
+
+</details>
+
+<details>
+<summary>All Code Blocks</summary>
+
+</details>
+
+<details>
+<summary>All Code Blocks</summary>
+
+</details>
+
+<details>
+<summary>All Code Blocks</summary>
+
+</details>
+
+<details>
+<summary>All Code Blocks</summary>
+
+</details>
+
+<details>
+<summary>All Code Blocks</summary>
+
+</details>
+
+<details>
+<summary>All Code Blocks</summary>
+
+</details>
+
+<details>
+<summary>All Code Blocks</summary>
+
+</details>
+
+<details>
+<summary>All Code Blocks</summary>
+
+</details>
+
+<details>
+<summary>All Code Blocks</summary>
+
+</details>
+
+<details>
+<summary>All Code Blocks</summary>
+
+</details>
+
+<details>
+<summary>All Code Blocks</summary>
+
+</details>
+
+<details>
+<summary>All Code Blocks</summary>
+
+</details>
+
+<details>
+<summary>All Code Blocks</summary>
+
+</details>
+
+<details>
+<summary>All Code Blocks</summary>
+
+</details>
+
+<details>
+<summary>All Code Blocks</summary>
+
+</details>
+
+<details>
+<summary>All Code Blocks</summary>
+
+</details>
+
+<details>
+<summary>All Code Blocks</summary>
+
+</details>
+
+<details>
+<summary>All Code Blocks</summary>
+
+</details>
+
+<details>
+<summary>All Code Blocks</summary>
+
+</details>
+
+<details>
+<summary>All Code Blocks</summary>
 
 </details>
 
 <a name="peerid"></a>
 ### PeerID
 
-Generating a unique peerID to use[^PeerID]
+Generating a unique peerID[^peerID] to use
 
 <details>
 <summary>python</summary>
@@ -3455,22 +3601,20 @@ public class Util
 ```
 </details>
 
-<a name="foot-notes"></a>
 ## Foot Notes
-: **Custom Anchors** `<a name="...">` tags placed before headings for linking to different places in the markdown file. See github docs: [custom anchors](https://docs.github.com/en/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax#custom-anchors).
-: **AST** Abstract syntax tree
-
-: **LZ-String** A string compression algorithm used for encoding map and game state data. [GitHub](https://github.com/pieroxy/lz-string)
-: **Packet ID** A Packet ID is a numeric or identifier value used to distinguish different network packets in a communication system. It is commonly used in both client and server networking to determine how incoming and outgoing messages should be handled. Packet ID may serve different purposes depending on direction (incoming `socket.on()` vs outgoing `socket.emit()`).
-: **PSON** An efficient binary encoding for JSON data. [GitHub](https://github.com/dcodeIO/PSON)
-: **Player ID** Each player in a room has a Player ID. It is an auto-incrementing integer assigned when a player joins the room, starting from 0 (the __original__ host). Player IDs are used to map players to their discs, scores, inputs, and other per-player data.
-: **Session Id** Unanimous with "Player ID"
-: **Token** A [JWT](https://www.jwt.io/) authentication token credential that belongs to an account. Obtained after successful response from login endpoints: [login_legacy.php](#login_legacyphp), [login_auto.php](#login_autophp), or [register_legacy.php](#register_legacyphp). See [Token Format](#token-format) for structure details.
-: **Remember Token** The same as token except it doesn't expire unless the server explicitly expires it.
-: **Socket.IO** A real-time bidirectional communication library built on top of WebSockets. It enables event-driven, low-latency communication between client and server. [Website](https://socket.io/)
-: **Base64** A binary-to-text encoding scheme that represents binary data in ASCII string format. Used throughout Bonk for encoding map data, replay data, and other binary information as transmittable strings.
-: **Fixture** In Box2D, a fixture attaches a shape (collision geometry) to a body see [docs/classb2_fixture.html](https://box2d.org/doc_version_2_4/classb2_fixture.html)
-: **Rate Limit** A server-side throttling mechanism that prevents clients from performing actions too frequently. Protects against spam and exploits by enforcing cooldown periods between actions.
-: **Host** The player controlling the room
-: **Emit** In Socket.IO context, to send data from client to server (or vice versa). An event is "emitted" with associated data to trigger server-side handlers.
-: **Peer ID** is a random, 20-character string that acts as a client's address, it must however match a specific "yeast" format. <a href="peerid">Snippets for generating them</a> 
+  [^peerID]: **Peer ID** is a random, 20-character string that acts as a client's address, it must however match a specific "yeast" format. <a href="peerid">Snippets for generating them</a> 
+  [^custom-anchors]: **Custom Anchors** `<a name="...">` tags placed before headings for linking to different places in the markdown file. See github docs: [custom anchors](https://docs.github.com/en/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax#custom-anchors).
+  [^AST]: **AST** Abstract syntax tree
+  [^LZ-String]: **LZ-String** A string compression algorithm used for encoding map and game state data. [GitHub](https://github.com/pieroxy/lz-string)
+  [^Packet-ID]: **Packet ID** A Packet ID is a numeric or identifier value used to distinguish different network packets in a communication system. It is commonly used in both client and server networking to determine how incoming and outgoing messages should be handled. Packet ID may serve different purposes depending on direction (incoming `socket.on()` vs outgoing `socket.emit()`).
+  [^PSON]: **PSON** An efficient binary encoding for JSON data. [GitHub](https://github.com/dcodeIO/PSON)
+  [^Player-ID]: **Player ID** Each player in a room has a Player ID. It is an auto-incrementing integer assigned when a player joins the room, starting from 0 (the __original__ host). Player IDs are used to map players to their discs, scores, inputs, and other per-player data.
+  [^token]: **Token** A [JWT](https://www.jwt.io/) authentication token credential that belongs to an account. Obtained after successful response from login endpoints: [login_legacy.php](#login_legacyphp), [login_auto.php](#login_autophp), or [register_legacy.php](#register_legacyphp). See [Token Format](#token-format) for structure details.
+  [^rememberToken]: **Remember Token** The same as token except it doesn't expire unless the server explicitly expires it.
+  [^Socket.IO]: **Socket.IO** A real-time bidirectional communication library built on top of WebSockets. It enables event-driven, low-latency communication between client and server. [Website](https://socket.io/)
+  [^Base64]: **Base64** A binary-to-text encoding scheme that represents binary data in ASCII string format. Used throughout Bonk for encoding map data, replay data, and other binary information as transmittable strings.
+  [^Fixture]: **Fixture** In Box2D, a fixture attaches a shape (collision geometry) to a body see [docs/classb2_fixture.html](https://box2d.org/doc_version_2_4/classb2_fixture.html)
+  [^Rate-Limit]: **Rate Limit** A server-side throttling mechanism that prevents clients from performing actions too frequently. Protects against spam and exploits by enforcing cooldown periods between actions.
+  [^Host]: The player controlling the room
+  [^Emit]: In Socket.IO context, to send data from client to server (or vice versa). An event is "emitted" with associated data to trigger server-side handlers.
+  [^sid]: **Session Id**
