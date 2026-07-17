@@ -6,7 +6,7 @@ THIS CODE IS EXTREMELY FRAGILE AND WILL FUCK UP README.MD IF MODIFIED WRONGLY
 import { readFileSync, writeFileSync } from 'node:fs';
 
 class ReadmeFixer {
-    static readonly FileName = "definitions.md";
+    static readonly FileName = "README.MD";
     private content: string;
     constructor() {
         this.content = readFileSync(ReadmeFixer.FileName, 'utf8').replaceAll('\r\n', '\n');
