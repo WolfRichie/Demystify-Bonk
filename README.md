@@ -2,22 +2,8 @@
 Last updated: *17-7-2026, 20:07:59*
 
 A repository for various resources to understand the inner workings of [bonk.io](https://bonk.io) api protocol 49.
- 
-| `invalid_params (token)`[^token] | N/A |
-peerId[^peerID]
-"PeerID":[^peerID]
-peerID[^peerID]
-<a name="test"></a>
-## test
-
-Peer ID (shouldnt)
-```js
-
-peerID[^peerID]
-```
 
 <!-- reservedForToc -->
-- [test](#test) *line 9*
 - [Contributing to the repository](#contributing-to-the-repository) *line 251*
   - [Requested Todo](#requested-todo) *line 265*
     - [Modding](#modding) *line 273*
