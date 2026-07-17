@@ -1,236 +1,238 @@
 # Demystifying Bonk
-Last updated: *15-7-2026, 19:49:07*
+Last updated: *17-7-2026, 11:56:32*
 
 A repository for various resources to understand the inner workings of [bonk.io](https://bonk.io) api protocol 49.
 
 <!-- reservedForToc -->
-- [Contributing to the repository](#contributing-to-the-repository) *line 235*
-  - [Requested Todo](#requested-todo) *line 249*
-    - [Modding](#modding) *line 257*
-- [Network](#network) *line 260*
-  - [Community Resources](#community-resources) *line 279*
-  - [Incoming Packets (Server Client)](#incoming-packets-server-client) *line 303*
-    - [On 1 - Update Pings](#on-1---update-pings) *line 305*
-    - [On 2 - Room Created](#on-2---room-created) *line 318*
-    - [On 3 - Room Join](#on-3---room-join) *line 332*
-    - [On 4 - Player Join](#on-4---player-join) *line 351*
-    - [On 5 - Player Leave](#on-5---player-leave) *line 369*
-    - [On 6 - Host Leave](#on-6---host-leave) *line 382*
-    - [On 7 - Inputs](#on-7---inputs) *line 396*
-    - [On 8 - Ready Change](#on-8---ready-change) *line 409*
-    - [On 9 - All Ready Reset](#on-9---all-ready-reset) *line 422*
-    - [On 10 - Server Mute](#on-10---server-mute) *line 430*
-    - [On 11 - Server Unmute](#on-11---server-unmute) *line 444*
-    - [On 12 - Username Change](#on-12---username-change) *line 458*
-    - [On 13 - Game End](#on-13---game-end) *line 471*
-    - [On 14 - Reserved](#on-14---reserved) *line 479*
-    - [On 15 - Game Start](#on-15---game-start) *line 488*
-    - [On 16 - Status Message](#on-16---status-message) *line 502*
-    - [On 17 - Reserved](#on-17---reserved) *line 514*
-    - [On 18 - Team Change](#on-18---team-change) *line 523*
-    - [On 19 - Teamlock Toggle](#on-19---teamlock-toggle) *line 536*
-    - [On 20 - Chat Message](#on-20---chat-message) *line 548*
-    - [On 21 - Initial Data](#on-21---initial-data) *line 561*
-    - [On 23 - Timesync Response](#on-23---timesync-response) *line 573*
-    - [On 24 - Player Banned/Kicked](#on-24---player-bannedkicked) *line 583*
-    - [On 25 - Map Reorder](#on-25---map-reorder) *line 596*
-    - [On 26 - Mode Change](#on-26---mode-change) *line 607*
-    - [On 27 - Change WL (Rounds)](#on-27---change-wl-rounds) *line 620*
-    - [On 28 - Map Delete](#on-28---map-delete) *line 632*
-    - [On 29 - Map Switch](#on-29---map-switch) *line 642*
-    - [On 30 - Typing](#on-30---typing) *line 654*
-    - [On 31 - Admin Inputs](#on-31---admin-inputs) *line 667*
-    - [On 32 - AFK Warn](#on-32---afk-warn) *line 675*
-    - [On 33 - Map Suggest (Host)](#on-33---map-suggest-host) *line 683*
-    - [On 34 - Map Suggest (Client)](#on-34---map-suggest-client) *line 696*
-    - [On 35 - Change Mode](#on-35---change-mode) *line 710*
-    - [On 36 - Balance Set](#on-36---balance-set) *line 720*
-    - [On 37 - Reserved](#on-37---reserved) *line 733*
-    - [On 38 - Debug Winner](#on-38---debug-winner) *line 742*
-    - [On 39 - Team Settings Change](#on-39---team-settings-change) *line 756*
-    - [On 40 - Save Replay](#on-40---save-replay) *line 766*
-    - [On 41 - Host Change](#on-41---host-change) *line 778*
-    - [On 42 - Friend Request](#on-42---friend-request) *line 788*
-    - [On 43 - Countdown](#on-43---countdown) *line 800*
-    - [On 44 - Abort Countdown](#on-44---abort-countdown) *line 812*
-    - [On 45 - Player Leveled Up](#on-45---player-leveled-up) *line 820*
-    - [On 46 - Local Gained XP](#on-46---local-gained-xp) *line 830*
-    - [On 47 - Local Revert](#on-47---local-revert) *line 842*
-    - [On 48 - Recv In Game](#on-48---recv-in-game) *line 852*
-    - [On 49 - Room Share Link](#on-49---room-share-link) *line 862*
-    - [On 50 - Map Vote Update](#on-50---map-vote-update) *line 875*
-    - [On 51 - More Quick Maps](#on-51---more-quick-maps) *line 886*
-    - [On 52 - Tabbed](#on-52---tabbed) *line 894*
-    - [On 53 - Desync Request](#on-53---desync-request) *line 907*
-    - [On 54 - Desync Response](#on-54---desync-response) *line 919*
-    - [On 57 - Curate Result](#on-57---curate-result) *line 931*
-    - [On 58 - Room Name Update](#on-58---room-name-update) *line 944*
-    - [On 59 - Room Password Update](#on-59---room-password-update) *line 956*
-    - [On 60 - Server Message](#on-60---server-message) *line 968*
-  - [Outgoing Packets (Client <h5>Response</h5> Server)](#outgoing-packets-client-h5responseh5-server) *line 976*
-    - [Emit 1 - Ping Acknowledgement](#emit-1---ping-acknowledgement) *line 978*
-    - [Emit 2 - Test Ping](#emit-2---test-ping) *line 990*
-    - [Emit 3 - Get Debug](#emit-3---get-debug) *line 999*
-    - [Emit 4 - Send Inputs](#emit-4---send-inputs) *line 1008*
-    - [Emit 5 - Trigger Start](#emit-5---trigger-start) *line 1022*
-    - [Emit 6 - Change Own Team](#emit-6---change-own-team) *line 1035*
-    - [Emit 7 - Team Lock](#emit-7---team-lock) *line 1045*
-    - [Emit 8 - Silence Player](#emit-8---silence-player) *line 1055*
-    - [Emit 9 - Kick/Ban Player](#emit-9---kickban-player) *line 1068*
-    - [Emit 10 - Chat Message](#emit-10---chat-message) *line 1079*
-    - [Emit 11 - Inform In Lobby](#emit-11---inform-in-lobby) *line 1089*
-    - [Emit 12 - Create Room](#emit-12---create-room) *line 1102*
-    - [Emit 13 - Join Room](#emit-13---join-room) *line 1131*
-    - [Emit 14 - Return To Lobby](#emit-14---return-to-lobby) *line 1148*
-    - [Emit 16 - Set Ready](#emit-16---set-ready) *line 1154*
-    - [Emit 17 - All Ready Reset](#emit-17---all-ready-reset) *line 1164*
-    - [Emit 18 - Timesync request](#emit-18---timesync-request) *line 1172*
-    - [Emit 19 - Map Reorder](#emit-19---map-reorder) *line 1182*
-    - [Emit 20 - Send Mode](#emit-20---send-mode) *line 1191*
-    - [Emit 21 - Send WL (Rounds)](#emit-21---send-wl-rounds) *line 1204*
-    - [Emit 22 - Map Delete](#emit-22---map-delete) *line 1214*
-    - [Emit 23 - Map Add](#emit-23---map-add) *line 1222*
-    - [Emit 24 - Send Typing](#emit-24---send-typing) *line 1234*
-    - [Emit 25 - Admin Inputs](#emit-25---admin-inputs) *line 1243*
-    - [Emit 26 - Change Other Team](#emit-26---change-other-team) *line 1253*
-    - [Emit 27 - Map Suggest](#emit-27---map-suggest) *line 1264*
-    - [Emit 28 - Change Mode](#emit-28---change-mode) *line 1276*
-    - [Emit 29 - Send Balance](#emit-29---send-balance) *line 1286*
-    - [Emit 30 - Version Check](#emit-30---version-check) *line 1299*
-    - [Emit 31 - Send Debug Winner](#emit-31---send-debug-winner) *line 1308*
-    - [Emit 32 - Team Settings Change](#emit-32---team-settings-change) *line 1321*
-    - [Emit 33 - Arm Record](#emit-33---arm-record) *line 1333*
-    - [Emit 34 - Host Change](#emit-34---host-change) *line 1341*
-    - [Emit 35 - Send Friended](#emit-35---send-friended) *line 1353*
-    - [Emit 36 - Start Countdown](#emit-36---start-countdown) *line 1365*
-    - [Emit 37 - Abort Countdown](#emit-37---abort-countdown) *line 1377*
-    - [Emit 38 - Request XP](#emit-38---request-xp) *line 1385*
-    - [Emit 39 - Map Vote](#emit-39---map-vote) *line 1393*
-    - [Emit 40 - Inform In Game](#emit-40---inform-in-game) *line 1406*
-    - [Emit 41 - Get Pre Vote](#emit-41---get-pre-vote) *line 1419*
-    - [Emit 42 - Get More Quick Play Maps](#emit-42---get-more-quick-play-maps) *line 1431*
-    - [Emit 43 - Update RC Data](#emit-43---update-rc-data) *line 1439*
-    - [Emit 44 - Tabbed](#emit-44---tabbed) *line 1449*
-    - [Emit 45 - Desync Test](#emit-45---desync-test) *line 1461*
-    - [Emit 46 - Send Desync Response](#emit-46---send-desync-response) *line 1475*
-    - [Emit 47 - Round Complete](#emit-47---round-complete) *line 1489*
-    - [Emit 50 - No Host Swap](#emit-50---no-host-swap) *line 1500*
-    - [Emit 51 - Curate](#emit-51---curate) *line 1508*
-    - [Emit 52 - Room Name Update](#emit-52---room-name-update) *line 1522*
-    - [Emit 53 - Room Password Update](#emit-53---room-password-update) *line 1534*
-- [Common Data Schemes](#common-data-schemes) *line 1544*
-  - [Data](#data) *line 1546*
-    - [Token Format](#token-format) *line 1548*
-  - [Enums](#enums) *line 1574*
-    - [Team](#team) *line 1576*
-    - [Server Mute Broadcast type enum](#server-mute-broadcast-type-enum) *line 1587*
-    - [Game Engine Enum](#game-engine-enum) *line 1595*
-    - [Game Mode Enum](#game-mode-enum) *line 1604*
-    - [Body Type Enum](#body-type-enum) *line 1618*
-    - [Quality Enum](#quality-enum) *line 1628*
-    - [Projectile Type Enum](#projectile-type-enum) *line 1638*
-    - [Avatar Shape Enum](#avatar-shape-enum) *line 1646*
-    - [Disc Death Method Enum](#disc-death-method-enum) *line 1652*
-  - [Inputs](#inputs) *line 1663*
-    - [Input Flags](#input-flags) *line 1711*
-    - [Input Object](#input-object) *line 1729*
-    - [Frame Input](#frame-input) *line 1737*
-  - [Game Configuration](#game-configuration) *line 1750*
-    - [Game Settings Object (`gs`)](#game-settings-object-gs) *line 1752*
-    - [Mode Settings Object](#mode-settings-object) *line 1768*
-    - [Team Settings Object](#team-settings-object) *line 1777*
-  - [Map](#map) *line 1786*
-    - [Map Settings](#map-settings) *line 1788*
-    - [Map Metadata](#map-metadata) *line 1800*
-    - [Map Data Format](#map-data-format) *line 1822*
-      - [Capture Zone](#capture-zone) *line 1833*
-    - [Physics](#physics) *line 1846*
-      - [Shapes](#shapes) *line 1850*
-        - [Base Shape](#base-shape) *line 1854*
-        - [Box Shape](#box-shape) *line 1861*
-        - [Circle Shape](#circle-shape) *line 1873*
-        - [Poly Shape](#poly-shape) *line 1883*
-        - [Chain Shape](#chain-shape) *line 1894*
-      - [Fixture](#fixture) *line 1908*
-      - [Body](#body) *line 1925*
-      - [Joints](#joints) *line 1954*
-        - [Base Joint](#base-joint) *line 1958*
-        - [Revolute Joint](#revolute-joint) *line 1972*
-        - [Distance Joint](#distance-joint) *line 1994*
-        - [Legacy Path Joint](#legacy-path-joint) *line 2012*
-        - [Legacy Springy Joint](#legacy-springy-joint) *line 2034*
-        - [Prismatic Joint](#prismatic-joint) *line 2052*
-        - [Soft Rod Joint](#soft-rod-joint) *line 2074*
-        - [Gear Joint](#gear-joint) *line 2090*
-      - [Physics State](#physics-state) *line 2104*
-  - [Game State](#game-state) *line 2117*
-    - [Initial Game State](#initial-game-state) *line 2119*
-      - [Bonk Game State](#bonk-game-state) *line 2135*
-      - [Football Game State](#football-game-state) *line 2160*
-    - [Full Game State Data](#full-game-state-data) *line 2181*
-  - [Discs](#discs) *line 2227*
-    - [Bonk Disc](#bonk-disc) *line 2229*
-    - [Football Disc](#football-disc) *line 2260*
-    - [Disc Death](#disc-death) *line 2276*
-      - [DiscDeathMethod](#discdeathmethod) *line 2290*
-  - [Common Types](#common-types) *line 2300*
-    - [Point 2D](#point-2d) *line 2302*
-    - [Point 2D Vector](#point-2d-vector) *line 2311*
-    - [Sounds This Step](#sounds-this-step) *line 2320*
-    - [Swing State](#swing-state) *line 2329*
-  - [Common Types](#common-types) *line 2339*
-    - [Avatar Data Format](#avatar-data-format) *line 2341*
-  - [Server](#server) *line 2350*
-    - [Status Codes](#status-codes) *line 2352*
-    - [Timesync Response Data](#timesync-response-data) *line 2398*
-    - [Admin Input Data](#admin-input-data) *line 2405*
-- [HTTP Requests](#http-requests) *line 2411*
-  - [Account Endpoints](#account-endpoints) *line 2417*
-    - [register_legacy.php](#register_legacyphp) *line 2419*
-    - [login_legacy.php](#login_legacyphp) *line 2447*
-    - [login_auto.php](#login_autophp) *line 2460*
-    - [login_clearauto.php](#login_clearautophp) *line 2471*
-    - [account_changepassword.php](#account_changepasswordphp) *line 2479*
-    - [account_savecontrols.php](#account_savecontrolsphp) *line 2496*
-  - [Friends Endpoints](#friends-endpoints) *line 2505*
-    - [friends.php](#friendsphp) *line 2507*
-  - [Map Endpoints](#map-endpoints) *line 2526*
-    - [Map Favorite Endpoints](#map-favorite-endpoints) *line 2528*
-      - [map_fave.php](#map_favephp) *line 2530*
-    - [Map Search Endpoints](#map-search-endpoints) *line 2547*
-      - [map_getsearch.php](#map_getsearchphp) *line 2549*
-      - [map_getfresh.php](#map_getfreshphp) *line 2569*
-      - [map_getfave.php](#map_getfavephp) *line 2585*
-      - [map_getown.php](#map_getownphp) *line 2602*
-    - [Map B1 Endpoints (Bonk1 Legacy Maps)](#map-b1-endpoints-bonk1-legacy-maps) *line 2618*
-      - [map_b1_getfave.php](#map_b1_getfavephp) *line 2620*
-      - [map_b1_getown.php](#map_b1_getownphp) *line 2637*
-      - [map_b1_getbest.php](#map_b1_getbestphp) *line 2654*
-      - [map_b1_getsearch.php](#map_b1_getsearchphp) *line 2670*
-    - [Map Management Endpoints](#map-management-endpoints) *line 2690*
-      - [map_save_pub.php](#map_save_pubphp) *line 2692*
-      - [map_delete.php](#map_deletephp) *line 2717*
-  - [Replay Endpoints](#replay-endpoints) *line 2726*
-      - [replay_submit.php](#replay_submitphp) *line 2728*
-      - [replay_get.php](#replay_getphp) *line 2739*
-      - [replay_report.php](#replay_reportphp) *line 2753*
-  - [Room Endpoints](#room-endpoints) *line 2767*
-      - [getrooms.php](#getroomsphp) *line 2769*
-      - [getroomaddress.php](#getroomaddressphp) *line 2791*
-  - [Matchmaking Endpoints](#matchmaking-endpoints) *line 2811*
-      - [matchmaking_maps.php](#matchmaking_mapsphp) *line 2813*
-      - [matchmaking_query.php](#matchmaking_queryphp) *line 2825*
-  - [Avatar Endpoints](#avatar-endpoints) *line 2848*
-      - [avatar_update.php](#avatar_updatephp) *line 2850*
-  - [static Endpoints](#static-endpoints) *line 2862*
-      - [combinedplayercount.txt](#combinedplayercounttxt) *line 2866*
-      - [Hot Maps Cache](#hot-maps-cache) *line 2893*
-    - [picks](#picks) *line 2915*
-- [Source Code / Deobfuscation](#source-code-deobfuscation) *line 2927*
-  - [Deobfuscation Tools](#deobfuscation-tools) *line 2938*
-    - [[kookywarrior/bonk-deobfuscator](https://github.com/kookywarrior/bonk-deobfuscator)](#kookywarriorbonk-deobfuscatorhttpsgithubcomkookywarriorbonk-deobfuscator) *line 2940*
-    - [[Kitaes-software/bonk-deobfuscator](https://github.com/Kitaes-software/bonk-deobfuscator)](#kitaes-softwarebonk-deobfuscatorhttpsgithubcomkitaes-softwarebonk-deobfuscator) *line 2945*
-- [Foot Notes](#foot-notes) *line 2953*
+- [Contributing to the repository](#contributing-to-the-repository) *line 238*
+  - [Requested Todo](#requested-todo) *line 252*
+    - [Modding](#modding) *line 260*
+- [Network](#network) *line 263*
+  - [Community Resources](#community-resources) *line 282*
+  - [Incoming Packets (Server Client)](#incoming-packets-server-client) *line 306*
+    - [On 1 - Update Pings](#on-1---update-pings) *line 308*
+    - [On 2 - Room Created](#on-2---room-created) *line 321*
+    - [On 3 - Room Join](#on-3---room-join) *line 335*
+    - [On 4 - Player Join](#on-4---player-join) *line 354*
+    - [On 5 - Player Leave](#on-5---player-leave) *line 372*
+    - [On 6 - Host Leave](#on-6---host-leave) *line 385*
+    - [On 7 - Inputs](#on-7---inputs) *line 399*
+    - [On 8 - Ready Change](#on-8---ready-change) *line 412*
+    - [On 9 - All Ready Reset](#on-9---all-ready-reset) *line 425*
+    - [On 10 - Server Mute](#on-10---server-mute) *line 433*
+    - [On 11 - Server Unmute](#on-11---server-unmute) *line 447*
+    - [On 12 - Username Change](#on-12---username-change) *line 461*
+    - [On 13 - Game End](#on-13---game-end) *line 474*
+    - [On 14 - Reserved](#on-14---reserved) *line 482*
+    - [On 15 - Game Start](#on-15---game-start) *line 491*
+    - [On 16 - Status Message](#on-16---status-message) *line 505*
+    - [On 17 - Reserved](#on-17---reserved) *line 517*
+    - [On 18 - Team Change](#on-18---team-change) *line 526*
+    - [On 19 - Teamlock Toggle](#on-19---teamlock-toggle) *line 539*
+    - [On 20 - Chat Message](#on-20---chat-message) *line 551*
+    - [On 21 - Initial Data](#on-21---initial-data) *line 564*
+    - [On 23 - Timesync Response](#on-23---timesync-response) *line 576*
+    - [On 24 - Player Banned/Kicked](#on-24---player-bannedkicked) *line 588*
+    - [On 25 - Map Reorder](#on-25---map-reorder) *line 601*
+    - [On 26 - Mode Change](#on-26---mode-change) *line 612*
+    - [On 27 - Change WL (Rounds)](#on-27---change-wl-rounds) *line 625*
+    - [On 28 - Map Delete](#on-28---map-delete) *line 637*
+    - [On 29 - Map Switch](#on-29---map-switch) *line 647*
+    - [On 30 - Typing](#on-30---typing) *line 659*
+    - [On 31 - Admin Inputs](#on-31---admin-inputs) *line 672*
+    - [On 32 - AFK Warn](#on-32---afk-warn) *line 680*
+    - [On 33 - Map Suggest (Host)](#on-33---map-suggest-host) *line 688*
+    - [On 34 - Map Suggest (Client)](#on-34---map-suggest-client) *line 701*
+    - [On 35 - Change Mode](#on-35---change-mode) *line 715*
+    - [On 36 - Balance Set](#on-36---balance-set) *line 725*
+    - [On 37 - Reserved](#on-37---reserved) *line 738*
+    - [On 38 - Debug Winner](#on-38---debug-winner) *line 747*
+    - [On 39 - Team Settings Change](#on-39---team-settings-change) *line 761*
+    - [On 40 - Save Replay](#on-40---save-replay) *line 771*
+    - [On 41 - Host Change](#on-41---host-change) *line 783*
+    - [On 42 - Friend Request](#on-42---friend-request) *line 793*
+    - [On 43 - Countdown](#on-43---countdown) *line 805*
+    - [On 44 - Abort Countdown](#on-44---abort-countdown) *line 817*
+    - [On 45 - Player Leveled Up](#on-45---player-leveled-up) *line 825*
+    - [On 46 - Local Gained XP](#on-46---local-gained-xp) *line 835*
+    - [On 47 - Local Revert](#on-47---local-revert) *line 847*
+    - [On 48 - Recv In Game](#on-48---recv-in-game) *line 857*
+    - [On 49 - Room Share Link](#on-49---room-share-link) *line 867*
+    - [On 50 - Map Vote Update](#on-50---map-vote-update) *line 880*
+    - [On 51 - More Quick Maps](#on-51---more-quick-maps) *line 891*
+    - [On 52 - Tabbed](#on-52---tabbed) *line 899*
+    - [On 53 - Desync Request](#on-53---desync-request) *line 912*
+    - [On 54 - Desync Response](#on-54---desync-response) *line 924*
+    - [On 57 - Curate Result](#on-57---curate-result) *line 936*
+    - [On 58 - Room Name Update](#on-58---room-name-update) *line 949*
+    - [On 59 - Room Password Update](#on-59---room-password-update) *line 961*
+    - [On 60 - Server Message](#on-60---server-message) *line 973*
+  - [Outgoing Packets](#outgoing-packets) *line 981*
+    - [Emit 1 - Ping Acknowledgement](#emit-1---ping-acknowledgement) *line 983*
+    - [Emit 2 - Test Ping](#emit-2---test-ping) *line 995*
+    - [Emit 3 - Get Debug](#emit-3---get-debug) *line 1004*
+    - [Emit 4 - Send Inputs](#emit-4---send-inputs) *line 1013*
+    - [Emit 5 - Trigger Start](#emit-5---trigger-start) *line 1027*
+    - [Emit 6 - Change Own Team](#emit-6---change-own-team) *line 1040*
+    - [Emit 7 - Team Lock](#emit-7---team-lock) *line 1050*
+    - [Emit 8 - Silence Player](#emit-8---silence-player) *line 1060*
+    - [Emit 9 - Kick/Ban Player](#emit-9---kickban-player) *line 1073*
+    - [Emit 10 - Chat Message](#emit-10---chat-message) *line 1084*
+    - [Emit 11 - Inform In Lobby](#emit-11---inform-in-lobby) *line 1094*
+    - [Emit 12 - Create Room](#emit-12---create-room) *line 1107*
+    - [Emit 13 - Join Room](#emit-13---join-room) *line 1137*
+    - [Emit 14 - Return To Lobby](#emit-14---return-to-lobby) *line 1156*
+    - [Emit 16 - Set Ready](#emit-16---set-ready) *line 1162*
+    - [Emit 17 - All Ready Reset](#emit-17---all-ready-reset) *line 1172*
+    - [Emit 18 - Timesync request](#emit-18---timesync-request) *line 1180*
+    - [Emit 19 - Map Reorder](#emit-19---map-reorder) *line 1190*
+    - [Emit 20 - Send Mode](#emit-20---send-mode) *line 1199*
+    - [Emit 21 - Send WL (Rounds)](#emit-21---send-wl-rounds) *line 1212*
+    - [Emit 22 - Map Delete](#emit-22---map-delete) *line 1222*
+    - [Emit 23 - Map Add](#emit-23---map-add) *line 1230*
+    - [Emit 24 - Send Typing](#emit-24---send-typing) *line 1242*
+    - [Emit 25 - Admin Inputs](#emit-25---admin-inputs) *line 1251*
+    - [Emit 26 - Change Other Team](#emit-26---change-other-team) *line 1282*
+    - [Emit 27 - Map Suggest](#emit-27---map-suggest) *line 1293*
+    - [Emit 28 - Change Mode](#emit-28---change-mode) *line 1305*
+    - [Emit 29 - Send Balance](#emit-29---send-balance) *line 1315*
+    - [Emit 30 - Version Check](#emit-30---version-check) *line 1328*
+    - [Emit 31 - Send Debug Winner](#emit-31---send-debug-winner) *line 1337*
+    - [Emit 32 - Team Settings Change](#emit-32---team-settings-change) *line 1350*
+    - [Emit 33 - Arm Record](#emit-33---arm-record) *line 1362*
+    - [Emit 34 - Host Change](#emit-34---host-change) *line 1370*
+    - [Emit 35 - Send Friended](#emit-35---send-friended) *line 1382*
+    - [Emit 36 - Start Countdown](#emit-36---start-countdown) *line 1394*
+    - [Emit 37 - Abort Countdown](#emit-37---abort-countdown) *line 1406*
+    - [Emit 38 - Request XP](#emit-38---request-xp) *line 1414*
+    - [Emit 39 - Map Vote](#emit-39---map-vote) *line 1422*
+    - [Emit 40 - Inform In Game](#emit-40---inform-in-game) *line 1435*
+    - [Emit 41 - Get Pre Vote](#emit-41---get-pre-vote) *line 1448*
+    - [Emit 42 - Get More Quick Play Maps](#emit-42---get-more-quick-play-maps) *line 1460*
+    - [Emit 43 - Update RC Data](#emit-43---update-rc-data) *line 1468*
+    - [Emit 44 - Tabbed](#emit-44---tabbed) *line 1478*
+    - [Emit 45 - Desync Test](#emit-45---desync-test) *line 1490*
+    - [Emit 46 - Send Desync Response](#emit-46---send-desync-response) *line 1504*
+    - [Emit 47 - Round Complete](#emit-47---round-complete) *line 1518*
+    - [Emit 50 - No Host Swap](#emit-50---no-host-swap) *line 1529*
+    - [Emit 51 - Curate](#emit-51---curate) *line 1537*
+    - [Emit 52 - Room Name Update](#emit-52---room-name-update) *line 1551*
+    - [Emit 53 - Room Password Update](#emit-53---room-password-update) *line 1563*
+- [Common Data Schemes](#common-data-schemes) *line 1573*
+  - [Data](#data) *line 1575*
+    - [Token Format](#token-format) *line 1577*
+  - [Enums](#enums) *line 1603*
+    - [Team](#team) *line 1605*
+    - [Server Mute Broadcast type enum](#server-mute-broadcast-type-enum) *line 1616*
+    - [Game Engine Enum](#game-engine-enum) *line 1624*
+    - [Game Mode Enum](#game-mode-enum) *line 1633*
+    - [Body Type Enum](#body-type-enum) *line 1647*
+    - [Quality Enum](#quality-enum) *line 1657*
+    - [Projectile Type Enum](#projectile-type-enum) *line 1667*
+    - [Avatar Shape Enum](#avatar-shape-enum) *line 1675*
+    - [Disc Death Method Enum](#disc-death-method-enum) *line 1726*
+  - [Inputs](#inputs) *line 1737*
+    - [Input Flags](#input-flags) *line 1785*
+    - [Input Object](#input-object) *line 1803*
+    - [Frame Input](#frame-input) *line 1811*
+  - [Game Configuration](#game-configuration) *line 1824*
+    - [Game Settings Object (`gs`)](#game-settings-object-gs) *line 1826*
+    - [Mode Settings Object](#mode-settings-object) *line 1842*
+    - [Team Settings Object](#team-settings-object) *line 1851*
+  - [Map](#map) *line 1860*
+    - [Map Settings](#map-settings) *line 1862*
+    - [Map Metadata](#map-metadata) *line 1874*
+    - [Map Data Format](#map-data-format) *line 1896*
+      - [Capture Zone](#capture-zone) *line 1907*
+    - [Physics](#physics) *line 1920*
+      - [Shapes](#shapes) *line 1924*
+        - [Base Shape](#base-shape) *line 1928*
+        - [Box Shape](#box-shape) *line 1935*
+        - [Circle Shape](#circle-shape) *line 1947*
+        - [Poly Shape](#poly-shape) *line 1957*
+        - [Chain Shape](#chain-shape) *line 1968*
+      - [Fixture](#fixture) *line 1982*
+      - [Body](#body) *line 1999*
+      - [Joints](#joints) *line 2028*
+        - [Base Joint](#base-joint) *line 2032*
+        - [Revolute Joint](#revolute-joint) *line 2046*
+        - [Distance Joint](#distance-joint) *line 2068*
+        - [Legacy Path Joint](#legacy-path-joint) *line 2086*
+        - [Legacy Springy Joint](#legacy-springy-joint) *line 2108*
+        - [Prismatic Joint](#prismatic-joint) *line 2126*
+        - [Soft Rod Joint](#soft-rod-joint) *line 2148*
+        - [Gear Joint](#gear-joint) *line 2164*
+      - [Physics State](#physics-state) *line 2178*
+  - [Game State](#game-state) *line 2191*
+    - [Initial Game State](#initial-game-state) *line 2193*
+      - [Bonk Game State](#bonk-game-state) *line 2209*
+      - [Football Game State](#football-game-state) *line 2234*
+    - [Full Game State Data](#full-game-state-data) *line 2255*
+  - [Discs](#discs) *line 2301*
+    - [Bonk Disc](#bonk-disc) *line 2303*
+    - [Football Disc](#football-disc) *line 2334*
+    - [Disc Death](#disc-death) *line 2350*
+      - [DiscDeathMethod](#discdeathmethod) *line 2364*
+  - [Common Types](#common-types) *line 2374*
+    - [Point 2D](#point-2d) *line 2376*
+    - [Point 2D Vector](#point-2d-vector) *line 2385*
+    - [Sounds This Step](#sounds-this-step) *line 2394*
+    - [Swing State](#swing-state) *line 2403*
+  - [Common Types](#common-types) *line 2413*
+    - [Avatar Data Format](#avatar-data-format) *line 2415*
+      - [Avatar](#avatar) *line 2419*
+      - [AvatarLayer](#avatarlayer) *line 2426*
+  - [Server](#server) *line 2444*
+    - [Status Codes](#status-codes) *line 2446*
+    - [Timesync Response Data](#timesync-response-data) *line 2492*
+    - [Admin Input Data](#admin-input-data) *line 2499*
+- [HTTP Requests](#http-requests) *line 2506*
+  - [Account Endpoints](#account-endpoints) *line 2513*
+    - [register_legacy.php](#register_legacyphp) *line 2515*
+    - [login_legacy.php](#login_legacyphp) *line 2543*
+    - [login_auto.php](#login_autophp) *line 2556*
+    - [login_clearauto.php](#login_clearautophp) *line 2567*
+    - [account_changepassword.php](#account_changepasswordphp) *line 2575*
+    - [account_savecontrols.php](#account_savecontrolsphp) *line 2592*
+  - [Friends Endpoints](#friends-endpoints) *line 2601*
+    - [friends.php](#friendsphp) *line 2603*
+  - [Map Endpoints](#map-endpoints) *line 2622*
+    - [Map Favorite Endpoints](#map-favorite-endpoints) *line 2624*
+      - [map_fave.php](#map_favephp) *line 2626*
+    - [Map Search Endpoints](#map-search-endpoints) *line 2643*
+      - [map_getsearch.php](#map_getsearchphp) *line 2645*
+      - [map_getfresh.php](#map_getfreshphp) *line 2665*
+      - [map_getfave.php](#map_getfavephp) *line 2681*
+      - [map_getown.php](#map_getownphp) *line 2698*
+    - [Map B1 Endpoints (Bonk1 Legacy Maps)](#map-b1-endpoints-bonk1-legacy-maps) *line 2714*
+      - [map_b1_getfave.php](#map_b1_getfavephp) *line 2716*
+      - [map_b1_getown.php](#map_b1_getownphp) *line 2733*
+      - [map_b1_getbest.php](#map_b1_getbestphp) *line 2750*
+      - [map_b1_getsearch.php](#map_b1_getsearchphp) *line 2766*
+    - [Map Management Endpoints](#map-management-endpoints) *line 2786*
+      - [map_save_pub.php](#map_save_pubphp) *line 2788*
+      - [map_delete.php](#map_deletephp) *line 2813*
+  - [Replay Endpoints](#replay-endpoints) *line 2822*
+      - [replay_submit.php](#replay_submitphp) *line 2824*
+      - [replay_get.php](#replay_getphp) *line 2835*
+      - [replay_report.php](#replay_reportphp) *line 2853*
+  - [Room Endpoints](#room-endpoints) *line 2867*
+      - [getrooms.php](#getroomsphp) *line 2869*
+      - [getroomaddress.php](#getroomaddressphp) *line 2891*
+  - [Matchmaking Endpoints](#matchmaking-endpoints) *line 2911*
+      - [matchmaking_maps.php](#matchmaking_mapsphp) *line 2913*
+      - [matchmaking_query.php](#matchmaking_queryphp) *line 2925*
+  - [Avatar Endpoints](#avatar-endpoints) *line 2948*
+      - [avatar_update.php](#avatar_updatephp) *line 2950*
+  - [static Endpoints](#static-endpoints) *line 2962*
+      - [combinedplayercount.txt](#combinedplayercounttxt) *line 2966*
+      - [Hot Maps Cache](#hot-maps-cache) *line 2996*
+    - [picks](#picks) *line 3020*
+- [Source Code / Deobfuscation](#source-code-deobfuscation) *line 3036*
+  - [Deobfuscation Tools](#deobfuscation-tools) *line 3047*
+    - [[kookywarrior/bonk-deobfuscator](https://github.com/kookywarrior/bonk-deobfuscator)](#kookywarriorbonk-deobfuscatorhttpsgithubcomkookywarriorbonk-deobfuscator) *line 3049*
+    - [[Kitaes-software/bonk-deobfuscator](https://github.com/Kitaes-software/bonk-deobfuscator)](#kitaes-softwarebonk-deobfuscatorhttpsgithubcomkitaes-softwarebonk-deobfuscator) *line 3054*
+- [Foot Notes](#foot-notes) *line 3062*
 
   
 <a name="contributing-to-the-repository"></a>
@@ -254,9 +256,9 @@ In fact, much of this README was written with the help of AI. However, the resea
 - Anything marked with "todo" is
 - Any types marked as "any" or "?"
 - <a href="hot-maps-cache">Hot Maps Cache</a> and <a href="picks">Picks</a> have a missing response table for "maps" aswell
-- Fix markdown errors, e.g invalid link/href or json code block fails
-- Add request method type to http endpoints e.g post or get
-- 
+- Add Replay Data format
+- Create Room Mode enum `"custom"`, `"bonkquick"`, `"arrowsquick"`, or `"grapplequick"`
+
 <a name="modding"></a>
 #### Modding
 Any information about "modding" or creating userscripts is highly appreciated. The focus should be on the basics rather than in-depth topics such as reverse engineering the game. Simple explanations of how the [Code Injector](https://greasyfork.org/en/scripts/433861-code-injector-bonk-io) works, including how to replace a string with regex to modify the game's behavior, or access certain things (e.g like the current gamestate)
@@ -363,7 +365,7 @@ Example: `42[3,3,0,[{"peerID":"vuzvugdrnja00000","userName":"user one","guest":t
 
 A new player has joined the room.
 
-Example: `42[4,21,"0qh12mq737fh0000","left paren",false,39,1,{"layers":[...],"bc":61591}]`
+Example: `42[4,21,"0qh12mq737fh0000","left paren",false,39,1,{"layers":[],"bc":61591}]`
 
 | # | Description |
 |---|-------------|
@@ -396,7 +398,7 @@ Example: `42[5,13,14511]`
 
 The host left; a new host is assigned (host migration).
 
-Examples: `42[6,1,0,49753339064]` Ã‚Â· `42[6,0,-1,49753339073]`
+Examples: `42[6,1,0,49753339064], `42[6,0,-1,49753339073]`
 
 | # | Description |
 |---|-------------|
@@ -411,7 +413,7 @@ Examples: `42[6,1,0,49753339064]` Ã‚Â· `42[6,0,-1,49753339073]`
 
 Game input data from another player, relayed through the server.
 
-Examples: `42[7,1,{"i":38,"f":324,"c":45}]` Ã‚Â· `42[7,1,{"i":25,"f":531,"c":108}]`
+Examples: `42[7,1,{"i":38,"f":324,"c":45}]`, `42[7,1,{"i":25,"f":531,"c":108}]`
 
 | # | Description |
 |---|-------------|
@@ -590,7 +592,7 @@ Example: `42[20,0,"hello"]`
 
 Sent by the host after you join a room, containing map and game data. Clears the 6-second initial data timeout.
 
-Example: `42[21,{"map":{"v":13,"s":{...},"physics":{...},"spawns":[],...},"gt":2,"wl":3,"q":false,"tl":true,"tea":false,"ga":"b","mo":"b","bal":[]}]`
+Example: `42[21,{"map":{"v":15,"s":{"re":false,"nc":false,"pq":1,"gd":25,"fl":false},"physics":{"shapes":[],"fixtures":[],"bodies":[],"bro":[],"joints":[],"ppm":12},"spawns":[],"capZones":[],"m":{"a":"riggad","n":"Unnamed","dbv":2,"dbid":-1,"authid":-1,"date":"","rxid":0,"rxn":"","rxa":"","rxdb":1,"cr":[],"pub":false,"mo":""}},"gt":2,"wl":3,"q":false,"tl":false,"tea":false,"ga":"b","mo":"b","bal":[]}]`
 
 | # | Description |
 |---|-------------|
@@ -602,6 +604,8 @@ Example: `42[21,{"map":{"v":13,"s":{...},"physics":{...},"spawns":[],...},"gt":2
 #### On 23 - Timesync Response
 
 Time synchronization response from the server. Used by the `timesync` library, not a game packet.
+
+Example `42[23,{"id":82,"result":1784281173297}]`
 
 | # | Description |
 |---|-------------|
@@ -971,7 +975,7 @@ Desynchronization test request from the server.
 |---|-------------|
 | 1 | Request ID |
 | 2 | Target data |
-| 3 | Additional data |
+| 3 | Accumulator |
 
 ---
 
@@ -984,7 +988,7 @@ Desynchronization test response.
 |---|-------------|
 | 1 | Response data |
 | 2 | State data |
-| 3 | Additional data |
+| 3 | Accumulator |
 
 ---
 
@@ -993,7 +997,7 @@ Desynchronization test response.
 
 Result of a map curation action (`/curate` + `/curateyes`).
 
-Examples: `42[57,false,"unauthorised"]` Ã‚Â· `42[57,true,""]`
+Examples: `42[57,false,"unauthorised"]`, `42[57,true,""]`
 
 | # | Description |
 |---|-------------|
@@ -1037,8 +1041,8 @@ A direct message from the server (system announcement, etc.).
 |---|-------------|
 | 1 | Server message text |
 
-<a name="outgoing-packets-client-h5responseh5-server"></a>
-### Outgoing Packets (Client <h5>Response</h5> Server)
+<a name="outgoing-packets"></a>
+### Outgoing Packets
 
 <a name="emit-1---ping-acknowledgement"></a>
 #### Emit 1 - Ping Acknowledgement
@@ -1078,7 +1082,7 @@ Example: `42[3]`
 
 Send game inputs.
 
-Examples: `42[4,{"i":38,"f":324,"c":45}]` Ã‚Â· `42[4,{"i":25,"f":531,"c":108}]`
+Examples: `42[4,{"i":38,"f":324,"c":45}]`, `42[4,{"i":25,"f":531,"c":108}]`
 
 | Key | Description |
 |-----|-------------|
@@ -1166,7 +1170,7 @@ Example: `42[10,{"message":"Hello, World!"}]`
 
 Sent by host to joining players with game settings.
 
-Example: `42[11,{"sid":2,"gs":{"map":{...},"gt":2,"wl":3,"q":false,"tl":false,"tea":false,"ga":"b","mo":"b","bal":[]}}]`
+Example: `42[11,{"sid":2,"gs":{"map":{"v":15,"s":{"re":false,"nc":false,"pq":1,"gd":25,"fl":false},"physics":{"shapes":[],"fixtures":[],"bodies":[],"bro":[],"joints":[],"ppm":12},"spawns":[],"capZones":[],"m":{"a":"riggad","n":"Unnamed","dbv":2,"dbid":-1,"authid":-1,"date":"","rxid":0,"rxn":"","rxa":"","rxdb":1,"cr":[],"pub":false,"mo":""}},"gt":2,"wl":3,"q":false,"tl":false,"tea":false,"ga":"b","mo":"b","bal":[]}}]`
 
 | Key | Description |
 |-----|-------------|
@@ -1178,9 +1182,10 @@ Example: `42[11,{"sid":2,"gs":{"map":{...},"gt":2,"wl":3,"q":false,"tl":false,"t
 <a name="emit-12---create-room"></a>
 #### Emit 12 - Create Room
 
-Example (logged in): `42[12,{"peerID":"ht1a3nt5tgc00000","roomName":"Showcase's game","maxPlayers":6,"password":"","dbid":12741896,"guest":false,...,"token[^token]":"TOKENHERE","avatar":{...}}]`
+Example (guest): `42[12,{"peerID":"einit1u6bp800000","roomName":"digga's game","maxPlayers":6,"password":"","dbid":0,"guest":true,"minLevel":0,"maxLevel":999,"latitude":52.3816,"longitude":4.8883,"country":"NL","version":49,"hidden":0,"quick":false,"mode":"custom","guestName":"digga","avatar":{"layers":[],"bc":6732650}}]`
 
-Example (guest): `42[12,{"peerID":"b6sg533lh1v00000","roomName":"net's game","maxPlayers":6,"password":"","dbid":12741896,"guest":true,...,"guestName":"net","avatar":{...}}]`
+The differences are when logged in a token parameter is passed, guest is set to false, and the parameter "guestName" is omitted
+Example (logged in): `42[12,{"peerID":"einit1u6bp800000","roomName":"rigga acc's game","maxPlayers":6,"password":"","dbid":0,"guest":false,"minLevel":0,"maxLevel":999,"latitude":52.3816,"longitude":4.8883,"country":"NL","version":49,"hidden":0,"quick":false,"mode":"custom","token":"TOKENHERE","avatar":{"layers":[],"bc":6732650}}]`
 
 | Key | Description |
 |-----|-------------|
@@ -1200,13 +1205,15 @@ Example (guest): `42[12,{"peerID":"b6sg533lh1v00000","roomName":"net's game","ma
 | `quick` | Whether quickplay |
 | `mode` | `"custom"`, `"bonkquick"`, `"arrowsquick"`, or `"grapplequick"` |
 | `guestName` | Guest display name (only if guest) |
-| `token` | Auth token[^token] (only if not guest) |
+| `token` | Optional Auth token[^token] (only if not guest) |
 | `avatar` | <a href="#avatar-data-format">Skin data</a> |
 
 ---
 
 <a name="emit-13---join-room"></a>
 #### Emit 13 - Join Room
+
+Example: `42[13,{"joinID":"dZCuw96RZ60KGK8FAALp","roomPassword":"","guest":true,"dbid":2,"version":49,"peerID":"3vss1i0oywz00000","bypass":"","guestName":"digga","avatar":{"layers":[],"bc":6732650}}]`
 
 | Key | Description |
 |-----|-------------|
@@ -1219,7 +1226,7 @@ Example (guest): `42[12,{"peerID":"b6sg533lh1v00000","roomName":"net's game","ma
 | `bypass` | Auto-join bypass token[^token] (empty if none) |
 | `avatar` | <a href="#avatar-data-format">Skin data</a> |
 | `guestName` | Guest name (only if guest) |
-| `token` | Auth token[^token] (only if not guest) |
+| `token` | OPTIONAL Auth token (only passed if not guest) |
 
 ---
 
@@ -1337,6 +1344,27 @@ Send admin/host commands during a game.
 |---|-------------|
 | 1 | Admin input data object (see <a href="#admin-input-data">Admin Input Data</a>) |
 
+<details>
+<summary>Deobfuscated Handler</summary>
+
+```js
+ this.recvAdmin = function (adminInputsRecvData) {
+  var _T9P__9_, _T9P__4_;
+  var frame = adminInputsRecvData.f;
+  var accumulator = adminInputsRecvData.a;
+  adminInputs[frame] = accumulator;
+  for (var i = frame; i < frameCount; i++) {
+    _T9P__9_ = getPlayerInputsForFrame(i);
+    if (_a5H__74_[i + 1]) {
+      _T9P__4_ = _a5H__74_[i + 1];
+    } else {
+      _T9P__4_ = _BonkEngine3.step(_a5H__4_[i], _T9P__9_, adminInputs[i], 30, _gs3, _a5H__13_, _a5H__73_, _a5H__50_);
+    }
+    _a5H__4_[i + 1] = _T9P__4_;
+  }
+ }
+```
+</details>
 ---
 
 <a name="emit-26---change-other-team"></a>
@@ -1772,9 +1800,54 @@ Types of projectiles that can be launched in-game.
 <a name="avatar-shape-enum"></a>
 #### Avatar Shape Enum
 
-Avatar layer shape IDs for player skin customization. Each enum value represents a unique shape that can be used as a layer in an avatar (maximum 15 layers per avatar). Values are automatically indexed (0-115+).
+Avatar layer shape IDs for player skin customization. Each enum value represents a unique shape that can be used as a layer in an avatar (maximum 15 layers per avatar).
 
-**Aliens:** Alien1-6 | **Barbed Wire:** Barbedwire1-6 | **Basic:** Circle, Crescent | **Crosses:** Cross1-7, Cross | **Faces:** Face1-21 | **Flames:** Flames1-10 | **Skulls:** Skull1-3, Skullcross | **Stars:** Star1-2 | **Triangles:** Triangle, Triangleeven, Triangletall1-2 | **Grunge:** Grungecircle, Grungeheart1-2, Grungeleaf1-3, Grungelines1-2 | **Prints:** Shoeprint, Handprint, Fingerprint, Print2 | **Splats:** Splat, Splat1-3 | **Geometric:** Pentagon, Rectangle1-3, Rectanglefat, Semicircle, Roundedrectangle | **Celestial:** Moon | **Hazard:** Radioactive1-2, Biohazard | **Fire:** Fire1-2, Oxidiser | **Misc:** Ball, Atomic, Freeze, World, Signal, Exclamation, Electricity, Chain, Scope1-2 | **Whisps:** Whisp1-11
+<details>
+<summary>Table</summary>
+
+| Index | Shape | Index | Shape | Index | Shape |
+|-------|-------|-------|-------|-------|-------|
+| 0 | Alien1 | 1 | Alien2 | 2 | Alien3 |
+| 3 | Alien4 | 4 | Alien5 | 5 | Alien6 |
+| 6 | Barbedwire1 | 7 | Barbedwire2 | 8 | Barbedwire3 |
+| 9 | Barbedwire4 | 10 | Barbedwire5 | 11 | Barbedwire6 |
+| 12 | Circle | 13 | Crescent | 14 | Cross1 |
+| 15 | Cross2 | 16 | Cross3 | 17 | Cross4 |
+| 18 | Cross5 | 19 | Cross6 | 20 | Cross7 |
+| 21 | Face1 | 22 | Face10 | 23 | Face11 |
+| 24 | Face12 | 25 | Face13 | 26 | Face14 |
+| 27 | Face15 | 28 | Face16 | 29 | Face17 |
+| 30 | Face18 | 31 | Face2 | 32 | Face19 |
+| 33 | Face20 | 34 | Face21 | 35 | Face3 |
+| 36 | Face4 | 37 | Face5 | 38 | Face6 |
+| 39 | Face7 | 40 | Face8 | 41 | Face9 |
+| 42 | Flames1 | 43 | Flames10 | 44 | Flames2 |
+| 45 | Flames3 | 46 | Flames4 | 47 | Flames5 |
+| 48 | Flames6 | 49 | Flames7 | 50 | Flames8 |
+| 51 | Flames9 | 52 | Skull1 | 53 | Cross |
+| 54 | Star1 | 55 | Triangle | 56 | Grungecircle |
+| 57 | Grungeheart1 | 58 | Grungeheart2 | 59 | Grungeleaf1 |
+| 60 | Grungeleaf2 | 61 | Grungeleaf3 | 62 | Skull2 |
+| 63 | Shoeprint | 64 | Handprint | 65 | Fingerprint |
+| 66 | Print2 | 67 | Grungelines1 | 68 | Grungelines2 |
+| 69 | Splat | 70 | Pentagon | 71 | Rectangle1 |
+| 72 | Triangletall1 | 73 | Rectangle2 | 74 | Rectangle3 |
+| 75 | Rectanglefat | 76 | Semicircle | 77 | Roundedrectangle |
+| 78 | Moon | 79 | Triangleeven | 80 | Triangletall2 |
+| 81 | Splat1 | 82 | Splat2 | 83 | Splat3 |
+| 84 | Square | 85 | Star2 | 86 | Radioactive1 |
+| 87 | World | 88 | Signal | 89 | Skullcross |
+| 90 | Skull3 | 91 | Exclamation | 92 | Electricity |
+| 93 | Chain | 94 | Scope1 | 95 | Scope2 |
+| 96 | Radioactive2 | 97 | Biohazard | 98 | Fire1 |
+| 99 | Fire2 | 100 | Oxidiser | 101 | Ball |
+| 102 | Atomic | 103 | Freeze | 104 | Whisp1 |
+| 105 | Whisp2 | 106 | Whisp3 | 107 | Whisp4 |
+| 108 | Whisp5 | 109 | Whisp6 | 110 | Whisp7 |
+| 111 | Whisp8 | 112 | Whisp9 | 113 | Whisp10 |
+| 114 | Whisp11 | | | | |
+
+</details>
 
 <a name="disc-death-method-enum"></a>
 #### Disc Death Method Enum
@@ -1897,17 +1970,17 @@ Complete game configuration settings.
 | `tea` | boolean | Teams enabled - whether teams mode is on (false = FFA mode) |
 | `ga` | string? | Game engine - "b" for Bonk, "f" for Football (optional) |
 | `mo` | string | Game mode - game mode identifier (see eMode enum) |
-| `bal` | any[]? | Balance/handicap array - per-player balance settings (optional) |
+| `bal` | int[]? | Balance/handicap array - per-player balance settings (optional) |
 
 <a name="mode-settings-object"></a>
 #### Mode Settings Object
 
-Received via [Packet 26](#on-26---mode-change) when the host changes the game mode or engine.
+Received via [Packet 35](#on-35---change-mode) when the host changes the game mode or engine.
 
 | Field | Type | Description |
 | ----- | ---- | ----- |
-| `gameEngine` | number | Game engine (0 = Bonk, 1 = Football) |
-| `gameMode` | string | Game mode (ar, ard, b, bs, f, sp, v, sl, ft) - see eMode enum in definitions.d.ts |
+| `ga` | string | (see <a href="#game-engine-enum">Game Engine Enum</a>) |
+| `mo` | string | (see <a href="#game-engine-enum">Game Engine Enum</a>) |
 
 <a name="team-settings-object"></a>
 #### Team Settings Object
@@ -2255,8 +2328,8 @@ Connects two joints so they work in sync.
 | `type` | string | "g" - Gear joint identifier |
 | `ba` | number | Body A |
 | `bb` | number | Body B |
-| `ja` | any? | Joint A (optional) |
-| `jb` | any? | Joint B (optional) |
+| `ja` | number? | Joint A (optional) |
+| `jb` | number? | Joint B (optional) |
 | `d.r` | number | Ratio - gear ratio |
 | `d.cc` | boolean? | Collide connected (optional) |
 
@@ -2327,7 +2400,7 @@ Used for Football mode only.
 
 | Field | Type | Description |
 |-------|------|-------------|
-| `scores` | any[] | Array containing the amount of wins for each <a href="#team">Team</a>. This item does not have to be a number although the game always does set it with numbers. On a football game, there are up to 4 items, with each one corresponding to a specific <a href="#team">Team</a>, in the following order: 0=unused in football, 1=unused in football, 2=Red, 3=Blue. For example: `scores[2]` would be <a href="#team">Team</a> Red's amount of wins. Note: these indices do not match the <a href="#team">Team</a> enum values. |
+| `scores` | number[] | Array containing the amount of wins for each <a href="#team">Team</a>. This item does not have to be a number although the game always does set it with numbers. On a football game, there are up to 4 items, with each one corresponding to a specific <a href="#team">Team</a>, in the following order: 0=unused in football, 1=unused in football, 2=Red, 3=Blue. For example: `scores[2]` would be <a href="#team">Team</a> Red's amount of wins. Note: these indices do not match the <a href="#team">Team</a> enum values. |
 | `goalHeight` | number | The goal height. Always `13` |
 | `borderThickness` | number | Border thickness. Always `5` |
 | `borderThicknessXInner` | number | Border thickness X inner. Always `25` |
@@ -2374,7 +2447,7 @@ Complete game state containing all physics, player, and game information. Struct
 
 | Field | Type | Description |
 | ----- | ---- | ----- |
-| `scores` | any[] | Win scores by team (indices: 0=unused, 1=unused, 2=Red, 3=Blue) |
+| `scores` | number[] | Win scores by team (indices: 0=unused, 1=unused, 2=Red, 3=Blue) |
 | `goalHeight` | number | Height of goal area (always 13) |
 | `borderThickness` | number | Border thickness (always 5) |
 | `borderThicknessXInner` | number | Inner border X thickness (always 25) |
@@ -2495,10 +2568,10 @@ A 2D point object. This is a object (`{x: x, y: y}`)
 
 | Field | Type | Description |
 |-------|------|-------------|
-| `i` | any | Sound ID |
+| `i` | number | Sound ID |
 | `v` | number | Volume |
 | `p` | string? | Sound type |
-| `f` | any | Frame |
+| `f` | number | Frame |
 
 <a name="swing-state"></a>
 #### Swing State
@@ -2518,6 +2591,28 @@ State information for an active swing/grapple action.
 #### Avatar Data Format
 
 The avatar object is an object containing layers with information to render the skin.
+
+<a name="avatar"></a>
+##### Avatar
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `layers` | `(avatarLayer \| undefined)[]` | The different "layers" of shapes on the skin. For a skin to be usable this must not be over 15 layers. |
+| `bc` | `number` | Background colour of the skin. |
+
+<a name="avatarlayer"></a>
+##### AvatarLayer
+
+| Field | Type | Constraints | Description |
+|-------|------|-------------|-------------|
+| `id` | [Avatar Shape Enum](#avatar-shape-enum)| min: 1, max: 115 | The shape ID. Will revert to 1 if out of range. |
+| `scale` | `number` | min: -9999, max: 9999 | The scale of the shape. Will revert to 0 if out of range. |
+| `angle` | `number` | - | The angle of the shape in degrees. |
+| `x` | `number` | - | X position of the shape. |
+| `y` | `number` | - | Y position of the shape. |
+| `flipX` | `boolean` | - | Whether to flip the shape horizontally (x axis). |
+| `flipY` | `number` | - | Whether to flip the shape vertically (y axis). |
+| `color` | `number` | min: 0, max: 16777215 | The shape colour. Will revert to 0 if out of range. |
 
 For the full avatar data structure, skin shape IDs, and rendering, see the full-fledged library:
 - [bonk-skin](https://github.com/PixelMelt/bonk-skin) - Community skin parsing library
@@ -2587,12 +2682,14 @@ Status messages received via <a href="#on-16---status-message">Packet 16</a>:
 
 | Field | Description |
 | ----- | ----- |
-| ? | TODO |
+| f | TODO | Frame
+| a | TODO | Accumulator
 
 <a name="http-requests"></a>
 ## HTTP Requests
 
-This section documents all jQuery AJAX requests (`$.get` and `$.post`) made throughout the codebase of bonk.io
+This section documents all jQuery AJAX requests all requests are `$.post` unless mentioned otherwise.
+
 > [!NOTE]
 > All bonk endpoints are specified with "https://bonk2.io/scripts/" unless otherwise specified
 
@@ -2952,13 +3049,17 @@ Same as register_legacy.php (on successful auto-login)
 
 | Field | Type | Description |
 |-------|------|-------------|
-| TODO | TODO | TODO |
+| version | int | Api Protocol version, as of 17/7/2026 this is 49 |
+| mode | string | filterMode (see <a href="#game-mode-enum">Game Mode Enum</a>)  |
+| offset | int | TODO |
+| `startingfrom` | number | Pagination offset |
 
 <h5>Response</h5>
 
 | Field | Type | Description |
 |-------|------|-------------|
-| TODO | TODO | Encoded replay data |
+| r | TODO | Response Status |
+| replays | TODO | TODO |
 
 <a name="replay_reportphp"></a>
 ##### replay_report.php
@@ -2967,7 +3068,7 @@ Same as register_legacy.php (on successful auto-login)
 
 | Field | Type | Description |
 |-------|------|-------------|
-| ? | ? | TODO |
+| replayid | ? | TODO |
 
 <h5>Response</h5>
 
@@ -3091,10 +3192,11 @@ These endpoints are simple get requests with no request body.
 | Field | Type | Description |
 |-------|------|-------------|
 | `bonk` | object | Contains player count data for Bonk.io |
-| `car` | object | Contains player count data for supercarstadium.com (NO LONGER EXISTS) |
+| `car` | object | Contains player count data for supercarstadium.com (GAME NO LONGER EXISTS) |
 
 <details>
-<summary>Example response/summary>
+<summary>Example response</summary>
+
 ```json
 {
    "car":{
@@ -3110,9 +3212,13 @@ These endpoints are simple get requests with no request body.
    }
 }
 ```
+</details>
 
 <a name="hot-maps-cache"></a>
 ##### Hot Maps Cache
+
+> ![NOTE]
+> This is a get request, unlike the others.
 
 Constructs a URL to fetch paginated hot/trending maps by game mode.
 
@@ -3132,12 +3238,15 @@ URL format: `https://bonk2.io/scripts/hotmaps/cache3_[page]_[modeCode].txt`
 |-------|------|-------------|
 | `r` | string | Response status: "success" or error |
 | `maps` | object[] | Array of hot map objects for requested page/mode |
-<!-- TODO object to actual table-->
 
 <a name="picks"></a>
 #### picks
+
+> ![NOTE]
+> This is a get request, unlike the others.
+
 > [!NOTE]
-> An exception to the rule is `https://bonk2.io/scripts/hotmaps/picks.txt`
+> An exception to the rule of hotmaps cache  is `https://bonk2.io/scripts/hotmaps/picks.txt`
 
 <h5>Response</h5>
 
