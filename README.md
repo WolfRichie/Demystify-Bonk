@@ -3,7 +3,7 @@ Last updated: *17-7-2026, 19:48:59*
 
 A repository for various resources to understand the inner workings of [bonk.io](https://bonk.io) api protocol 49.
 
-</details>
+
 <!-- reservedForToc -->
   - [Emit](#emit) *line 11*
 - [Contributing to the repository](#contributing-to-the-repository) *line 254*
