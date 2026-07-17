@@ -256,7 +256,7 @@ In fact, much of this README was written with the help of AI. However, the resea
 
 - Anything marked with "todo" is
 - Any types marked as "any" or "?"
-- <a href="hot-maps-cache">Hot Maps Cache</a> and <a href="picks">Picks</a> have a missing response table for "maps" aswell
+- <a href="#hot-maps-cache">Hot Maps Cache</a> and <a href="#picks">Picks</a> have a missing response table for "maps" aswell
 - Add Replay Data format
 - Create Room Mode enum `"custom"`, `"bonkquick"`, `"arrowsquick"`, or `"grapplequick"`
 
@@ -384,7 +384,7 @@ function _onCreatedRoom(team, mapListQuick) {
 
 | # | Description |
 |---|-------------|
-| 1 | Room Address - equal to the one you would get if you'd send a request to <a href="getroomaddressphp">getroomaddress.php</a>
+| 1 | Room Address - equal to the one you would get if you'd send a request to <a href="#getroomaddressphp">getroomaddress.php</a>
 | 2 | Team |
 | 3 | Map list object for quick play |
 
@@ -1334,7 +1334,7 @@ Example: `42[13,{"joinID":"dZCuw96RZ60KGK8FAALp","roomPassword":"","guest":true,
 
 | Key | Description |
 |-----|-------------|
-| `joinID` | Room address - obtained through a request to <a href="getroomaddressphp">getroomaddress.php</a> |
+| `joinID` | Room address - obtained through a request to <a href="#getroomaddressphp">getroomaddress.php</a> |
 | `roomPassword` | Room password (empty if none) |
 | `guest` | Whether you are a guest |
 | `dbid` | Database ID (hardcoded to 2) |
@@ -2033,7 +2033,7 @@ class PlayerInput:
 
 | Field | Type | Description |
 |-------|------|-------------|
-| `"i"` | int | Input bitmask (see <a href="input-flags">Input FLags</a>) |
+| `"i"` | int | Input bitmask (see <a href="#input-flags">Input FLags</a>) |
 | `"f"` | int | Frame number |
 | `"c"` | int | Sequence number (increments per input) |
 
@@ -2140,7 +2140,7 @@ For the full map data structure and key mappings (e.g. `v` -> `version`), see:
 - [nameConverter.ts](https://github.com/PixelMelt/bonk-map/blob/23c39313420741709cea089b136f152900d3f3e5/src/util/nameConverter.ts#L1) - Actual mappings of the shorthand keys to their full names
 
 > [!WARNING]
-> THIS IS NOT FULLY ACCURATE, AND MIGHT BE INCOMPLETE FOR SOME STUFF, (like <a href="capture-zone">Capture Znono/a>)
+> THIS IS NOT FULLY ACCURATE, AND MIGHT BE INCOMPLETE FOR SOME STUFF, (like <a href="#capture-zone">Capture Znono/a>)
 
 <a name="capture-zone"></a>
 ##### Capture Zone
@@ -3205,7 +3205,7 @@ Same as register_legacy.php (on successful auto-login)
 <a name="getroomaddressphp"></a>
 ##### getroomaddress.php
 
-Room address is used for initializing a connection to a room through <a href="emit[^Emit]-13---join-room">Emit[^Emit] 13 - Join Room</a>
+Room address is used for initializing a connection to a room through <a href="#emit-13---join-room">Emit 13 - Join Room</a>
 
 <h5>Body</h5>
 
@@ -3453,7 +3453,7 @@ public class Util
 </details>
 
 ## Foot Notes
-  [^peerID]: **Peer ID** is a random, 20-character string that acts as a client's address, it must however match a specific "yeast" format. <a href="peerid">Snippets for generating them</a> 
+  [^peerID]: **Peer ID** is a random, 20-character string that acts as a client's address, it must however match a specific "yeast" format. <a href="#peerid">Snippets for generating them</a> 
   [^custom-anchors]: **Custom Anchors** `<a name="...">` tags placed before headings for linking to different places in the markdown file. See github docs: [custom anchors](https://docs.github.com/en/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax#custom-anchors).
   [^AST]: **AST** Abstract syntax tree
   [^LZ-String]: **LZ-String** A string compression algorithm used for encoding map and game state data. [GitHub](https://github.com/pieroxy/lz-string)
