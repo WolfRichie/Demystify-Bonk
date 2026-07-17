@@ -1,5 +1,5 @@
 # Demystifying Bonk
-Last updated: *17-7-2026, 20:06:28*
+Last updated: *17-7-2026, 20:07:59*
 
 A repository for various resources to understand the inner workings of [bonk.io](https://bonk.io) api protocol 49.
  
@@ -247,7 +247,7 @@ peerID[^peerID]
     - [[kookywarrior/bonk-deobfuscator](https://github.com/kookywarrior/bonk-deobfuscator)](#kookywarriorbonk-deobfuscatorhttpsgithubcomkookywarriorbonk-deobfuscator) *line 3161*
     - [[Kitaes-software/bonk-deobfuscator](https://github.com/Kitaes-software/bonk-deobfuscator)](#kitaes-softwarebonk-deobfuscatorhttpsgithubcomkitaes-softwarebonk-deobfuscator) *line 3166*
 - [Snippets](#snippets) *line 3174*
-  - [PeerID](#peerid) *line 3312*
+  - [PeerID](#peerid) *line 3179*
 
   
 <a name="contributing-to-the-repository"></a>
@@ -3416,141 +3416,6 @@ The [Community Resources](#community-resources) section below will also help you
 - <a href="#snippet-javascript-flipunflip-case-works-both-ways-2310">Javascript: Flip/unflip case (works both ways)</a>
 - <a href="#snippet-example-response-3090">Example response</a>
 <!-- /snippetSummaryIndex -->
-
-</details>
-
-<details>
-<summary>All Code Blocks</summary>
-
-</details>
-
-<details>
-<summary>All Code Blocks</summary>
-
-</details>
-
-<details>
-<summary>All Code Blocks</summary>
-
-</details>
-
-<details>
-<summary>All Code Blocks</summary>
-
-</details>
-
-<details>
-<summary>All Code Blocks</summary>
-
-</details>
-
-<details>
-<summary>All Code Blocks</summary>
-
-</details>
-
-<details>
-<summary>All Code Blocks</summary>
-
-</details>
-
-<details>
-<summary>All Code Blocks</summary>
-
-</details>
-
-<details>
-<summary>All Code Blocks</summary>
-
-</details>
-
-<details>
-<summary>All Code Blocks</summary>
-
-</details>
-
-<details>
-<summary>All Code Blocks</summary>
-
-</details>
-
-<details>
-<summary>All Code Blocks</summary>
-
-</details>
-
-<details>
-<summary>All Code Blocks</summary>
-
-</details>
-
-<details>
-<summary>All Code Blocks</summary>
-
-</details>
-
-<details>
-<summary>All Code Blocks</summary>
-
-</details>
-
-<details>
-<summary>All Code Blocks</summary>
-
-</details>
-
-<details>
-<summary>All Code Blocks</summary>
-
-</details>
-
-<details>
-<summary>All Code Blocks</summary>
-
-</details>
-
-<details>
-<summary>All Code Blocks</summary>
-
-</details>
-
-<details>
-<summary>All Code Blocks</summary>
-
-</details>
-
-<details>
-<summary>All Code Blocks</summary>
-
-</details>
-
-<details>
-<summary>All Code Blocks</summary>
-
-</details>
-
-<details>
-<summary>All Code Blocks</summary>
-
-</details>
-
-<details>
-<summary>All Code Blocks</summary>
-
-</details>
-
-<details>
-<summary>All Code Blocks</summary>
-
-</details>
-
-<details>
-<summary>All Code Blocks</summary>
-
-</details>
-
-<details>
-<summary>All Code Blocks</summary>
 
 </details>
 
